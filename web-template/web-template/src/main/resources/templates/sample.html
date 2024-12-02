@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>WEBテンプレートサンプル</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+</head>
+
+<body>
+    <form name="sample" id= "sample" method="post" th:action="@{/sample}" th:object="${sampleForm}">
+        <input type="hidden" name="id" id="id" th:value="${sampleForm.id}">
+        会員ID：<th:block th:text="${sampleForm.id}"/><br><br>
+        <th:block th:each="sampleMap, status : ${sampleMap}">
+            <li>
+                <input type="radio" name="sampleMap" th:id="'opt' + ${status.count}" class="visually-hidden" th:field="${sampleForm.opt}" th:value="${sampleMap.key}">
+                <label th:for="'opt' + ${status.count}">[[${sampleMap.value}]]</label>
+            </li>
+        </th:block>
+        <br>
+        <button type="submit" name="update">変更する</button>
+    </form>
+</body>
+
+</html>

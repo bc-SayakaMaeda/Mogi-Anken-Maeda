@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+<!-- 
+  <logger name="org.springframework" level="OFF" />
+  <logger name="org.apache" level="OFF" />
+  <logger name="jp.co.benesse.web.WebTemplateApplication" level="OFF" />
+ -->
+  <!-- INFOログ以上を出す -->
+  <logger name="jp.co.benesse.web" level="DEBUG" />
+  <!-- ファイル名 -->
+  <property name="FILE_NAME_PATTERN" value="webapp" />
+  <!-- 出力ディレクトリ -->
+  <property name="OUTPUT_DIR" value="/home/LogFiles/Application" />
+  <!-- 出力フォーマット  -->
+  <property name="LAYOUT_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss.SSS}][%-5level][%thread][%X{jsessionId}][%X{funcId}] %class[%line] - %.-8192msg%n" />
+
+  <!-- コンソールログ -->
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <layout class="ch.qos.logback.classic.PatternLayout">
+      <Pattern>${LAYOUT_PATTERN}</Pattern>
+    </layout>
+  </appender>
+  <!-- ログファイル出力 -->
+  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${OUTPUT_DIR}/${FILE_NAME_PATTERN}.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+        <!-- ログバックアップ時ファイル名  -->
+        <fileNamePattern>${OUTPUT_DIR}/${FILE_NAME_PATTERN}.log.%d{yyyy-MM-dd}</fileNamePattern>
+    </rollingPolicy>
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <charset>UTF-8</charset>
+      <Pattern>${LAYOUT_PATTERN}</Pattern>
+    </encoder>
+  </appender>
+
+  <!-- Azure関連はエラーログだけを出す -->
+  <logger name="com.azure.core" level="ERROR" />
+
+  <root level="INFO">
+    <appender-ref ref="STDOUT" />
+    <appender-ref ref="FILE" />
+  </root>
+</configuration>

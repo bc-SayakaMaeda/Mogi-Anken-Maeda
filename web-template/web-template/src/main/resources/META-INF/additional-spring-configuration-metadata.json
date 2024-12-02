@@ -1,0 +1,19 @@
+{
+    "properties": [
+        {
+            "name": "db.retry.count",
+            "type": "java.lang.Integer",
+            "description": "DB設定 - リトライ回数"
+        },
+        {
+            "name": "db.retry.interval",
+            "type": "java.lang.Integer",
+            "description": "DB設定 - インターバル"
+        },
+        {
+            "name": "db.batch.execute.num",
+            "type": "java.lang.Integer",
+            "description": "DB設定 - バッチ実行数"
+        }
+    ]
+}

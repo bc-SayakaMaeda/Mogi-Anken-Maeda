@@ -1,43 +1,35 @@
 <!DOCTYPE html>
-<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<html lang="ja">
 
 <head>
-    <meta charset="utf-8">
-    <title>WEB利用者ログイン</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- メタタグ不要であれば削除 -->
-    <!-- <meta name="description" content=""> -->
-    <!-- <meta name="keywords" content=""> -->
-
-    <link rel="stylesheet" th:href="@{/css/webCustomerLogin.css}" />
+	<meta charset="utf-8">
+	<title>WEB利用者ログイン</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="×××市立図書館のWEB利用者ログイン画面です。">
+	<meta name="keywords" content="×××市立図書館, ログイン">
+	<link rel="stylesheet" href="../static/css/webCustomerLogin.css" type="text/css">
 </head>
 
 <body>
-    <div class="webCustomerLogin-container">
-        <h1>×××市立図書館　WEB利用者ログイン</h1>
-
-        <form name="webCustomerLoginForm" id="webCustomerLoginForm" method="post" th:action="@{/webCustomerLogin}"
-            th:object="${webCustomerLoginForm}">
-            <div>
-                <label for="userId">利用者ID:</label>
-                <input type="text" id="userId" th:field="*{userId}" />
-            </div>
-            <div>
-                <label for="password">パスワード:</label>
-                <input type="password" id="password" th:field="*{password}" />
-            </div>
-            <div th:if="${errorMessage}" class="error-message">
-                <p th:text="${errorMessage}">IDまたはパスワードの入力が適切ではありません。</p>
-            </div>
-            <div>
-                <button type="submit" id="webCustomerLoginButton">ログイン</button>
-            </div>
-        </form>
-    </div>
-
-    <script th:src="@{/js/webCustomerLogin.js}"></script>
-
+	<div class="webCustomerLogin-container">
+		<h1>×××市立図書館　WEB利用者ログイン</h1>
+		<form name="webCustomerLoginForm" id="webCustomerLoginForm" method="post" action="/webCustomerLogin">
+			<div class="form-group">
+				<label for="userId">利用者ID</label>
+				<input type="text" id="userId" name="userId" />
+			</div>
+			<div class="form-group">
+				<label for="password">パスワード</label>
+				<input type="password" id="password" name="password" />
+			</div>
+			<div class="error-message">
+				<p>IDまたはパスワードの入力が適切ではありません。</p>
+			</div>
+			<div class="form-group">
+				<button type="submit" id="webCustomerLoginButton">ログイン</button>
+			</div>
+		</form>
+	</div>
 </body>
 
 </html>

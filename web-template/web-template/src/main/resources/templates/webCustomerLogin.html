@@ -2,32 +2,41 @@
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<meta charset="utf-8">
-	<title>WEB利用者ログイン</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="">
-	<meta name="keywords" content="">
+    <meta charset="utf-8">
+    <title>WEB利用者ログイン</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- メタタグ不要であれば削除 -->
+    <!-- <meta name="description" content=""> -->
+    <!-- <meta name="keywords" content=""> -->
+
+    <link rel="stylesheet" th:href="@{/css/webCustomerLogin.css}" />
 </head>
 
 <body>
-	<h1>×××市立図書館　WEB利用者ログイン</h1>
+    <div class="webCustomerLogin-container">
+        <h1>×××市立図書館　WEB利用者ログイン</h1>
 
-	<form name="sample" id="sample" method="post" th:action="@{/webCustomerLogin}" th:object="${loginForm}">
-		<div>
-			<label for="userId">利用者ID:</label>
-			<input type="text" id="userId" th:field="*{userId}" />
-		</div>
-		<div>
-			<label for="password">パスワード:</label>
-			<input type="password" id="password" th:field="*{password}" />
-		</div>
-		<div th:if="${errorMessage}">
-			<p th:text="${errorMessage}"></p>
-		</div>
-		<div>
-			<button type="submit">ログイン</button>
-		</div>
-	</form>
+        <form name="webCustomerLoginForm" id="webCustomerLoginForm" method="post" th:action="@{/webCustomerLogin}"
+            th:object="${webCustomerLoginForm}">
+            <div>
+                <label for="userId">利用者ID:</label>
+                <input type="text" id="userId" th:field="*{userId}" />
+            </div>
+            <div>
+                <label for="password">パスワード:</label>
+                <input type="password" id="password" th:field="*{password}" />
+            </div>
+            <div th:if="${errorMessage}" class="error-message">
+                <p th:text="${errorMessage}">IDまたはパスワードの入力が適切ではありません。</p>
+            </div>
+            <div>
+                <button type="submit" id="webCustomerLoginButton">ログイン</button>
+            </div>
+        </form>
+    </div>
+
+    <script th:src="@{/js/webCustomerLogin.js}"></script>
 
 </body>
 

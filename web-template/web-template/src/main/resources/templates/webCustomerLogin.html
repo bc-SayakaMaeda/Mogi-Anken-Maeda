@@ -1,37 +1,38 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<meta charset="utf-8">
-	<title>WEB利用者ログイン</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="×××市立図書館のWEB利用者ログイン画面です。">
-	<meta name="keywords" content="×××市立図書館, ログイン">
-	<link rel="stylesheet" href="../static/css/webCustomerLogin.css" type="text/css">
+    <meta charset="utf-8">
+    <title>WEB利用者ログイン</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="×××市立図書館のWEB利用者ログイン画面です。">
+    <meta name="keywords" content="×××市立図書館, ログイン">
+    <link rel="stylesheet" th:href="@{/css/webCustomerLogin.css}" type="text/css" >
 </head>
 
 <body>
-	<div class="webCustomerLogin-container">
-		<h1>×××市立図書館　WEB利用者ログイン</h1>
-		<form name="webCustomerLoginForm" id="webCustomerLoginForm" method="post" action="/webCustomerLogin">
-			<div class="form-group">
-				<label for="userId">利用者ID</label>
-				<input type="text" id="userId" name="userId" maxlength="16" />
-			</div>
-			<div class="form-group password-container">
-				<label for="password">パスワード</label>
-				<input type="password" id="password" name="password" maxlength="16" />
-				<img src="../static/images/icon_eye_hide.png" id="togglePassword" alt="Toggle Password Visibility">
-			</div>
-			<div class="error-message">
-				<p>IDまたはパスワードの入力が適切ではありません。</p>
-			</div>
-			<div class="form-group">
-				<button type="submit" id="webCustomerLoginButton">ログイン</button>
-			</div>
-		</form>
-	</div>
-	<script src="../static/js/webCustomerLogin.js"></script>
+    <div class="webCustomerLogin-container">
+        <h1>×××市立図書館　WEB利用者ログイン</h1>
+        <form name="webCustomerLoginForm" id="webCustomerLoginForm" method="post" action="@{/webCustomerLogin}">
+            <div class="form-group">
+                <label for="userId">利用者ID</label>
+                <input type="text" id="userId" name="userId" maxlength="16" />
+            </div>
+            <div class="form-group password-container">
+                <label for="password">パスワード</label>
+                <input type="password" id="password" name="password" maxlength="16" />
+                <img th:src="@{/images/icon_eye_hide.png}" id="togglePassword" alt="Toggle Password Visibility">
+            </div>
+            <div class="error-message">
+                <p>IDまたはパスワードの入力が適切ではありません。</p>
+            </div>
+            <div class="form-group">
+                <button type="submit" id="webCustomerLoginButton">ログイン</button>
+            </div>
+        </form>
+    </div>
+    <script th:src="@{/js/webCustomerLogin.js}"></script>
 </body>
 
 </html>
+

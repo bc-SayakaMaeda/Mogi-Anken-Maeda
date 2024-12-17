@@ -1,15 +1,5 @@
 @charset "UTF-8";
 
-body {
-	font-family: Arial, sans-serif;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	min-height: 100vh;
-	margin: 0;
-	font-size: 1.5em;
-}
-
 .webCustomerLogin-container {
 	text-align: center;
 	padding: 0 20px;
@@ -34,11 +24,6 @@ body {
 	width: 24px; 
 	height: 24px; 
 	display: none; 
-	}
-
-h1 {
-	font-size: 1.4em;
-	margin-bottom: 50px;
 }
 
 form {
@@ -73,8 +58,6 @@ input {
 }
 
 .error-message {
-	color: red;
-	font-weight: bold;
 	margin: 30px 0;
 	text-align: center;
 	height: 1.5em; 
@@ -82,18 +65,7 @@ input {
 }
 
 button {
-	background-color: rgb(191, 228, 255);
 	padding: 10px 150px;
-	border: none;
-	cursor: pointer;
-	box-shadow: 0 6px 6px #999;
-	font-size: 1em;
-	font-weight: bold;
 	display: block;
 	margin: 0 auto;
-}
-
-button:active {
-	box-shadow: 0 3px 3px #666;
-	transform: translateY(3px);
 }

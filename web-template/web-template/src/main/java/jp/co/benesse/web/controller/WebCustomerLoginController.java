@@ -33,7 +33,7 @@ public class WebCustomerLoginController {
         session.invalidate();
 
         // 入力フィールド（利用者ID・パスワード）を初期化
-        model.addAttribute("userId", "");
+        model.addAttribute("customerID", "");
         model.addAttribute("password", "");
 
         return "webCustomerLogin";

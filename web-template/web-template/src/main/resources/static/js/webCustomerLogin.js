@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
             errorMessageDiv.style.visibility = 'visible'; 
             isValid = false;
             }
+            
         // 入力チェックに問題がない場合フォームを送る
         if (isValid) {
             form.submit(); 

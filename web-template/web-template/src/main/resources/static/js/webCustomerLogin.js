@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('webCustomerLoginForm');
-    const userIdInput = document.getElementById('userId');
+    const customerIDInput = document.getElementById('customerID');
     const passwordInput = document.getElementById('password');
     const errorMessageDiv = document.querySelector('.error-message');
     const togglePassword = document.getElementById('togglePassword');
@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let isValid = true;
         errorMessageDiv.innerHTML = '';
         // 必須チェック
-        if (!userIdInput.value || !passwordInput.value) {
+        if (!customerIDInput.value || !passwordInput.value) {
             errorMessageDiv.innerHTML = '入力必須項目です。';
             errorMessageDiv.style.visibility = 'visible'; 
             isValid = false;
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // フォーマットチェック
         const alphanumericRegex = /^[a-zA-Z0-9]*$/;
-        if (!alphanumericRegex.test(userIdInput.value) || !alphanumericRegex.test(passwordInput.value)) {
+        if (!alphanumericRegex.test(customerIDInput.value) || !alphanumericRegex.test(passwordInput.value)) {
             errorMessageDiv.innerHTML = '入力形式が間違っています。';
             errorMessageDiv.style.visibility = 'visible'; 
             isValid = false;

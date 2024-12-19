@@ -10,9 +10,9 @@ document.addEventListener('DOMContentLoaded', function() {
         let isValid = true;
         errorMessageDiv.innerHTML = '';
         // 必須チェック
-        if (!customerIDInput.value || !passwordInput.value) {
+        if (!validateRequiredFields([customerIDInput, passwordInput])) {
             errorMessageDiv.innerHTML = '入力必須項目です。';
-            errorMessageDiv.style.visibility = 'visible'; 
+            errorMessageDiv.style.visibility = 'visible';
             isValid = false;
         }
         

@@ -34,9 +34,10 @@ document.addEventListener('DOMContentLoaded', function() {
     togglePassword.addEventListener('click', function() {
         const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
         passwordInput.setAttribute('type', type);
-        this.src = type === 'password' ? '../static/images/icon_eye_hide.png' : '../static/images/icon_eye.png';
+        this.src = type === 'password' ? 
+            togglePassword.getAttribute('data-icon-eye-hide') : 
+            togglePassword.getAttribute('data-icon-eye-show');
     });
-    
     passwordInput.addEventListener('input', function() {
         if (passwordInput.value) {
             togglePassword.style.display = 'block'; 

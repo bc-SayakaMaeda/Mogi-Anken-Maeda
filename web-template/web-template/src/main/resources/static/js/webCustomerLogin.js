@@ -17,12 +17,15 @@ document.addEventListener('DOMContentLoaded', function() {
             isValid = false;
         }
         
-        // フォーマットチェック（半角英数字）
-        errorMessage = validateAlphanumeric([customerIDInput, passwordInput]);
-        if (errorMessage) {
-            errorMessageDiv.innerHTML = errorMessage;
-            errorMessageDiv.style.visibility = 'visible'; 
-            isValid = false;
+        // 必須チェックに問題がない場合にフォーマットチェックを行う
+        if (isValid) {
+            // フォーマットチェック（半角英数字）
+            errorMessage = validateAlphanumeric([customerIDInput, passwordInput]);
+            if (errorMessage) {
+                errorMessageDiv.innerHTML = errorMessage;
+                errorMessageDiv.style.visibility = 'visible'; 
+                isValid = false;
+            }
         }
         
         // 入力チェックに問題がない場合フォームを送る

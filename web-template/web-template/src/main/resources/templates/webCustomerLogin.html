@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="utf-8">
@@ -7,14 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="×××市立図書館のWEB利用者ログイン画面です。">
     <meta name="keywords" content="×××市立図書館, ログイン">
-    <link rel="stylesheet" href="../static/css/common.css" type="text/css">
-    <link rel="stylesheet" href="../static/css/webCustomerLogin.css" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/common.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/webCustomerLogin.css}" type="text/css">
 </head>
 
 <body>
     <div class="webCustomerLogin-container">
         <h1 class="title-group">×××市立図書館　WEB利用者ログイン</h1>
-        <form name="webCustomerLoginForm" id="webCustomerLoginForm" method="post" action="/webCustomerLogin">
+        <form name="webCustomerLoginForm" id="webCustomerLoginForm" method="post" action="@{/webCustomerLogin}">
             <div class="form-group">
                 <label for="customerID">利用者ID</label>
                 <input type="text" id="customerID" name="customerID" maxlength="16" />
@@ -22,7 +22,8 @@
             <div class="form-group password-container">
                 <label for="password">パスワード</label>
                 <input type="password" id="password" name="password" maxlength="16" />
-                <img src="../static/images/icon_eye_hide.png" id="togglePassword" alt="Toggle Password Visibility">
+                <img th:src="@{/images/icon_eye_hide.png}" id="togglePassword" alt="Toggle Password Visibility"
+                    th:data-icon-eye-hide="@{/images/icon_eye_hide.png}" th:data-icon-eye-show="@{/images/icon_eye.png}">
             </div>
             <div class="error-message">
                 <p>IDまたはパスワードの入力が適切ではありません。</p>
@@ -32,8 +33,9 @@
             </div>
         </form>
     </div>
-    <script src="../static/js/validation.js"></script>
-    <script src="../static/js/webCustomerLogin.js"></script>
+    <script type="module" th:src="@{/js/constants.js}"></script>
+    <script type="module" th:src="@{/js/validation.js}"></script>
+    <script type="module" th:src="@{/js/webCustomerLogin.js}"></script>
 </body>
 
 </html>

@@ -1,3 +1,6 @@
+import { validateRequiredFields, validateHalfAlphanumeric } from './validation.js';
+import { IMAGE_PATHS } from './constants.js';
+
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('webCustomerLoginForm');
     const customerIDInput = document.getElementById('customerID');
@@ -20,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // 必須チェックに問題がない場合にフォーマットチェックを行う
         if (isValid) {
             // フォーマットチェック（半角英数字）
-            errorMessage = validateAlphanumeric([customerIDInput, passwordInput]);
+            errorMessage = validateHalfAlphanumeric([customerIDInput, passwordInput]);
             if (errorMessage) {
                 errorMessageDiv.innerHTML = errorMessage;
                 errorMessageDiv.style.visibility = 'visible'; 
@@ -38,9 +41,8 @@ document.addEventListener('DOMContentLoaded', function() {
     togglePassword.addEventListener('click', function() {
         const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
         passwordInput.setAttribute('type', type);
-        this.src = type === 'password' ? '../static/images/icon_eye_hide.png' : '../static/images/icon_eye.png';
+        this.src = type === 'password' ? IMAGE_PATHS.ICON_EYE_HIDE : IMAGE_PATHS.ICON_EYE_SHOW;
     });
-    
     passwordInput.addEventListener('input', function() {
         if (passwordInput.value) {
             togglePassword.style.display = 'block'; 

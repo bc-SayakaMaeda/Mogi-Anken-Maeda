@@ -1,5 +1,7 @@
+import { MESSAGES } from './constants.js';
+
 // 必須チェック
-function validateRequiredFields(fields, errorMessage = '入力必須項目です。') {
+function validateRequiredFields(fields, errorMessage = MESSAGES.REQUIRED) {
     for (let field of fields) {
         if (!field.value) {
             return errorMessage;
@@ -9,12 +11,14 @@ function validateRequiredFields(fields, errorMessage = '入力必須項目です
 }
 
 // フォーマットチェック（半角英数字）
-function validateAlphanumeric(fields, errorMessage = 'IDまたはパスワードの入力が適切ではありません。') {
-    const alphanumericRegex = /^[a-zA-Z0-9]*$/;
+function validateHalfAlphanumeric(fields, errorMessage = MESSAGES.HALF_ALPHANUMERIC) {
+    const halfAlphanumericRegex = /^[a-zA-Z0-9]*$/;
     for (let field of fields) {
-        if (!alphanumericRegex.test(field.value)) {
+        if (!halfAlphanumericRegex.test(field.value)) {
             return errorMessage;
         }
     }
     return null;
 }
+
+export { validateRequiredFields, validateHalfAlphanumeric };

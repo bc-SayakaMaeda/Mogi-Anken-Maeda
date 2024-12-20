@@ -1,5 +1,6 @@
 package jp.co.benesse.web.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +21,10 @@ import jp.co.benesse.web.constants.UrlConstants;
  */
 @Controller
 public class WebCustomerLoginController {
+    
+    /** セッション */
+    @Autowired
+    private HttpSession session;
 
     /**
      * 初期表示：web利用者ログイン画面表示 1. セッション情報を初期化 2. 入力フィールド（利用者ID・パスワード）を初期化
@@ -29,7 +34,7 @@ public class WebCustomerLoginController {
      * @return web利用者ログイン画面
      */
     @GetMapping(UrlConstants.VIEW_WEB_CUSTOMER_LOGIN)
-    public String showWebCustomerLogin(HttpSession session, Model model) {
+    public String showWebCustomerLogin(Model model) {
         // セッション情報を初期化
         session.invalidate();
 

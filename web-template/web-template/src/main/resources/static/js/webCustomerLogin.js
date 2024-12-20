@@ -10,26 +10,30 @@ document.addEventListener('DOMContentLoaded', function() {
         let isValid = true;
         errorMessageDiv.innerHTML = '';
         // 必須チェック
-        if (!customerIDInput.value || !passwordInput.value) {
-            errorMessageDiv.innerHTML = '入力必須項目です。';
-            errorMessageDiv.style.visibility = 'visible'; 
+        let errorMessage = validateRequiredFields([customerIDInput, passwordInput]);
+        if (errorMessage) {
+            errorMessageDiv.innerHTML = errorMessage;
+            errorMessageDiv.style.visibility = 'visible';
             isValid = false;
         }
         
-        // フォーマットチェック
-        const alphanumericRegex = /^[a-zA-Z0-9]*$/;
-        if (!alphanumericRegex.test(customerIDInput.value) || !alphanumericRegex.test(passwordInput.value)) {
-            errorMessageDiv.innerHTML = '入力形式が間違っています。';
-            errorMessageDiv.style.visibility = 'visible'; 
-            isValid = false;
+        // 必須チェックに問題がない場合にフォーマットチェックを行う
+        if (isValid) {
+            // フォーマットチェック（半角英数字）
+            errorMessage = validateAlphanumeric([customerIDInput, passwordInput]);
+            if (errorMessage) {
+                errorMessageDiv.innerHTML = errorMessage;
+                errorMessageDiv.style.visibility = 'visible'; 
+                isValid = false;
             }
-            
+        }
+        
         // 入力チェックに問題がない場合フォームを送る
         if (isValid) {
             form.submit(); 
         }
     });
-    
+            
     // パスワード表示機能
     togglePassword.addEventListener('click', function() {
         const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';

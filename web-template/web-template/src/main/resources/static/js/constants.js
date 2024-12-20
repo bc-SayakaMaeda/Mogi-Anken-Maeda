@@ -1,5 +1,5 @@
 // 定数定義
-// メッセージ
+// エラーメッセージ
 export const MESSAGES = {
     REQUIRED: '入力必須項目です。',
     HALF_ALPHANUMERIC: 'IDまたはパスワードの入力が適切ではありません。'

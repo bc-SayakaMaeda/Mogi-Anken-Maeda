@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import jakarta.servlet.http.HttpSession;
+import jp.co.benesse.web.constants.UrlConstants;
 
 /**
  * <pre>
@@ -27,7 +28,7 @@ public class WebCustomerLoginController {
      * @param model モデル
      * @return web利用者ログイン画面
      */
-    @GetMapping("/webCustomerLogin")
+    @GetMapping(UrlConstants.VIEW_WEB_CUSTOMER_LOGIN)
     public String showWebCustomerLogin(HttpSession session, Model model) {
         // セッション情報を初期化
         session.invalidate();
@@ -36,6 +37,6 @@ public class WebCustomerLoginController {
         model.addAttribute("customerID", "");
         model.addAttribute("password", "");
 
-        return "webCustomerLogin";
+        return UrlConstants.VIEW_WEB_CUSTOMER_LOGIN;
     }
 }

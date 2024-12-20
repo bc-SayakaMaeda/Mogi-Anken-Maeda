@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import jakarta.servlet.http.HttpSession;
+import jp.co.benesse.web.annotation.AppDescription;
 import jp.co.benesse.web.constants.UrlConstants;
 
 /**
@@ -34,6 +35,7 @@ public class WebCustomerLoginController {
      * @return web利用者ログイン画面
      */
     @GetMapping(UrlConstants.VIEW_WEB_CUSTOMER_LOGIN)
+    @AppDescription(id = "WEB_CUSTOMER_LOGIN", name = "WEB利用者ログイン")
     public String showWebCustomerLogin(Model model) {
         // セッション情報を初期化
         session.invalidate();

@@ -15,7 +15,7 @@
 <body>
     <div class="webCustomerLogin-container">
         <h1 class="title-group">×××市立図書館　WEB利用者ログイン</h1>
-        <form name="webCustomerLoginForm" id="webCustomerLoginForm" method="post" action="@{/webCustomerLogin}">
+        <form name="webCustomerLoginForm" id="webCustomerLoginForm" method="post" th:action="@{/webCustomerLogin}">
             <div class="form-group">
                 <label for="customerID">利用者ID</label>
                 <input type="text" id="customerID" name="customerID" maxlength="16" />

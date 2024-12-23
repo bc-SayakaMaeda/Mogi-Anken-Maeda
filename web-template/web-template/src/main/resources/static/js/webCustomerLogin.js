@@ -7,7 +7,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const passwordInput = document.getElementById('password');
     const errorMessageDiv = document.querySelector('.error-message');
     const togglePassword = document.getElementById('togglePassword');
-    
+
+    // 初期表示のアイコン設定
+    togglePassword.src = IMAGE_PATHS.ICON_EYE_HIDE;
+
     form.addEventListener('submit', function(event) {
         event.preventDefault();
         let isValid = true;

@@ -2,7 +2,7 @@
 // エラーメッセージ
 export const MESSAGES = {
     REQUIRED: '入力必須項目です。',
-    HALF_ALPHANUMERIC: 'IDまたはパスワードの入力が適切ではありません。'
+    LOGIN_FORMAT: 'IDまたはパスワードの入力が適切ではありません。'
 };
 
 // 画像パス

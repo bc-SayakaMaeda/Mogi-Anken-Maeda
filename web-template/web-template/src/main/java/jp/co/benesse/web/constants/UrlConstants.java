@@ -28,4 +28,7 @@ public class UrlConstants {
     /** web利用者ログイン画面 */
     public static final String VIEW_WEB_CUSTOMER_LOGIN = "/webCustomerLogin";
     
+    /** メニュー画面 */
+    public static final String VIEW_MENU = "/webCustomerMenu";
+    
 }

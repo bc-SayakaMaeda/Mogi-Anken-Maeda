@@ -10,14 +10,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import jakarta.servlet.http.HttpSession;
 import jp.co.benesse.web.annotation.AppDescription;
 import jp.co.benesse.web.constants.UrlConstants;
+import jp.co.benesse.web.entity.WebCustomerEntity;
+import jp.co.benesse.web.exception.WebParamException;
+import jp.co.benesse.web.exception.WebUnexpectedException;
 import jp.co.benesse.web.form.WebCustomerLoginForm;
+import jp.co.benesse.web.service.WebCustomerLoginService;
 
 /**
  * <pre>
  * web利用者ログインコントローラークラス
  *
  * 作成日：2024/12/17
- * 更新日：2024/12/20
+ * 更新日：2024/12/24
  * </pre>
  *
  * @author BC)maeda
@@ -77,26 +81,33 @@ public class WebCustomerLoginController {
         // 必須チェック
         if (customerID == null || customerID.isEmpty() || password == null || password.isEmpty()) {
             model.addAttribute("errorMessage", "入力必須項目です。");
-            return "webCustomerLogin";
+            return UrlConstants.VIEW_WEB_CUSTOMER_LOGIN;
         }
 
         // 文字列長チェック
         if (customerID.length() < 8 || customerID.length() > 16 || password.length() < 8 || password.length() > 16) {
             model.addAttribute("errorMessage", "IDまたはパスワードの入力が適切ではありません。");
-            return "webCustomerLogin";
+            return UrlConstants.VIEW_WEB_CUSTOMER_LOGIN;
         }
 
         // フォーマットチェック
         if (!customerID.matches("[a-zA-Z0-9]+") || !password.matches("[a-zA-Z0-9]+")) {
             model.addAttribute("errorMessage", "IDまたはパスワードの入力が適切ではありません。");
-            return "webCustomerLogin";
+            return UrlConstants.VIEW_WEB_CUSTOMER_LOGIN;
         }
 
         // ログイン処理
-        WebCustomer webCustomer = webCustomerLoginService.login(customerID, password);
+        WebCustomerEntity webCustomer = null;
+        try {
+            webCustomer = WebCustomerLoginService.login(customerID, password);
+        } catch (WebUnexpectedException e) {
+            e.printStackTrace();
+        } catch (WebParamException e) {
+            e.printStackTrace();
+        }
         if (webCustomer == null) {
             model.addAttribute("errorMessage", "IDまたはパスワードが間違っています。");
-            return "webCustomerLogin";
+            return UrlConstants.VIEW_WEB_CUSTOMER_LOGIN;
         }
 
         // セッション保存
@@ -107,6 +118,6 @@ public class WebCustomerLoginController {
         session.setAttribute("email", webCustomer.getEmail());
 
         // 画面遷移
-        return "forward:/webCustomerMenu";
+        return "forward:" + UrlConstants.VIEW_WEB_CUSTOMER_MENU;
     }
 }

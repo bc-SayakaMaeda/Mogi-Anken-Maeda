@@ -2,8 +2,8 @@ package jp.co.benesse.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import jakarta.servlet.http.HttpSession;
 import jp.co.benesse.web.annotation.AppDescription;
@@ -15,7 +15,7 @@ import jp.co.benesse.web.form.WebCustomerLoginForm;
  * web利用者ログインコントローラークラス
  *
  * 作成日：2024/12/17
- * 更新日：2024/12/20
+ * 更新日：2024/12/25
  * </pre>
  *
  * @author BC)maeda
@@ -34,23 +34,18 @@ public class WebCustomerLoginController {
      * 1. セッション情報を初期化 2. 入力フィールド（利用者ID・パスワード）を初期化
      * </p>
      * 
-     * @param model モデル
+     * @param form フォーム
      * @return web利用者ログイン画面
      */
     @GetMapping(UrlConstants.VIEW_WEB_CUSTOMER_LOGIN)
     @AppDescription(id = "WEB_CUSTOMER_LOGIN", name = "WEB利用者ログイン")
-    public String showWebCustomerLogin(Model model) {
+    public String showWebCustomerLogin(@ModelAttribute("webCustomerLoginForm") WebCustomerLoginForm form) {
         // セッション情報を初期化
         session.invalidate();
 
         // 入力フィールド（利用者ID・パスワード）を初期化
-        // フォームオブジェクトを生成し、入力フィールド（利用者ID・パスワード）を初期化
-        WebCustomerLoginForm form = new WebCustomerLoginForm();
         form.setCustomerID("");
         form.setPassword("");
-
-        // 初期化したフォームオブジェクトをモデルに追加
-        model.addAttribute("webCustomerLoginForm", form);
 
         return UrlConstants.VIEW_WEB_CUSTOMER_LOGIN;
     }

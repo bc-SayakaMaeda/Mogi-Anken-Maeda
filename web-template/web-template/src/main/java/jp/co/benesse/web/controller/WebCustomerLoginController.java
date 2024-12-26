@@ -3,7 +3,6 @@ package jp.co.benesse.web.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 
 import jakarta.servlet.http.HttpSession;
 import jp.co.benesse.web.annotation.AppDescription;
@@ -15,7 +14,7 @@ import jp.co.benesse.web.form.WebCustomerLoginForm;
  * web利用者ログインコントローラークラス
  *
  * 作成日：2024/12/17
- * 更新日：2024/12/25
+ * 更新日：2024/12/26
  * </pre>
  *
  * @author BC)maeda
@@ -39,7 +38,7 @@ public class WebCustomerLoginController {
      */
     @GetMapping(UrlConstants.VIEW_WEB_CUSTOMER_LOGIN)
     @AppDescription(id = "WEB_CUSTOMER_LOGIN", name = "WEB利用者ログイン")
-    public String showWebCustomerLogin(@ModelAttribute("webCustomerLoginForm") WebCustomerLoginForm form) {
+    public String showWebCustomerLogin(WebCustomerLoginForm form) {
         // セッション情報を初期化
         session.invalidate();
 

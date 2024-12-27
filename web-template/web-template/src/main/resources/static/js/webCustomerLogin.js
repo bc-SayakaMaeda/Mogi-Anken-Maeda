@@ -16,27 +16,26 @@ document.addEventListener('DOMContentLoaded', function() {
         errorMessageDiv.style.visibility = 'hidden';
 
         // 必須チェック
-        let errorMessage = validateRequiredField(customerIDInput, MESSAGES.REQUIRED);
+        let errorMessage = validateRequiredField(customerIDInput.value, MESSAGES.REQUIRED);
         if (errorMessage) {
             showError(errorMessage);
             return;
         }
 
-        errorMessage = validateRequiredField(passwordInput, MESSAGES.REQUIRED);
+        errorMessage = validateRequiredField(passwordInput.value, MESSAGES.REQUIRED);
         if (errorMessage) {
             showError(errorMessage);
             return;
         }
 
         // フォーマットチェック（半角英数字）
-        const halfAlphanumericRegex = /^[a-zA-Z0-9]*$/;
-        errorMessage = validateFieldFormat(customerIDInput, halfAlphanumericRegex, MESSAGES.LOGIN_FORMAT);
+        errorMessage = validateFieldFormat(customerIDInput.value, REGEX.HALF_ALPHANUMERIC, MESSAGES.LOGIN_FORMAT);
         if (errorMessage) {
             showError(errorMessage);
             return;
         }
 
-        errorMessage = validateFieldFormat(passwordInput, halfAlphanumericRegex, MESSAGES.LOGIN_FORMAT);
+        errorMessage = validateFieldFormat(passwordInput.value, REGEX.HALF_ALPHANUMERIC, MESSAGES.LOGIN_FORMAT);
         if (errorMessage) {
             showError(errorMessage);
             return;

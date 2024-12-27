@@ -8,7 +8,7 @@ function validateRequiredField(value, errorMessage = MESSAGES.REQUIRED) {
 
 // フォーマットチェック
 function validateFieldFormat(value, regex, errorMessage) {
-    if (typeof value !== 'string' || !regex.test(value)) {
+    if (typeof value !== 'string' || regex == null || !regex.test(value)) {
         return errorMessage;
     }
     return null;

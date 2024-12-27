@@ -1,4 +1,4 @@
-import { validateRequiredFields, validateHalfAlphanumeric } from './validation.js';
+import { validateRequiredField, validateFieldFormat } from './validation.js';
 import { IMAGE_PATHS } from './constants.js';
 
 document.addEventListener('DOMContentLoaded', function() {

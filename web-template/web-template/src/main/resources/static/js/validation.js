@@ -2,7 +2,7 @@ import { MESSAGES } from './constants.js';
 
 // 必須チェック
 function validateRequiredField(field, errorMessage = MESSAGES.REQUIRED) {
-    if (!field.value) {
+    if (field == null || !field.value) {
         return errorMessage;
     }
     return null;

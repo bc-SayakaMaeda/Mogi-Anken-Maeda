@@ -1,5 +1,5 @@
 import { validateRequiredField, validateFieldFormat } from './validation.js';
-import { IMAGE_PATHS } from './constants.js';
+import { MESSAGES, IMAGE_PATHS, REGEX } from './constants.js';
 
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('webCustomerLoginForm');

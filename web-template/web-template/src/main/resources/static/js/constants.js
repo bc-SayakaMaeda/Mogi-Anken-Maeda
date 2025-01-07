@@ -12,6 +12,6 @@ export const IMAGE_PATHS = {
 };
 
 // 正規表現
-const REGEX = {
+export const REGEX = {
     HALF_ALPHANUMERIC: /^[a-zA-Z0-9]*$/
 };

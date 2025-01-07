@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import jakarta.servlet.http.HttpSession;
 import jp.co.benesse.web.annotation.AppDescription;
+import jp.co.benesse.web.constants.AppDescriptions;
 import jp.co.benesse.web.constants.UrlConstants;
 import jp.co.benesse.web.form.WebCustomerLoginForm;
 
@@ -14,7 +15,7 @@ import jp.co.benesse.web.form.WebCustomerLoginForm;
  * web利用者ログインコントローラークラス
  *
  * 作成日：2024/12/17
- * 更新日：2024/12/26
+ * 更新日：2025/01/07
  * </pre>
  *
  * @author BC)maeda
@@ -37,7 +38,7 @@ public class WebCustomerLoginController {
      * @return web利用者ログイン画面
      */
     @GetMapping(UrlConstants.VIEW_WEB_CUSTOMER_LOGIN)
-    @AppDescription(id = "WEB_CUSTOMER_LOGIN", name = "WEB利用者ログイン")
+    @AppDescription(id = AppDescriptions.WEB_CUSTOMER_LOGIN_ID, name = AppDescriptions.WEB_CUSTOMER_LOGIN_NAME)
     public String showWebCustomerLogin(WebCustomerLoginForm form) {
         // セッション情報を初期化
         session.invalidate();

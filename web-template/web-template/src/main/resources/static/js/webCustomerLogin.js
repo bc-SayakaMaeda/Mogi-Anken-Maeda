@@ -1,5 +1,5 @@
-import { validateRequiredFields, validateHalfAlphanumeric } from './validation.js';
-import { IMAGE_PATHS } from './constants.js';
+import { validateRequiredField, validateFieldFormat } from './validation.js';
+import { MESSAGES, IMAGE_PATHS, REGEX } from './constants.js';
 
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('webCustomerLoginForm');
@@ -10,34 +10,45 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 初期表示のアイコン設定
     togglePassword.src = IMAGE_PATHS.ICON_EYE_HIDE;
+    
+    function showError(message) {
+        errorMessageDiv.innerHTML = message;
+        errorMessageDiv.style.visibility = 'visible';
+    }
 
     form.addEventListener('submit', function(event) {
         event.preventDefault();
-        let isValid = true;
         errorMessageDiv.innerHTML = '';
+        errorMessageDiv.style.visibility = 'hidden';
+
         // 必須チェック
-        let errorMessage = validateRequiredFields([customerIDInput, passwordInput]);
+        let errorMessage = validateRequiredField(customerIDInput.value, MESSAGES.REQUIRED);
         if (errorMessage) {
-            errorMessageDiv.innerHTML = errorMessage;
-            errorMessageDiv.style.visibility = 'visible';
-            isValid = false;
+            showError(errorMessage);
+            return;
         }
-        
-        // 必須チェックに問題がない場合にフォーマットチェックを行う
-        if (isValid) {
-            // フォーマットチェック（半角英数字）
-            errorMessage = validateHalfAlphanumeric([customerIDInput, passwordInput]);
-            if (errorMessage) {
-                errorMessageDiv.innerHTML = errorMessage;
-                errorMessageDiv.style.visibility = 'visible'; 
-                isValid = false;
-            }
+
+        errorMessage = validateRequiredField(passwordInput.value, MESSAGES.REQUIRED);
+        if (errorMessage) {
+            showError(errorMessage);
+            return;
         }
-        
+
+        // フォーマットチェック（半角英数字）
+        errorMessage = validateFieldFormat(customerIDInput.value, REGEX.HALF_ALPHANUMERIC, MESSAGES.LOGIN_FORMAT);
+        if (errorMessage) {
+            showError(errorMessage);
+            return;
+        }
+
+        errorMessage = validateFieldFormat(passwordInput.value, REGEX.HALF_ALPHANUMERIC, MESSAGES.LOGIN_FORMAT);
+        if (errorMessage) {
+            showError(errorMessage);
+            return;
+        }
+
         // 入力チェックに問題がない場合フォームを送る
-        if (isValid) {
-            form.submit(); 
-        }
+        form.submit();
     });
             
     // パスワード表示機能
@@ -48,9 +59,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     passwordInput.addEventListener('input', function() {
         if (passwordInput.value) {
-            togglePassword.style.display = 'block'; 
+            togglePassword.style.display = 'block';
         } else {
-            togglePassword.style.display = 'none'; 
+            togglePassword.style.display = 'none';
         }
     });
 });

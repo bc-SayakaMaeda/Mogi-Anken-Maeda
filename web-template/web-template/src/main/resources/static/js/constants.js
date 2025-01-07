@@ -10,3 +10,8 @@ export const IMAGE_PATHS = {
     ICON_EYE_HIDE: '/images/icon_eye_hide.png',
     ICON_EYE_SHOW: '/images/icon_eye.png'
 };
+
+// 正規表現
+const REGEX = {
+    HALF_ALPHANUMERIC: /^[a-zA-Z0-9]*$/
+};

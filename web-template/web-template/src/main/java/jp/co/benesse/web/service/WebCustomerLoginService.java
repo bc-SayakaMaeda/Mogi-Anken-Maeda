@@ -28,11 +28,11 @@ public class WebCustomerLoginService {
 
     /** WebCustomerLoginリポジトリ */
     @Autowired
-    private WebCustomerLoginRepository webCustomerLoginRepository;
+    private static WebCustomerLoginRepository webCustomerLoginRepository;
 
     /** パスワードエンコーダー */
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    private static BCryptPasswordEncoder passwordEncoder;
 
     /**
      * <pre>
@@ -47,7 +47,7 @@ public class WebCustomerLoginService {
      * @throws WebUnexpectedException
      * @throws WebParamException
      */
-    public WebCustomerEntity login(String customerID, String password) throws WebUnexpectedException, WebParamException {
+    public static WebCustomerEntity login(String customerID, String password) throws WebUnexpectedException, WebParamException {
         // パスワードをSHA-256でハッシュ化
         String sha256HashedPassword = HashUtil.sha256(password);
 

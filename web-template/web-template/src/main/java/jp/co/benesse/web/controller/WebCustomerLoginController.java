@@ -1,5 +1,7 @@
 package jp.co.benesse.web.controller;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -66,12 +68,12 @@ public class WebCustomerLoginController {
      * 
      * @param customerID インプットの利用者ID
      * @param password インプットのパスワード
-     * @param model モデル
      * @param session セッション
      * @return メニュー画面
      */
-    @PostMapping("/webCustomerLogin")
-    public String login(@RequestParam("customerID") String customerID, @RequestParam("password") String password, Model model, HttpSession session) {
+    @PostMapping(UrlConstants.VIEW_WEB_CUSTOMER_LOGIN)
+    @AppDescription(id = AppDescriptions.WEB_CUSTOMER_LOGIN_ID, name = AppDescriptions.WEB_CUSTOMER_LOGIN_NAME)
+    public String login(@RequestParam String customerID, @RequestParam String password, HttpSession session) {
         // ユーザー情報取得
         // 必須チェック
         if (customerID == null || customerID.isEmpty() || password == null || password.isEmpty()) {

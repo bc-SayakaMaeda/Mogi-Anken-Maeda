@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import jakarta.servlet.http.HttpSession;
 import jp.co.benesse.web.annotation.AppDescription;
 import jp.co.benesse.web.constants.AppDescriptions;
+import jp.co.benesse.web.constants.CommonConstants;
 import jp.co.benesse.web.constants.UrlConstants;
 import jp.co.benesse.web.entity.WebCustomerEntity;
 import jp.co.benesse.web.exception.WebParamException;
@@ -88,7 +89,7 @@ public class WebCustomerLoginController {
         }
 
         // フォーマットチェック
-        if (!customerID.matches("[a-zA-Z0-9]+") || !password.matches("[a-zA-Z0-9]+")) {
+        if (!customerID.matches(CommonConstants.HALF_ALPHANUMERIC) || !password.matches(CommonConstants.HALF_ALPHANUMERIC)) {
             model.addAttribute("errorMessage", "IDまたはパスワードの入力が適切ではありません。");
             return UrlConstants.VIEW_WEB_CUSTOMER_LOGIN;
         }

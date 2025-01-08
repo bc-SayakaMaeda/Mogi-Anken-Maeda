@@ -9,10 +9,10 @@ FROM
 INNER JOIN 
     M_MstCustomer AS cust ON webCust.customerID = cust.customerID
 WHERE 
-    webCust.customerID = :customerID
+    webCust.customerID = /*[# mb:p="customerID"]*/ 'customerID' /*[/]*/
 AND 
-    webCust.password = :hashedPassword
+    webCust.password = /*[# mb:p="password"]*/ 'password' /*[/]*/
 AND 
-    webCust.logicDelFlg = '0'
+    webCust.logicDelFlg = '0' -- 削除なし
 AND 
-    cust.logicDelFlg = '0';
+    cust.logicDelFlg = '0'; -- 削除なし

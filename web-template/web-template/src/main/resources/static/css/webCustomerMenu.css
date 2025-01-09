@@ -1,0 +1,82 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    margin: 0;
+    font-size: 1em;
+}
+
+.webCustomerMenu-container {
+    width: 80%;
+    margin: 20px auto;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.user-info {
+    display: flex;
+    gap: 10px;
+}
+
+#logoutButton {
+    background-color: rgb(191, 228, 255);
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 6px 6px #999;
+    font-size: 1em;
+    font-weight: bold;
+}
+
+#logoutButton:active {
+    box-shadow: 0 3px 3px #666;
+    transform: translateY(3px);
+}
+
+.title-group {
+    font-size: 1.4em;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#book-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+#book-table th, #book-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+#webCustomerReservationCheckButton {
+    display: block;
+    margin: 0 auto;
+    background-color: rgb(191, 228, 255);
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 6px 6px #999;
+    font-size: 1em;
+    font-weight: bold;
+}
+
+#webCustomerReservationCheckButton:active {
+    box-shadow: 0 3px 3px #666;
+    transform: translateY(3px);
+}

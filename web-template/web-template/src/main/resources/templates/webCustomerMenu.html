@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <title>メニュー</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="×××市立図書館のメニュー画面です。">
+    <meta name="keywords" content="×××市立図書館, メニュー">
+    <link rel="stylesheet" href="../static/css/common.css" type="text/css">
+    <link rel="stylesheet" href="../static/css/webCustomerMenu.css" type="text/css">
+</head>
+
+<body>
+    <div class="webCustomerMenu-container">
+        <div class="header">
+            <div class="user-info">
+                <span id="user-id">利用者ID：</span>
+                <span id="user-name">利用者名：</span>
+            </div>
+            <button type="button" id="logoutButton">ログアウト</button>
+        </div>
+        <div class="title-group">
+            <p>貸出希望の本を選択してください</p>
+        </div>
+        <table id="book-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>タイトル</th>
+                    <th>著者</th>
+                    <th>在庫数</th>
+                    <th>貸出希望</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 書籍データがここに挿入されます -->
+            </tbody>
+        </table>
+        <div class="pagination">
+            <a href="#" id="prev-page">＜前</a>
+            <span id="page-info">x/yページ</span>
+            <a href="#" id="next-page">次＞</a>
+        </div>
+        <div class="form-group">
+            <button type="submit" id="webCustomerReservationCheckButton">貸出希望確認</button>
+        </div>
+    </div>
+    <script src="../static/js/constants.js"></script>
+    <script src="../static/js/menu.js"></script>
+</body>
+
+</html>

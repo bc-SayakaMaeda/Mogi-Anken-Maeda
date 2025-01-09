@@ -1,6 +1,8 @@
 package jp.co.benesse.web.repository;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Repository;
 
@@ -21,7 +23,7 @@ import jp.co.benesse.web.exception.WebUnexpectedException;
 @EnableAutoConfiguration
 @Repository
 public class WebCustomerLoginRepository extends SqlGeneratorBaseRepository {
-
+    
     /**
      * ログイン判定情報を取得するメソッド
      * 
@@ -35,20 +37,15 @@ public class WebCustomerLoginRepository extends SqlGeneratorBaseRepository {
         // SQLに渡すパラメータを設定
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("customerID", customerID)
-                .addValue("hashedPassword", hashedPassword);
+                .addValue("password", hashedPassword);
 
         // 動的なSQLの作成
         String sql = getSql(params);
+        
+        RowMapper<WebCustomerEntity> rowMapper = new BeanPropertyRowMapper<>(WebCustomerEntity.class);
 
         // クエリを実行して結果を取得
-        return kgwebjt.queryForObject(sql, params, (rs, rowNum) -> {
-            WebCustomerEntity webCustomer = new WebCustomerEntity();
-            webCustomer.setCustomerId(rs.getString("customerID"));
-            webCustomer.setCustomerName(rs.getString("customerName"));
-            webCustomer.setPostCode(rs.getString("postCode"));
-            webCustomer.setAddress(rs.getString("address"));
-            webCustomer.setEmail(rs.getString("email"));
-            return webCustomer;
-        });
+        return kgwebjt.queryForObject(sql, params, rowMapper);
+        
     }
 }

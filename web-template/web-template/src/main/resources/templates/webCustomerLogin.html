@@ -25,9 +25,14 @@
                 <input type="password" id="password" name="password" maxlength="16" />
                 <img id="togglePassword" alt="Toggle Password Visibility">
             </div>
-            <div class="error-message" th:if="${errorMessage}"
-                th:style="'visibility:' + (${errorMessage} != null ? 'visible' : 'hidden')">
+            <div class="error-message">
                 <p th:text="${errorMessage}"></p>
+                <script type="text/javascript" th:inline="javascript">
+    /*<![CDATA[*/
+    const errorMessage = /*[[${errorMessage}]]*/null;
+    /*]]>*/
+</script>
+                
             </div>
             <div class="form-group">
                 <button type="submit" id="webCustomerLoginButton">ログイン</button>

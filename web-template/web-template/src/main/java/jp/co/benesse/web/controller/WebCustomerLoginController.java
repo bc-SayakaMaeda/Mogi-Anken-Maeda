@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpSession;
 import jp.co.benesse.web.annotation.AppDescription;
 import jp.co.benesse.web.constants.AppDescriptions;
 import jp.co.benesse.web.constants.CommonConstants;
+import jp.co.benesse.web.constants.ErrorMessages;
 import jp.co.benesse.web.constants.UrlConstants;
 import jp.co.benesse.web.entity.WebCustomerEntity;
 import jp.co.benesse.web.exception.WebParamException;
@@ -35,6 +36,10 @@ public class WebCustomerLoginController {
     /** セッション */
     @Autowired
     private HttpSession session;
+    
+    /** WEB利用者ログインサービス */
+    @Autowired
+    private WebCustomerLoginService webCustomerLoginService;
 
     /**
      * 初期表示：web利用者ログイン画面表示
@@ -78,33 +83,30 @@ public class WebCustomerLoginController {
         // ユーザー情報取得
         // 必須チェック
         if (customerID == null || customerID.isEmpty() || password == null || password.isEmpty()) {
-            model.addAttribute("errorMessage", "入力必須項目です。");
+            model.addAttribute("errorMessage", ErrorMessages.REQUIRED);
             return UrlConstants.VIEW_WEB_CUSTOMER_LOGIN;
         }
 
         // 文字列長チェック
         if (customerID.length() < 8 || customerID.length() > 16 || password.length() < 8 || password.length() > 16) {
-            model.addAttribute("errorMessage", "IDまたはパスワードの入力が適切ではありません。");
+            model.addAttribute("errorMessage", ErrorMessages.LOGIN_LENGTH);
             return UrlConstants.VIEW_WEB_CUSTOMER_LOGIN;
         }
 
         // フォーマットチェック
         if (!customerID.matches(CommonConstants.HALF_ALPHANUMERIC) || !password.matches(CommonConstants.HALF_ALPHANUMERIC)) {
-            model.addAttribute("errorMessage", "IDまたはパスワードの入力が適切ではありません。");
+            model.addAttribute("errorMessage", ErrorMessages.LOGIN_FORMAT);
             return UrlConstants.VIEW_WEB_CUSTOMER_LOGIN;
         }
 
         // ログイン処理
         WebCustomerEntity webCustomer = null;
         try {
-            webCustomer = WebCustomerLoginService.login(customerID, password);
+            webCustomer = webCustomerLoginService.login(customerID, password);
         } catch (WebUnexpectedException e) {
             e.printStackTrace();
         } catch (WebParamException e) {
-            e.printStackTrace();
-        }
-        if (webCustomer == null) {
-            model.addAttribute("errorMessage", "IDまたはパスワードが間違っています。");
+            model.addAttribute("errorMessage", ErrorMessages.INVALID_CREDENTIALS);
             return UrlConstants.VIEW_WEB_CUSTOMER_LOGIN;
         }
 

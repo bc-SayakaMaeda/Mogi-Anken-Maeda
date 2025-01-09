@@ -1,10 +1,8 @@
 package jp.co.benesse.web.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import jp.co.benesse.web.constants.ErrorMessages;
 import jp.co.benesse.web.entity.WebCustomerEntity;
 import jp.co.benesse.web.exception.WebParamException;
 import jp.co.benesse.web.exception.WebUnexpectedException;
@@ -28,11 +26,7 @@ public class WebCustomerLoginService {
 
     /** WebCustomerLoginリポジトリ */
     @Autowired
-    private static WebCustomerLoginRepository webCustomerLoginRepository;
-
-    /** パスワードエンコーダー */
-    @Autowired
-    private static BCryptPasswordEncoder passwordEncoder;
+    private WebCustomerLoginRepository webCustomerLoginRepository;
 
     /**
      * <pre>
@@ -47,18 +41,15 @@ public class WebCustomerLoginService {
      * @throws WebUnexpectedException
      * @throws WebParamException
      */
-    public static WebCustomerEntity login(String customerID, String password) throws WebUnexpectedException, WebParamException {
+    public WebCustomerEntity login(String customerID, String password) throws WebUnexpectedException, WebParamException {
         // パスワードをSHA-256でハッシュ化
         String sha256HashedPassword = HashUtil.sha256(password);
-
-        // SHA-256でハッシュ化されたパスワードをBCryptPasswordEncoderでエンコード
-        String bcryptHashedPassword = passwordEncoder.encode(sha256HashedPassword);
-
+        
         // DBアクセス（ログイン判定情報取得）
-        WebCustomerEntity webCustomer = webCustomerLoginRepository.getLoginInfo(customerID, bcryptHashedPassword);
+        WebCustomerEntity webCustomer = webCustomerLoginRepository.getLoginInfo(customerID, sha256HashedPassword);
 
         if (webCustomer == null) {
-            throw new WebParamException(MessageUtil.getMessage(ErrorMessages.INVALID_CREDENTIALS));
+            throw new WebParamException(MessageUtil.getMessage("XXXXX-009"));
         }
 
         return webCustomer;

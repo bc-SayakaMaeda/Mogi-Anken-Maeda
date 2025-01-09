@@ -5,7 +5,7 @@ import java.security.NoSuchAlgorithmException;
 
 /**
  * <pre>
- * Hash化に関するユーティリティ
+ * ハッシュ化に関するユーティリティ
  *
  * 作成日：2025/01/07
  * 更新日：2025/01/07

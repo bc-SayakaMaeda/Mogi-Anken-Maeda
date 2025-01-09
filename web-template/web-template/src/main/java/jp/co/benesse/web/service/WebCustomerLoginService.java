@@ -41,10 +41,11 @@ public class WebCustomerLoginService {
      * @throws WebUnexpectedException
      * @throws WebParamException
      */
-    public WebCustomerEntity login(String customerID, String password) throws WebUnexpectedException, WebParamException {
+    public WebCustomerEntity login(String customerID, String password)
+            throws WebUnexpectedException, WebParamException {
         // パスワードをSHA-256でハッシュ化
         String sha256HashedPassword = HashUtil.sha256(password);
-        
+
         // DBアクセス（ログイン判定情報取得）
         WebCustomerEntity webCustomer = webCustomerLoginRepository.getLoginInfo(customerID, sha256HashedPassword);
 

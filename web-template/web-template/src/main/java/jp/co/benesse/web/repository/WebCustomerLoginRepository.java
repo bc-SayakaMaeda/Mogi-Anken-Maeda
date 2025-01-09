@@ -11,7 +11,7 @@ import jp.co.benesse.web.exception.WebUnexpectedException;
 
 /**
  * <pre>
- * WebCustomerLoginリポジトリ
+ * web利用者ログインリポジトリ
  *
  * 作成日：2024/12/24
  * 更新日：2024/12/24
@@ -23,7 +23,7 @@ import jp.co.benesse.web.exception.WebUnexpectedException;
 @EnableAutoConfiguration
 @Repository
 public class WebCustomerLoginRepository extends SqlGeneratorBaseRepository {
-    
+
     /**
      * ログイン判定情報を取得するメソッド
      * 
@@ -41,11 +41,11 @@ public class WebCustomerLoginRepository extends SqlGeneratorBaseRepository {
 
         // 動的なSQLの作成
         String sql = getSql(params);
-        
+
         RowMapper<WebCustomerEntity> rowMapper = new BeanPropertyRowMapper<>(WebCustomerEntity.class);
 
         // クエリを実行して結果を取得
         return kgwebjt.queryForObject(sql, params, rowMapper);
-        
+
     }
 }

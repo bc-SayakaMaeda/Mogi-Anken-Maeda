@@ -12,13 +12,13 @@ package jp.co.benesse.web.constants;
  * @version 1.0
  */
 public class ErrorMessages {
-    
+
     /**
      * コンストラクタ
      */
     private ErrorMessages() {
     }
-    
+
     /** 必須チェック */
     public static final String REQUIRED = "入力必須項目です。";
 
@@ -27,7 +27,7 @@ public class ErrorMessages {
 
     /** フォーマットチェック */
     public static final String LOGIN_FORMAT = "IDまたはパスワードの入力が適切ではありません。";
-    
+
     /** 認証失敗 */
     public static final String INVALID_CREDENTIALS = "IDまたはパスワードが間違っています。";
 }

@@ -5,7 +5,7 @@ import jp.co.benesse.web.constants.ErrorMessages;
 
 /**
  * <pre>
- * Validation用ユーティリティ.
+ * バリデーション用ユーティリティ.
  *
  * 作成日：2025/01/07
  * 更新日：2025/01/07
@@ -17,7 +17,7 @@ public class ValidationUtil {
 
     /**
      * <pre>
-     * Validationをチェックする
+     * バリデーションをチェックする
      * </pre>
      *
      * @param customerID 利用者ID
@@ -36,7 +36,8 @@ public class ValidationUtil {
         }
 
         // フォーマットチェック（半角英数字）
-        if (!CheckUtil.isRegex(customerID, CommonConstants.HALF_ALPHANUMERIC) || !CheckUtil.isRegex(password, CommonConstants.HALF_ALPHANUMERIC)) {
+        if (!CheckUtil.isRegex(customerID, CommonConstants.HALF_ALPHANUMERIC)
+                || !CheckUtil.isRegex(password, CommonConstants.HALF_ALPHANUMERIC)) {
             return ErrorMessages.LOGIN_FORMAT;
         }
 

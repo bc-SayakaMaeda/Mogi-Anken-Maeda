@@ -7,7 +7,7 @@ import lombok.Setter;
 
 /**
  * <pre>
- * WebCustomerエンティティ
+ * web利用者ログインエンティティ
  *
  * 作成日：2024/12/24
  * 更新日：2024/12/24

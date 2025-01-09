@@ -17,10 +17,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class WebCustomerLoginForm {
-    
+
     /** 利用者ID */
     private String customerID;
-    
+
     /** パスワード */
     private String password;
 }

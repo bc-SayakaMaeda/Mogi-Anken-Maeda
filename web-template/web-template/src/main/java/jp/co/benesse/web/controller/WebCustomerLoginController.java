@@ -36,7 +36,7 @@ public class WebCustomerLoginController {
     /** セッション */
     @Autowired
     private HttpSession session;
-    
+
     /** WEB利用者ログインサービス */
     @Autowired
     private WebCustomerLoginService webCustomerLoginService;
@@ -62,14 +62,9 @@ public class WebCustomerLoginController {
 
         return UrlConstants.VIEW_WEB_CUSTOMER_LOGIN;
     }
-    
+
     /**
-     * ログインボタン押下時：ログイン処理 
-     * 1. ユーザー情報取得 
-     * 2. パスワードのハッシュ化 
-     * 3. DBアクセス（ログイン判定情報取得）
-     * 4. セッション保存 
-     * 5. 画面遷移
+     * ログインボタン押下時：ログイン処理 1. ユーザー情報取得 2. パスワードのハッシュ化 3. DBアクセス（ログイン判定情報取得） 4. セッション保存 5. 画面遷移
      * 
      * @param customerID インプットの利用者ID
      * @param password インプットのパスワード
@@ -79,7 +74,8 @@ public class WebCustomerLoginController {
      */
     @PostMapping(UrlConstants.VIEW_WEB_CUSTOMER_LOGIN)
     @AppDescription(id = AppDescriptions.WEB_CUSTOMER_LOGIN_ID, name = AppDescriptions.WEB_CUSTOMER_LOGIN_NAME)
-    public String login(@RequestParam String customerID, @RequestParam String password, HttpSession session, Model model) {
+    public String login(@RequestParam String customerID, @RequestParam String password, HttpSession session,
+            Model model) {
         // ユーザー情報取得
         // 必須チェック
         if (customerID == null || customerID.isEmpty() || password == null || password.isEmpty()) {
@@ -94,7 +90,8 @@ public class WebCustomerLoginController {
         }
 
         // フォーマットチェック
-        if (!customerID.matches(CommonConstants.HALF_ALPHANUMERIC) || !password.matches(CommonConstants.HALF_ALPHANUMERIC)) {
+        if (!customerID.matches(CommonConstants.HALF_ALPHANUMERIC)
+                || !password.matches(CommonConstants.HALF_ALPHANUMERIC)) {
             model.addAttribute("errorMessage", ErrorMessages.LOGIN_FORMAT);
             return UrlConstants.VIEW_WEB_CUSTOMER_LOGIN;
         }

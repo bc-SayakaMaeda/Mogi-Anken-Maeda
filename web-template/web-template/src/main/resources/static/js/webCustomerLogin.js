@@ -18,8 +18,8 @@ document.addEventListener('DOMContentLoaded', function() {
             errorMessageDiv.innerHTML = message;
             errorMessageDiv.style.visibility = 'visible';
         }else{
-			errorMessageDiv.style.visibility = 'hidden';
-		}
+            errorMessageDiv.style.visibility = 'hidden';
+        }
     }
     
     showError(errorMessage);

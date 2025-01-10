@@ -21,8 +21,9 @@ body {
 }
 
 #logoutButton {
-    background-color: lightgray; /* 薄い灰色に変更 */
-    margin-left: auto; /* 右寄せにする */
+    background-color: lightgray;
+    margin-left: auto;
+    padding: 10px 80px;
 }
 
 hr {
@@ -30,10 +31,10 @@ hr {
 }
 
 .title-group {
-    font-size: 1em; /* カラム名と同じ大きさにする */
-    font-weight: bold; /* 太文字にする */
+    font-size: 1em;
+    font-weight: bold;
     margin-bottom: 20px;
-    text-align: left; 
+    text-align: left;
 }
 
 #book-table {
@@ -44,23 +45,36 @@ hr {
 
 #book-table th {
     background-color: black;
-    color: white; 
+    color: white;
     border: 1px solid #ddd;
     padding: 8px;
     text-align: center;
 }
 
 #book-table td {
-    background-color: lightgray; 
     border: 1px solid #ddd;
     padding: 8px;
     text-align: center;
 }
 
+#book-table tr:nth-child(odd) {
+    background-color: rgb(195, 195, 195); 
+}
+
+#book-table tr:nth-child(even) {
+    background-color: rgb(233, 233, 233);
+}
+
 .pagination {
     display: flex;
-    justify-content: flex-end; 
+    justify-content: flex-end;
     align-items: center;
     gap: 10px;
     margin-bottom: 20px;
 }
+
+.large-checkbox {
+    width: 20px; 
+    height: 20px; 
+}
+

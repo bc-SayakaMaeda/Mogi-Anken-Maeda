@@ -63,9 +63,3 @@ input {
     height: 1.5em;
     visibility: hidden;
 }
-
-button {
-    padding: 10px 150px;
-    display: block;
-    margin: 0 auto;
-}

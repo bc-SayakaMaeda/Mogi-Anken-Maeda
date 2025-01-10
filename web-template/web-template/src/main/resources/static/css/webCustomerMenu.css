@@ -1,11 +1,5 @@
 body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
     align-items: flex-start;
-    min-height: 100vh;
-    margin: 0;
-    font-size: 1em;
 }
 
 .webCustomerMenu-container {
@@ -17,32 +11,29 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .user-info {
     display: flex;
     gap: 10px;
+    flex-grow: 1;
 }
 
 #logoutButton {
-    background-color: rgb(191, 228, 255);
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 6px 6px #999;
-    font-size: 1em;
-    font-weight: bold;
+    background-color: lightgray; /* 薄い灰色に変更 */
+    margin-left: auto; /* 右寄せにする */
 }
 
-#logoutButton:active {
-    box-shadow: 0 3px 3px #666;
-    transform: translateY(3px);
+hr {
+    margin: 20px 0;
 }
 
 .title-group {
-    font-size: 1.4em;
+    font-size: 1em; /* カラム名と同じ大きさにする */
+    font-weight: bold; /* 太文字にする */
     margin-bottom: 20px;
-    text-align: center;
+    text-align: left; 
 }
 
 #book-table {
@@ -51,7 +42,16 @@ body {
     margin-bottom: 20px;
 }
 
-#book-table th, #book-table td {
+#book-table th {
+    background-color: black;
+    color: white; 
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+#book-table td {
+    background-color: lightgray; 
     border: 1px solid #ddd;
     padding: 8px;
     text-align: center;
@@ -59,24 +59,8 @@ body {
 
 .pagination {
     display: flex;
-    justify-content: center;
+    justify-content: flex-end; 
     align-items: center;
     gap: 10px;
     margin-bottom: 20px;
-}
-
-#webCustomerReservationCheckButton {
-    display: block;
-    margin: 0 auto;
-    background-color: rgb(191, 228, 255);
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 6px 6px #999;
-    font-size: 1em;
-    font-weight: bold;
-}
-
-#webCustomerReservationCheckButton:active {
-    box-shadow: 0 3px 3px #666;
-    transform: translateY(3px);
 }

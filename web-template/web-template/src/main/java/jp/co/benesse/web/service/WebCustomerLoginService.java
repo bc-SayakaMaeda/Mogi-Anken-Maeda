@@ -2,10 +2,12 @@ package jp.co.benesse.web.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import jp.co.benesse.web.entity.WebCustomerEntity;
 import jp.co.benesse.web.exception.WebParamException;
 import jp.co.benesse.web.exception.WebUnexpectedException;
+import jp.co.benesse.web.form.WebCustomerLoginForm;
 import jp.co.benesse.web.repository.WebCustomerLoginRepository;
 import jp.co.benesse.web.util.HashUtil;
 import jp.co.benesse.web.util.MessageUtil;
@@ -15,7 +17,7 @@ import jp.co.benesse.web.util.MessageUtil;
  * web利用者ログインサービス
  *
  * 作成日：2024/12/24
- * 更新日：2025/01/07
+ * 更新日：2025/01/14
  * </pre>
  * 
  * @author bc)maeda
@@ -35,14 +37,16 @@ public class WebCustomerLoginService {
      * 2. DBアクセス（ログイン判定情報取得）
      * </pre>
      *
-     * @param customerID
-     * @param password
+     * @param webCustomerLoginForm WEb利用者ログインフォーム
      * @return webCustomer
      * @throws WebUnexpectedException
      * @throws WebParamException
      */
-    public WebCustomerEntity login(String customerID, String password)
+    public WebCustomerEntity login(@ModelAttribute WebCustomerLoginForm webCustomerLoginForm)
             throws WebUnexpectedException, WebParamException {
+        String customerID = webCustomerLoginForm.getCustomerID();
+        String password = webCustomerLoginForm.getPassword();
+
         // パスワードをSHA-256でハッシュ化
         String sha256HashedPassword = HashUtil.sha256(password);
 

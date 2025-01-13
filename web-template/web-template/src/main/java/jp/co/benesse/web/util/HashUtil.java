@@ -8,7 +8,7 @@ import java.security.NoSuchAlgorithmException;
  * ハッシュ化に関するユーティリティ
  *
  * 作成日：2025/01/07
- * 更新日：2025/01/07
+ * 更新日：2025/01/14
  * </pre>
  *
  * @author BC)maeda
@@ -18,10 +18,10 @@ public class HashUtil {
 
     /**
      * <pre>
-     * SHA-256でハッシュ化する
+     * 入力されたパスワードをSHA-256でハッシュ化する
      * </pre>
      *
-     * @param password
+     * @param password ハッシュ化するパスワード
      * @return ハッシュ化されたパスワード（16進数の文字列）
      * @throws RuntimeException
      */
@@ -38,7 +38,6 @@ public class HashUtil {
                 // 1桁の場合先頭に0を足して2桁にする
                 if (hex.length() == 1)
                     hexString.append('0');
-
                 hexString.append(hex);
             }
 

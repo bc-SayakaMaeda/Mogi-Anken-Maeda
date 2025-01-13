@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.HttpSession;
 import jp.co.benesse.web.annotation.AppDescription;
@@ -24,7 +24,7 @@ import jp.co.benesse.web.service.WebCustomerLoginService;
  * web利用者ログインコントローラークラス
  *
  * 作成日：2024/12/17
- * 更新日：2025/01/07
+ * 更新日：2025/01/14
  * </pre>
  *
  * @author BC)maeda
@@ -37,7 +37,7 @@ public class WebCustomerLoginController {
     @Autowired
     private HttpSession session;
 
-    /** WEB利用者ログインサービス */
+    /** web利用者ログインサービス */
     @Autowired
     private WebCustomerLoginService webCustomerLoginService;
 
@@ -47,18 +47,18 @@ public class WebCustomerLoginController {
      * 1. セッション情報を初期化 2. 入力フィールド（利用者ID・パスワード）を初期化
      * </p>
      * 
-     * @param form フォーム
+     * @param webCustomerLoginForm web利用者ログインフォーム
      * @return web利用者ログイン画面
      */
     @GetMapping(UrlConstants.VIEW_WEB_CUSTOMER_LOGIN)
     @AppDescription(id = AppDescriptions.WEB_CUSTOMER_LOGIN_ID, name = AppDescriptions.WEB_CUSTOMER_LOGIN_NAME)
-    public String showWebCustomerLogin(WebCustomerLoginForm form) {
+    public String showWebCustomerLogin(WebCustomerLoginForm webCustomerLoginForm) {
         // セッション情報を初期化
         session.invalidate();
 
         // 入力フィールド（利用者ID・パスワード）を初期化
-        form.setCustomerID("");
-        form.setPassword("");
+        webCustomerLoginForm.setCustomerID("");
+        webCustomerLoginForm.setPassword("");
 
         return UrlConstants.VIEW_WEB_CUSTOMER_LOGIN;
     }
@@ -66,16 +66,16 @@ public class WebCustomerLoginController {
     /**
      * ログインボタン押下時：ログイン処理 1. ユーザー情報取得 2. パスワードのハッシュ化 3. DBアクセス（ログイン判定情報取得） 4. セッション保存 5. 画面遷移
      * 
-     * @param customerID インプットの利用者ID
-     * @param password インプットのパスワード
-     * @param session セッション
+     * @param webCustomerLoginForm web利用者ログインフォーム
      * @param model モデル
      * @return メニュー画面
      */
     @PostMapping(UrlConstants.VIEW_WEB_CUSTOMER_LOGIN)
     @AppDescription(id = AppDescriptions.WEB_CUSTOMER_LOGIN_ID, name = AppDescriptions.WEB_CUSTOMER_LOGIN_NAME)
-    public String login(@RequestParam String customerID, @RequestParam String password, HttpSession session,
-            Model model) {
+    public String login(@ModelAttribute WebCustomerLoginForm webCustomerLoginForm, Model model) {
+        String customerID = webCustomerLoginForm.getCustomerID();
+        String password = webCustomerLoginForm.getPassword();
+
         // ユーザー情報取得
         // 必須チェック
         if (customerID == null || customerID.isEmpty() || password == null || password.isEmpty()) {
@@ -99,7 +99,7 @@ public class WebCustomerLoginController {
         // ログイン処理
         WebCustomerEntity webCustomer = null;
         try {
-            webCustomer = webCustomerLoginService.login(customerID, password);
+            webCustomer = webCustomerLoginService.login(webCustomerLoginForm);
         } catch (WebUnexpectedException e) {
             e.printStackTrace();
         } catch (WebParamException e) {

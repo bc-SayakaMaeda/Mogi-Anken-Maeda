@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (message) {
             errorMessageDiv.innerHTML = message;
             errorMessageDiv.style.visibility = 'visible';
-        }else{
+        } else {
             errorMessageDiv.style.visibility = 'hidden';
         }
     }

@@ -90,7 +90,7 @@ public class WebCustomerLoginController {
             session.setAttribute("email", webCustomer.getEmail());
 
             // 平常時：メニュー画面に遷移
-            return "forward:" + UrlConstants.VIEW_WEB_CUSTOMER_MENU;
+            return "redirect:" + UrlConstants.VIEW_WEB_CUSTOMER_MENU;
 
         } catch (WebUnexpectedException e) {
             e.printStackTrace();

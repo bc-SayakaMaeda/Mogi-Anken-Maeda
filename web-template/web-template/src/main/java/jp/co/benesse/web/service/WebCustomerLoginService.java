@@ -2,7 +2,6 @@ package jp.co.benesse.web.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ModelAttribute;
 
 import jp.co.benesse.web.entity.WebCustomerEntity;
 import jp.co.benesse.web.exception.WebParamException;
@@ -37,12 +36,12 @@ public class WebCustomerLoginService {
      * 2. DBアクセス（ログイン判定情報取得）
      * </pre>
      *
-     * @param webCustomerLoginForm WEb利用者ログインフォーム
-     * @return webCustomer
+     * @param webCustomerLoginForm web利用者ログインフォーム
+     * @return webCustomer 利用者情報
      * @throws WebUnexpectedException
      * @throws WebParamException
      */
-    public WebCustomerEntity login(@ModelAttribute WebCustomerLoginForm webCustomerLoginForm)
+    public WebCustomerEntity login(WebCustomerLoginForm webCustomerLoginForm)
             throws WebUnexpectedException, WebParamException {
         String customerID = webCustomerLoginForm.getCustomerID();
         String password = webCustomerLoginForm.getPassword();

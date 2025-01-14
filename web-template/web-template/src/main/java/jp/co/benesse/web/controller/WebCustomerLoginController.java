@@ -3,14 +3,14 @@ package jp.co.benesse.web.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import jakarta.servlet.http.HttpSession;
 import jp.co.benesse.web.annotation.AppDescription;
 import jp.co.benesse.web.constants.AppDescriptions;
-import jp.co.benesse.web.constants.CommonConstants;
 import jp.co.benesse.web.constants.ErrorMessages;
 import jp.co.benesse.web.constants.UrlConstants;
 import jp.co.benesse.web.entity.WebCustomerEntity;
@@ -67,54 +67,39 @@ public class WebCustomerLoginController {
      * ログインボタン押下時：ログイン処理 1. ユーザー情報取得 2. パスワードのハッシュ化 3. DBアクセス（ログイン判定情報取得） 4. セッション保存 5. 画面遷移
      * 
      * @param webCustomerLoginForm web利用者ログインフォーム
+     * @param bindingResult formクラスでのバリデーション結果
      * @param model モデル
      * @return メニュー画面
      */
     @PostMapping(UrlConstants.VIEW_WEB_CUSTOMER_LOGIN)
     @AppDescription(id = AppDescriptions.WEB_CUSTOMER_LOGIN_ID, name = AppDescriptions.WEB_CUSTOMER_LOGIN_NAME)
-    public String login(@ModelAttribute WebCustomerLoginForm webCustomerLoginForm, Model model) {
-        String customerID = webCustomerLoginForm.getCustomerID();
-        String password = webCustomerLoginForm.getPassword();
-
-        // ユーザー情報取得
-        // 必須チェック
-        if (customerID == null || customerID.isEmpty() || password == null || password.isEmpty()) {
-            model.addAttribute("errorMessage", ErrorMessages.REQUIRED);
+    public String login(@Validated WebCustomerLoginForm webCustomerLoginForm,
+            BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
             return UrlConstants.VIEW_WEB_CUSTOMER_LOGIN;
         }
 
-        // 文字列長チェック
-        if (customerID.length() < 8 || customerID.length() > 16 || password.length() < 8 || password.length() > 16) {
-            model.addAttribute("errorMessage", ErrorMessages.LOGIN_LENGTH);
-            return UrlConstants.VIEW_WEB_CUSTOMER_LOGIN;
-        }
-
-        // フォーマットチェック
-        if (!customerID.matches(CommonConstants.HALF_ALPHANUMERIC)
-                || !password.matches(CommonConstants.HALF_ALPHANUMERIC)) {
-            model.addAttribute("errorMessage", ErrorMessages.LOGIN_FORMAT);
-            return UrlConstants.VIEW_WEB_CUSTOMER_LOGIN;
-        }
-
-        // ログイン処理
-        WebCustomerEntity webCustomer = null;
         try {
-            webCustomer = webCustomerLoginService.login(webCustomerLoginForm);
+            WebCustomerEntity webCustomer = webCustomerLoginService.login(webCustomerLoginForm);
+
+            // セッション保存
+            session.setAttribute("customerID", webCustomer.getCustomerId());
+            session.setAttribute("customerName", webCustomer.getCustomerName());
+            session.setAttribute("postCode", webCustomer.getPostCode());
+            session.setAttribute("address", webCustomer.getAddress());
+            session.setAttribute("email", webCustomer.getEmail());
+
+            // 平常時：メニュー画面に遷移
+            return "forward:" + UrlConstants.VIEW_WEB_CUSTOMER_MENU;
+
         } catch (WebUnexpectedException e) {
             e.printStackTrace();
+            // エラー発生時：エラー画面に遷移
+            return UrlConstants.VIEW_ERROR;
+
         } catch (WebParamException e) {
             model.addAttribute("errorMessage", ErrorMessages.INVALID_CREDENTIALS);
             return UrlConstants.VIEW_WEB_CUSTOMER_LOGIN;
         }
-
-        // セッション保存
-        session.setAttribute("customerID", webCustomer.getCustomerId());
-        session.setAttribute("customerName", webCustomer.getCustomerName());
-        session.setAttribute("postCode", webCustomer.getPostCode());
-        session.setAttribute("address", webCustomer.getAddress());
-        session.setAttribute("email", webCustomer.getEmail());
-
-        // 画面遷移
-        return "forward:" + UrlConstants.VIEW_WEB_CUSTOMER_MENU;
     }
 }

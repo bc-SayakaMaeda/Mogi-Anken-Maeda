@@ -1,6 +1,8 @@
 package jp.co.benesse.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,13 +13,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import jakarta.servlet.http.HttpSession;
 import jp.co.benesse.web.annotation.AppDescription;
 import jp.co.benesse.web.constants.AppDescriptions;
-import jp.co.benesse.web.constants.ErrorMessages;
 import jp.co.benesse.web.constants.UrlConstants;
 import jp.co.benesse.web.entity.WebCustomerEntity;
 import jp.co.benesse.web.exception.WebParamException;
 import jp.co.benesse.web.exception.WebUnexpectedException;
 import jp.co.benesse.web.form.WebCustomerLoginForm;
 import jp.co.benesse.web.service.WebCustomerLoginService;
+import jp.co.benesse.web.util.MessageUtil;
+import jp.co.benesse.web.validationGroups.ValidationGroups.ValidationOrder;
 
 /**
  * <pre>
@@ -40,6 +43,10 @@ public class WebCustomerLoginController {
     /** web利用者ログインサービス */
     @Autowired
     private WebCustomerLoginService webCustomerLoginService;
+
+    /** メッセージソース（エラーメッセージ格納） */
+    @Autowired
+    private MessageSource messageSource;
 
     /**
      * 初期表示：web利用者ログイン画面表示
@@ -73,9 +80,10 @@ public class WebCustomerLoginController {
      */
     @PostMapping(UrlConstants.VIEW_WEB_CUSTOMER_LOGIN)
     @AppDescription(id = AppDescriptions.WEB_CUSTOMER_LOGIN_ID, name = AppDescriptions.WEB_CUSTOMER_LOGIN_NAME)
-    public String login(@Validated WebCustomerLoginForm webCustomerLoginForm,
+    public String login(@Validated(ValidationOrder.class) WebCustomerLoginForm webCustomerLoginForm,
             BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("webCustomerLoginForm", webCustomerLoginForm);
             return UrlConstants.VIEW_WEB_CUSTOMER_LOGIN;
         }
 
@@ -93,13 +101,20 @@ public class WebCustomerLoginController {
             return "redirect:" + UrlConstants.VIEW_WEB_CUSTOMER_MENU;
 
         } catch (WebUnexpectedException e) {
-            e.printStackTrace();
+
+            String errorMessage = MessageUtil.getMessage("XXXXX-001");
+            model.addAttribute("errorMessage", errorMessage);
+
             // エラー発生時：エラー画面に遷移
             return UrlConstants.VIEW_ERROR;
 
         } catch (WebParamException e) {
-            model.addAttribute("errorMessage", ErrorMessages.INVALID_CREDENTIALS);
+            String errorMessage = messageSource.getMessage("error.invalid.credentials", null,
+                    LocaleContextHolder.getLocale());
+            model.addAttribute("errorMessage", errorMessage);
+            model.addAttribute("webCustomerLoginForm", webCustomerLoginForm);
             return UrlConstants.VIEW_WEB_CUSTOMER_LOGIN;
         }
+
     }
 }

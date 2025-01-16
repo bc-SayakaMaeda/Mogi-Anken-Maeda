@@ -12,13 +12,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // 初期表示のアイコン設定
     togglePassword.src = IMAGE_PATHS.ICON_EYE_HIDE;
     
-    
     function showError(message) {
         if (message) {
-            errorMessageDiv.innerHTML = message;
-            errorMessageDiv.style.visibility = 'visible';
+            errorMessageDiv.innerHTML = `<p>${message}</p>`;
+            errorMessageDiv.classList.remove('hidden');
+            errorMessageDiv.classList.add('visible');
         } else {
-            errorMessageDiv.style.visibility = 'hidden';
+            errorMessageDiv.classList.remove('visible');
+            errorMessageDiv.classList.add('hidden');
         }
     }
     

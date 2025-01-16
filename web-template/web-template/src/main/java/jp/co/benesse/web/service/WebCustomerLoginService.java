@@ -46,7 +46,7 @@ public class WebCustomerLoginService {
         String customerID = webCustomerLoginForm.getCustomerID();
         String password = webCustomerLoginForm.getPassword();
 
-        // パスワードをSHA-256でハッシュ化
+        // パスワードのハッシュ化
         String sha256HashedPassword = HashUtil.sha256(password);
 
         // DBアクセス（ログイン判定情報取得）

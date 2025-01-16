@@ -109,7 +109,9 @@ public class WebCustomerLoginController {
             return UrlConstants.VIEW_ERROR;
 
         } catch (WebParamException e) {
-            String errorMessage = messageSource.getMessage("error.invalid.credentials", null,
+            String errorMessage = messageSource.getMessage(
+                    "error.invalid.credentials",
+                    new Object[] { "IDまたはパスワード" },
                     LocaleContextHolder.getLocale());
             model.addAttribute("errorMessage", errorMessage);
             model.addAttribute("webCustomerLoginForm", webCustomerLoginForm);

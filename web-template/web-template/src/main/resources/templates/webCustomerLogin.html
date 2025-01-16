@@ -26,17 +26,11 @@
                 <img id="togglePassword" alt="Toggle Password Visibility">
             </div>
             <div class="error-message" th:with="errormessage=${
-                #fields.hasErrors('customerID') ? #fields.errors('customerID')[0] :
-                (#fields.hasErrors('password') ? #fields.errors('password')[0] : '')
-            }" th:classappend="${not #strings.isEmpty(errormessage)} ? 'visible' : 'hidden'">
-                <p th:text="${errormessage}"></p>
+            #fields.hasErrors('customerID') ? #fields.errors('customerID')[0] :
+            (#fields.hasErrors('password') ? #fields.errors('password')[0] : '')
+            }" th:classappend="${not #strings.isEmpty(errormessage) || errorMessage != null} ? 'visible' : 'hidden'">
+                <p th:text="${not #strings.isEmpty(errormessage) ? errormessage : errorMessage}"></p>
             </div>
-
-            <div class="error-message" th:if="${errorMessage != null}"
-                th:classappend="${not #strings.isEmpty(errorMessage)} ? 'visible' : 'hidden'">
-                <p th:text="${errorMessage}"></p>
-            </div>
-
             <div class="form-group">
                 <button type="submit" id="webCustomerLoginButton">ログイン</button>
             </div>

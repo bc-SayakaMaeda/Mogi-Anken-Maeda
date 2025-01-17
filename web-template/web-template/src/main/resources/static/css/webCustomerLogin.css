@@ -63,13 +63,6 @@ input {
     height: 1.5em;
 }
 
-.error-message.hidden {
-    visibility: hidden;
-}
-.error-message.visible {
-    visibility: visible;
-}
-
 button {
     padding: 10px 150px;
     display: block;

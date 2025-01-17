@@ -2,10 +2,10 @@ package jp.co.benesse.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.SmartValidator;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +20,9 @@ import jp.co.benesse.web.exception.WebUnexpectedException;
 import jp.co.benesse.web.form.WebCustomerLoginForm;
 import jp.co.benesse.web.service.WebCustomerLoginService;
 import jp.co.benesse.web.util.MessageUtil;
+import jp.co.benesse.web.validationGroups.ValidationGroups.FormatCheck;
+import jp.co.benesse.web.validationGroups.ValidationGroups.LengthCheck;
+import jp.co.benesse.web.validationGroups.ValidationGroups.RequiredCheck;
 import jp.co.benesse.web.validationGroups.ValidationGroups.ValidationOrder;
 
 /**
@@ -47,6 +50,10 @@ public class WebCustomerLoginController {
     /** メッセージソース（エラーメッセージ格納） */
     @Autowired
     private MessageSource messageSource;
+
+    /** スマートバリデータ */
+    @Autowired
+    private SmartValidator validator;
 
     /**
      * 初期表示：web利用者ログイン画面表示
@@ -82,12 +89,30 @@ public class WebCustomerLoginController {
     @AppDescription(id = AppDescriptions.WEB_CUSTOMER_LOGIN_ID, name = AppDescriptions.WEB_CUSTOMER_LOGIN_NAME)
     public String login(@Validated(ValidationOrder.class) WebCustomerLoginForm webCustomerLoginForm,
             BindingResult bindingResult, Model model) {
+
+        validator.validate(webCustomerLoginForm, bindingResult, RequiredCheck.class);
         if (bindingResult.hasErrors()) {
-            model.addAttribute("webCustomerLoginForm", webCustomerLoginForm);
+            String errorRequired = MessageUtil.getMessage("error.required");
+            model.addAttribute("errorMessage", errorRequired);
             return UrlConstants.VIEW_WEB_CUSTOMER_LOGIN;
         }
 
-        try {
+        validator.validate(webCustomerLoginForm, bindingResult, LengthCheck.class);
+        if (bindingResult.hasErrors()) {
+            String errorLoginLength = MessageUtil.getMessage("error.login.length", "IDまたはパスワード");
+            model.addAttribute("errorMessage", errorLoginLength);
+            return UrlConstants.VIEW_WEB_CUSTOMER_LOGIN;
+        }
+
+        validator.validate(webCustomerLoginForm, bindingResult, FormatCheck.class);
+        if (bindingResult.hasErrors()) {
+            String errorLoginFormat = MessageUtil.getMessage("error.login.format", "IDまたはパスワード");
+            model.addAttribute("errorMessage", errorLoginFormat);
+            return UrlConstants.VIEW_WEB_CUSTOMER_LOGIN;
+        }
+
+        try
+        {
             WebCustomerEntity webCustomer = webCustomerLoginService.login(webCustomerLoginForm);
 
             // セッション保存
@@ -109,12 +134,8 @@ public class WebCustomerLoginController {
             return UrlConstants.VIEW_ERROR;
 
         } catch (WebParamException e) {
-            String errorMessage = messageSource.getMessage(
-                    "error.invalid.credentials",
-                    new Object[] { "IDまたはパスワード" },
-                    LocaleContextHolder.getLocale());
+            String errorMessage = MessageUtil.getMessage("error.invalid.credentials", "IDまたはパスワード");
             model.addAttribute("errorMessage", errorMessage);
-            model.addAttribute("webCustomerLoginForm", webCustomerLoginForm);
             return UrlConstants.VIEW_WEB_CUSTOMER_LOGIN;
         }
 

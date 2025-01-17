@@ -11,10 +11,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 初期表示のアイコン設定
     togglePassword.src = IMAGE_PATHS.ICON_EYE_HIDE;
-    
+
     function showError(message) {
         if (message) {
-            errorMessageDiv.innerHTML = `<p>${message}</p>`;
+            errorMessageDiv.innerHTML = message;
             errorMessageDiv.classList.remove('hidden');
             errorMessageDiv.classList.add('visible');
         } else {
@@ -29,8 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
         event.preventDefault();
         if (errorMessageDiv) {
             errorMessageDiv.innerHTML = '';
-            errorMessageDiv.style.visibility = 'hidden';
-        }
+        } 
         // 必須チェック
         let errorMessage = validateRequiredField(customerIDInput.value, MESSAGES.REQUIRED);
         if (errorMessage) {

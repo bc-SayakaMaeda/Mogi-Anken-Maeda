@@ -24,6 +24,11 @@ body {
     background-color: lightgray;
     margin-left: auto;
     padding: 10px 80px;
+    text-decoration: none; 
+    color: black; 
+    display: inline-block; 
+    border-radius: 5px; 
+    text-align: center; 
 }
 
 hr {
@@ -53,7 +58,7 @@ hr {
 
 #book-table td {
     border: 1px solid #ddd;
-    padding: 8px;
+    padding: 5px;
     text-align: center;
 }
 
@@ -77,4 +82,3 @@ hr {
     width: 20px; 
     height: 20px; 
 }
-

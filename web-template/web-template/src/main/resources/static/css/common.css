@@ -15,7 +15,7 @@ body {
     margin-bottom: 50px;
 }
 
-button {
+button, #logoutButton {
     background-color: rgb(191, 228, 255);
     border: none;
     cursor: pointer;

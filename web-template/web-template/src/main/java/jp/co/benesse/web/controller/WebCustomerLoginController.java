@@ -1,12 +1,10 @@
 package jp.co.benesse.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.SmartValidator;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -23,14 +21,13 @@ import jp.co.benesse.web.util.MessageUtil;
 import jp.co.benesse.web.validationGroups.ValidationGroups.FormatCheck;
 import jp.co.benesse.web.validationGroups.ValidationGroups.LengthCheck;
 import jp.co.benesse.web.validationGroups.ValidationGroups.RequiredCheck;
-import jp.co.benesse.web.validationGroups.ValidationGroups.ValidationOrder;
 
 /**
  * <pre>
  * web利用者ログインコントローラークラス
  *
  * 作成日：2024/12/17
- * 更新日：2025/01/14
+ * 更新日：2025/01/20
  * </pre>
  *
  * @author BC)maeda
@@ -46,10 +43,6 @@ public class WebCustomerLoginController {
     /** web利用者ログインサービス */
     @Autowired
     private WebCustomerLoginService webCustomerLoginService;
-
-    /** メッセージソース（エラーメッセージ格納） */
-    @Autowired
-    private MessageSource messageSource;
 
     /** スマートバリデータ */
     @Autowired
@@ -74,11 +67,12 @@ public class WebCustomerLoginController {
         webCustomerLoginForm.setCustomerID("");
         webCustomerLoginForm.setPassword("");
 
+        // ログイン画面に遷移
         return UrlConstants.VIEW_WEB_CUSTOMER_LOGIN;
     }
 
     /**
-     * ログインボタン押下時：ログイン処理 1. ユーザー情報取得 2. パスワードのハッシュ化 3. DBアクセス（ログイン判定情報取得） 4. セッション保存 5. 画面遷移
+     * ログインボタン押下時処理
      * 
      * @param webCustomerLoginForm web利用者ログインフォーム
      * @param bindingResult formクラスでのバリデーション結果
@@ -87,9 +81,11 @@ public class WebCustomerLoginController {
      */
     @PostMapping(UrlConstants.VIEW_WEB_CUSTOMER_LOGIN)
     @AppDescription(id = AppDescriptions.WEB_CUSTOMER_LOGIN_ID, name = AppDescriptions.WEB_CUSTOMER_LOGIN_NAME)
-    public String login(@Validated(ValidationOrder.class) WebCustomerLoginForm webCustomerLoginForm,
+    public String login(WebCustomerLoginForm webCustomerLoginForm,
             BindingResult bindingResult, Model model) {
 
+        // バリデーションチェック
+        // 必須チェック
         validator.validate(webCustomerLoginForm, bindingResult, RequiredCheck.class);
         if (bindingResult.hasErrors()) {
             String errorRequired = MessageUtil.getMessage("error.required");
@@ -97,6 +93,7 @@ public class WebCustomerLoginController {
             return UrlConstants.VIEW_WEB_CUSTOMER_LOGIN;
         }
 
+        // 文字列長チェック
         validator.validate(webCustomerLoginForm, bindingResult, LengthCheck.class);
         if (bindingResult.hasErrors()) {
             String errorLoginLength = MessageUtil.getMessage("error.login.length", "IDまたはパスワード");
@@ -104,6 +101,7 @@ public class WebCustomerLoginController {
             return UrlConstants.VIEW_WEB_CUSTOMER_LOGIN;
         }
 
+        // フォーマットチェック
         validator.validate(webCustomerLoginForm, bindingResult, FormatCheck.class);
         if (bindingResult.hasErrors()) {
             String errorLoginFormat = MessageUtil.getMessage("error.login.format", "IDまたはパスワード");
@@ -111,8 +109,7 @@ public class WebCustomerLoginController {
             return UrlConstants.VIEW_WEB_CUSTOMER_LOGIN;
         }
 
-        try
-        {
+        try {
             WebCustomerEntity webCustomer = webCustomerLoginService.login(webCustomerLoginForm);
 
             // セッション保存

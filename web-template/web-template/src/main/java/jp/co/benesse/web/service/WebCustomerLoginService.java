@@ -1,5 +1,7 @@
 package jp.co.benesse.web.service;
 
+import java.security.NoSuchAlgorithmException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,11 +32,7 @@ public class WebCustomerLoginService {
     private WebCustomerLoginRepository webCustomerLoginRepository;
 
     /**
-     * <pre>
-     * ログイン認証をする
-     * 1. パスワードのハッシュ化 
-     * 2. DBアクセス（ログイン判定情報取得）
-     * </pre>
+     * ログイン認証メソッド
      *
      * @param webCustomerLoginForm web利用者ログインフォーム
      * @return webCustomer 利用者情報
@@ -47,7 +45,12 @@ public class WebCustomerLoginService {
         String password = webCustomerLoginForm.getPassword();
 
         // パスワードのハッシュ化
-        String sha256HashedPassword = HashUtil.sha256(password);
+        String sha256HashedPassword;
+        try {
+            sha256HashedPassword = HashUtil.sha256(password);
+        } catch (NoSuchAlgorithmException e) {
+            throw new WebUnexpectedException("SHA-256アルゴリズムが見つかりません", e);
+        }
 
         // DBアクセス（ログイン判定情報取得）
         WebCustomerEntity webCustomer = webCustomerLoginRepository.getLoginInfo(customerID, sha256HashedPassword);

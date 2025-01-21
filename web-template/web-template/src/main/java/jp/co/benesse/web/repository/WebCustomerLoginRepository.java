@@ -25,7 +25,7 @@ import jp.co.benesse.web.exception.WebUnexpectedException;
 public class WebCustomerLoginRepository extends SqlGeneratorBaseRepository {
 
     /**
-     * ログイン判定情報を取得するメソッド
+     * ログイン情報を取得するメソッド
      * 
      * @param customerID 利用者ID
      * @param hashedPassword ハッシュ化されたパスワード

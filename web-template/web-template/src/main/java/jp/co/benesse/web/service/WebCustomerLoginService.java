@@ -18,7 +18,7 @@ import jp.co.benesse.web.util.MessageUtil;
  * web利用者ログインサービス
  *
  * 作成日：2024/12/24
- * 更新日：2025/01/14
+ * 更新日：2025/01/21
  * </pre>
  * 
  * @author bc)maeda
@@ -49,7 +49,7 @@ public class WebCustomerLoginService {
         try {
             sha256HashedPassword = HashUtil.sha256(password);
         } catch (NoSuchAlgorithmException e) {
-            throw new WebUnexpectedException("SHA-256アルゴリズムが見つかりません", e);
+            throw new WebUnexpectedException("SHA-256アルゴリズムが見つかりません");
         }
 
         // DBアクセス（ログイン判定情報取得）

@@ -1,14 +1,12 @@
 package jp.co.benesse.web.validationGroups;
 
-import jakarta.validation.GroupSequence;
-
 /**
  * <pre>
  * バリデーショングループを定義するクラス
  * 異なるバリデーションチェックの順序を制御するためのインターフェイスを実装
  *
  * 作成日：2025/01/16
- * 更新日：2025/01/16
+ * 更新日：2025/01/21
  * </pre>
  *
  * @author BC)maeda
@@ -38,15 +36,5 @@ public class ValidationGroups {
      * </pre>
      */
     public interface FormatCheck {
-    }
-
-    /**
-     * <pre>
-     * バリデーションチェックの順序を定義するインターフェイス
-     * 必須チェック、文字列長チェック、フォーマットチェックの順にバリデーションが実行されることを指定
-     * </pre>
-     */
-    @GroupSequence({ RequiredCheck.class, LengthCheck.class, FormatCheck.class })
-    public interface ValidationOrder {
     }
 }

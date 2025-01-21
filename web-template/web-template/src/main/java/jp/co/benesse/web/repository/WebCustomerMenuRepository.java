@@ -12,7 +12,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import jp.co.benesse.web.constants.UrlConstants;
-import jp.co.benesse.web.dto.BookDTO;
+import jp.co.benesse.web.entity.BookData;
 
 /**
  * <pre>
@@ -38,14 +38,14 @@ public class WebCustomerMenuRepository extends SqlGeneratorBaseRepository {
      * 
      * @return DBから取得した書籍情報
      */
-    public List<BookDTO> findAllBooks() {
+    public List<BookData> findAllBooks() {
         try {
             // SQLファイルの内容を読み込む
             String sql = new String(Files.readAllBytes(Paths.get(UrlConstants.SQL_FIND_ALL_BOOKS)),
                     StandardCharsets.UTF_8);
 
             // SQLクエリを実行し、結果をBookDTOクラスのリストとして返す
-            return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(BookDTO.class));
+            return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(BookData.class));
 
         } catch (Exception e) {
             throw new RuntimeException("SQLファイルを読み込めませんでした", e);

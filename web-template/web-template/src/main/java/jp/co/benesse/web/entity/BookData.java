@@ -5,7 +5,7 @@ import lombok.Setter;
 
 /**
  * <pre>
- * 書籍情報（M_MstBookData）エンティティ
+ * 書籍情報エンティティ
  *
  * 作成日：2025/01/21
  * 更新日：2025/01/21
@@ -29,4 +29,13 @@ public class BookData {
 
     /** 論理削除フラグ */
     private boolean logicDelFlg;
+
+    /** 図書ID */
+    private String libraryBookID;
+
+    /** 貸出フラグ */
+    private boolean loanFlag;
+
+    /** 在庫数 */
+    private int stockCount;
 }

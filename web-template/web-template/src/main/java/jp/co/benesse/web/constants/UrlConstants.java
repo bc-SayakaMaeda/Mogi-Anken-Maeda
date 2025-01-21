@@ -24,4 +24,16 @@ public class UrlConstants {
 
     /** システムエラー */
     public static final String VIEW_ERROR = "/system_error";
+
+    /** web利用者ログイン画面 */
+    public static final String VIEW_WEB_CUSTOMER_LOGIN = "/webCustomerLogin";
+
+    /** メニュー画面 */
+    public static final String VIEW_WEB_CUSTOMER_MENU = "/webCustomerMenu";
+
+    /** 貸出予約確認画面 */
+    public static final String VIEW_WEB_CUSTOMER_RESERVATION_CHECK = "/webCustomerReservationCheck";
+
+    /** 図書一覧取得SQL */
+    public static final String SQL_FIND_ALL_BOOKS = "src/main/resources/sql/BookRepository/findAllBooks.sql";
 }

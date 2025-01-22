@@ -8,7 +8,7 @@ import lombok.Setter;
  * web利用者ログインエンティティ
  *
  * 作成日：2024/12/24
- * 更新日：2024/12/24
+ * 更新日：2025/01/22
  * </pre>
  * 
  * @author BC)maeda

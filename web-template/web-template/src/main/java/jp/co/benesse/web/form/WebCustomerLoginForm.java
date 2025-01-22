@@ -15,7 +15,7 @@ import lombok.Setter;
  * web利用者ログインフォーム
  *
  * 作成日：2024/12/20
- * 更新日：2025/1/16
+ * 更新日：2025/01/22
  * </pre>
  *
  * @author bc)maeda

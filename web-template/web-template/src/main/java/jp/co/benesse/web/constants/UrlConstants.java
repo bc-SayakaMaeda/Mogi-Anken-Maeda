@@ -5,7 +5,7 @@ package jp.co.benesse.web.constants;
  * URL一覧
  * 
  * 作成日：2024/06/18
- * 更新日：2024/06/18
+ * 更新日：2024/12/20
  * </pre>
  * 
  * @author BC)yoda

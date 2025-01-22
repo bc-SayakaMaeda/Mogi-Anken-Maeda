@@ -20,17 +20,6 @@ body {
     flex-grow: 1;
 }
 
-#logoutButton {
-    background-color: lightgray;
-    margin-left: auto;
-    padding: 10px 80px;
-    text-decoration: none; 
-    color: black; 
-    display: inline-block; 
-    border-radius: 5px; 
-    text-align: center; 
-}
-
 hr {
     margin: 20px 0;
 }

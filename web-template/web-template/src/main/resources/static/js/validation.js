@@ -1,3 +1,5 @@
+import { MESSAGES } from './constants.js';
+
 // 必須チェック
 function validateRequiredField(value, errorMessage = MESSAGES.REQUIRED) {
     if (typeof value !== 'string' || value.trim() === '') {
@@ -13,3 +15,5 @@ function validateFieldFormat(value, regex, errorMessage) {
     }
     return null;
 }
+
+export { validateRequiredField, validateFieldFormat };

@@ -26,14 +26,14 @@ import lombok.Setter;
 public class WebCustomerLoginForm {
 
     /** 利用者ID */
-    @NotBlank(groups = RequiredCheck.class, message = "{error.required}")
-    @Size(groups = LengthCheck.class, min = 8, max = 16, message = "{error.login.length}")
-    @Pattern(groups = FormatCheck.class, regexp = CommonConstants.HALF_ALPHANUMERIC, message = "{error.login.format}")
+    @NotBlank(groups = RequiredCheck.class)
+    @Size(groups = LengthCheck.class, min = 8, max = 16)
+    @Pattern(groups = FormatCheck.class, regexp = CommonConstants.HALF_ALPHANUMERIC)
     private String customerID;
 
     /** パスワード */
-    @NotBlank(groups = RequiredCheck.class, message = "{error.required}")
-    @Size(groups = LengthCheck.class, min = 8, max = 16, message = "{error.login.length}")
-    @Pattern(groups = FormatCheck.class, regexp = CommonConstants.HALF_ALPHANUMERIC, message = "{error.login.format}")
+    @NotBlank(groups = RequiredCheck.class)
+    @Size(groups = LengthCheck.class, min = 8, max = 16)
+    @Pattern(groups = FormatCheck.class, regexp = CommonConstants.HALF_ALPHANUMERIC)
     private String password;
 }

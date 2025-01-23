@@ -13,11 +13,11 @@
 </head>
 
 <body>
-    <div class="webCustomerMenu-container" data-total-pages="2">
+    <div class="webCustomerMenu-container" th:attr="data-total-pages=${totalPages}">
         <div class="header">
             <div class="user-info">
-                <span id="user-id" th:text="'利用者ID：' + ${userId}"></span>
-                <span id="user-name" th:text="'利用者名：' + ${userName}"></span>
+                <span id="user-id" th:text="'利用者ID：' + ${customerID}"></span>
+                <span id="user-name" th:text="'利用者名：' + ${customerName}"></span>
             </div>
             <a href="logout.html" id="logoutButton">ログアウト</a>
         </div>
@@ -36,13 +36,13 @@
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="book, iterStat : ${books}">
+                <tr th:each="book, iterStat : ${bookList}">
                     <td th:text="${iterStat.index + 1}"></td>
                     <td th:text="${book.title}"></td>
                     <td th:text="${book.author}"></td>
-                    <td th:text="${book.stock}"></td>
+                    <td th:text="${book.stockCount}"></td>
                     <td>
-                        <input type="checkbox" th:id="'book-' + ${book.id}" th:name="'bookIds'" th:value="${book.id}">
+                        <input type="checkbox" th:id="'book-' + ${book.bookID}" th:name="'bookIds'" th:value="${book.bookID}">
                     </td>
                 </tr>
             </tbody>

@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Thymeleafから渡されたデータを取得
-    const data = /*[[${books}]]*/ []; // サーバーからのデータをここに挿入
+    const data = /*[[${bookList}]]*/ []; // サーバーからのデータをここに挿入
     const rowsPerPage = 10;
     let currentPage = 1;
-    const totalPages = parseInt(document.querySelector('.webCustomerMenu-container').getAttribute('data-total-pages'), 10);
+    const totalPages = parseInt(document.querySelector('.webCustomerMenu-container').getAttribute('data-total-pages'), 10) || 1;
 
     function renderTable(page) {
         const tableBody = document.querySelector('#book-table tbody');
@@ -19,8 +19,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 <td>${start + index + 1}</td>
                 <td>${item.title}</td>
                 <td>${item.author}</td>
-                <td>${item.stock}</td>
-                <td>${item.stock > 0 ? `<input type="checkbox" id="book-${item.id}" name="bookIds" value="${item.id}">` : '貸出中'}</td>
+                <td>${item.stockCount}</td> <!-- 在庫数を表示 -->
+                <td>${item.stockCount > 0 ? `<input type="checkbox" id="book-${item.bookID}" name="bookIds" value="${item.bookID}">` : '貸出中'}</td>
             `;
             tableBody.appendChild(row);
         });
@@ -29,28 +29,39 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // 「前」ボタンの表示/非表示を切り替え
         const prevPageButton = document.getElementById('prev-page');
-        prevPageButton.style.display = page === 1 ? 'none' : 'inline';
+        if (prevPageButton) {
+            prevPageButton.style.display = page === 1 ? 'none' : 'inline';
+        }
 
         // 「次」ボタンの表示/非表示を切り替え
         const nextPageButton = document.getElementById('next-page');
-        nextPageButton.style.display = page === totalPages ? 'none' : 'inline';
+        if (nextPageButton) {
+            nextPageButton.style.display = page === totalPages ? 'none' : 'inline';
+        }
     }
 
-    document.getElementById('prev-page').addEventListener('click', function(event) {
-        event.preventDefault();
-        if (currentPage > 1) {
-            currentPage--;
-            renderTable(currentPage);
-        }
-    });
+    const prevPageButton = document.getElementById('prev-page');
+    const nextPageButton = document.getElementById('next-page');
 
-    document.getElementById('next-page').addEventListener('click', function(event) {
-        event.preventDefault();
-        if (currentPage < totalPages) {
-            currentPage++;
-            renderTable(currentPage);
-        }
-    });
+    if (prevPageButton) {
+        prevPageButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            if (currentPage > 1) {
+                currentPage--;
+                renderTable(currentPage);
+            }
+        });
+    }
+
+    if (nextPageButton) {
+        nextPageButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderTable(currentPage);
+            }
+        });
+    }
 
     renderTable(currentPage);
 });

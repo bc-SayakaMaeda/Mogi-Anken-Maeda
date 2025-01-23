@@ -1,14 +1,14 @@
 SELECT 
     bookData.bookID,
     libraryBook.libraryBookID,
-    bookData.title AS タイトル,
-    bookData.author AS 著者,
+    bookData.title,
+    bookData.author,
     CASE 
         WHEN loanDetail.returnFlg = '0' -- 未返却
         AND loanDetail.logicDelFlg = '0' -- 削除なし
         THEN 1 -- 貸出中
         ELSE 0 -- 在庫
-    END AS 貸出フラグ
+    END AS loanFlag
 FROM 
     M_MstBookData AS bookData
 LEFT JOIN M_MstLibraryBook AS libraryBook

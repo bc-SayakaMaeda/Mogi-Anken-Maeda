@@ -35,5 +35,5 @@ public class UrlConstants {
     public static final String VIEW_WEB_CUSTOMER_RESERVATION_CHECK = "/webCustomerReservationCheck";
 
     /** 図書一覧取得SQL */
-    public static final String SQL_FIND_ALL_BOOKS = "src/main/resources/sql/BookRepository/findAllBooks.sql";
+    public static final String SQL_FIND_ALL_BOOKS = "src/main/resources/sql/WebCustomerMenuRepository/findAllBooks.sql";
 }

@@ -1,6 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Thymeleafから渡されたデータを取得
-    const data = /*[[${bookList}]]*/ []; // サーバーからのデータをここに挿入
     const rowsPerPage = 10;
     let currentPage = 1;
     const totalPages = parseInt(document.querySelector('.webCustomerMenu-container').getAttribute('data-total-pages'), 10) || 1;
@@ -19,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <td>${start + index + 1}</td>
                 <td>${item.title}</td>
                 <td>${item.author}</td>
-                <td>${item.stockCount}</td> <!-- 在庫数を表示 -->
+                <td>${item.stockCount}</td> 
                 <td>${item.stockCount > 0 ? `<input type="checkbox" id="book-${item.bookID}" name="bookIds" value="${item.bookID}">` : '貸出中'}</td>
             `;
             tableBody.appendChild(row);

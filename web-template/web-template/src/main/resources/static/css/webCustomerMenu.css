@@ -42,13 +42,13 @@ hr {
     color: white;
     border: 1px solid #ddd;
     padding: 8px;
-    text-align: center;
+    text-align: left;
 }
 
 #book-table td {
     border: 1px solid #ddd;
     padding: 5px;
-    text-align: center;
+    text-align: left
 }
 
 #book-table tr:nth-child(odd) {

@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <td>${item.title}</td>
                 <td>${item.author}</td>
                 <td>${item.stockCount}</td> 
-                <td>${item.stockCount > 0 ? `<input type="checkbox" id="book-${item.bookID}" name="bookIds" value="${item.bookID}">` : '貸出中'}</td>
+                <td>${item.stockCount > 0 ? `<input type="checkbox" id="book-${start + index + 1}" name="bookIds" value="${item.bookID}">` : '貸出中'}</td>
             `;
             tableBody.appendChild(row);
         });

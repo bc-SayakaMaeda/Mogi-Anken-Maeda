@@ -36,23 +36,14 @@
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="book, iterStat : ${bookList}">
-                    <td th:text="${iterStat.index + 1}"></td>
-                    <td th:text="${book.title}"></td>
-                    <td th:text="${book.author}"></td>
-                    <td th:text="${book.stockCount}"></td>
-                    <td>
-                        <input type="checkbox" th:id="'book-' + ${iterStat.index + 1}" th:name="'bookIds'"
-                            th:value="${book.bookID}" class="large-checkbox">
-                    </td>
-                </tr>
+                <!--図書一覧レコード：JSで動的に作成-->
             </tbody>
         </table>
-        <div class="pagination">
-            <a href="#" id="prev-page" th:href="@{${prevPageUrl}}" th:if="${hasPrevPage}">＜前</a>
-            <span id="page-info" th:text="${currentPage} + ' / ' + ${totalPages}"></span>
-            <a href="#" id="next-page" th:href="@{${nextPageUrl}}" th:if="${hasNextPage}">次＞</a>
-        </div>
+<div class="pagination">
+    <a href="#" id="prev-page" th:href="@{${prevPageUrl}}">＜前</a>
+    <span id="page-info" th:text="${currentPage} + ' / ' + ${totalPages}"></span>
+    <a href="#" id="next-page" th:href="@{${nextPageUrl}}">次＞</a>
+</div>
         <div class="form-group">
             <button type="submit" id="webCustomerReservationCheckButton"
                 th:onclick="'confirmReservation()'">貸出希望確認</button>

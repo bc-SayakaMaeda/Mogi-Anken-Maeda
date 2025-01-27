@@ -43,7 +43,9 @@ public class HashUtil {
             // 16進数の文字列を返す
             return hexString.toString();
         } catch (NoSuchAlgorithmException e) {
-            // ハッシュ化に失敗した場合はnullを返す
+            String errorMessage = MessageUtil.getMessage("パスワードのハッシュ化に失敗しました");
+            LogUtil.logger.info(errorMessage, e);
+
             return null;
         }
     }

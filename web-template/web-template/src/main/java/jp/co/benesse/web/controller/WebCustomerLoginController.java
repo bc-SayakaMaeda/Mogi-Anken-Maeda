@@ -17,6 +17,7 @@ import jp.co.benesse.web.exception.WebParamException;
 import jp.co.benesse.web.exception.WebUnexpectedException;
 import jp.co.benesse.web.form.WebCustomerLoginForm;
 import jp.co.benesse.web.service.WebCustomerLoginService;
+import jp.co.benesse.web.util.LogUtil;
 import jp.co.benesse.web.util.MessageUtil;
 import jp.co.benesse.web.validationGroups.ValidationGroups.FormatCheck;
 import jp.co.benesse.web.validationGroups.ValidationGroups.LengthCheck;
@@ -27,7 +28,7 @@ import jp.co.benesse.web.validationGroups.ValidationGroups.RequiredCheck;
  * web利用者ログインコントローラークラス
  *
  * 作成日：2024/12/17
- * 更新日：2025/01/20
+ * 更新日：2025/01/27
  * </pre>
  *
  * @version 1.0
@@ -104,7 +105,7 @@ public class WebCustomerLoginController {
         } catch (WebUnexpectedException e) {
 
             String errorMessage = MessageUtil.getMessage("XXXXX-001");
-            model.addAttribute("errorMessage", errorMessage);
+            LogUtil.errorDetail(errorMessage, e);
 
             // エラー発生時：エラー画面に遷移
             return UrlConstants.VIEW_ERROR;

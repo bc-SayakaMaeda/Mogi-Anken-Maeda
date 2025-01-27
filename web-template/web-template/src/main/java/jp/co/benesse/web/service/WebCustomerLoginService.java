@@ -49,6 +49,7 @@ public class WebCustomerLoginService {
             String errorMessage = MessageUtil.getMessage("パスワードのハッシュ化に失敗しました");
             WebUnexpectedException exception = new WebUnexpectedException(errorMessage);
             LogUtil.infoDetail(errorMessage, exception);
+            throw exception;
         }
 
         // DBアクセス（ログイン判定情報取得）

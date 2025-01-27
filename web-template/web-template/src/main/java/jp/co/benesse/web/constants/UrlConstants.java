@@ -23,7 +23,7 @@ public class UrlConstants {
     public static final String VIEW_SAMPLE = "/sample";
 
     /** システムエラー */
-    public static final String VIEW_ERROR = "/system_error";
+    public static final String VIEW_ERROR = "/error";
 
     /** web利用者ログイン画面 */
     public static final String VIEW_WEB_CUSTOMER_LOGIN = "/webCustomerLogin";

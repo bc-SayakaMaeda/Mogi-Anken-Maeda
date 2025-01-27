@@ -92,6 +92,10 @@ public class WebCustomerLoginController {
         try {
             WebCustomerEntity webCustomer = webCustomerLoginService.login(webCustomerLoginForm);
 
+            if (webCustomer == null) {
+                return UrlConstants.VIEW_ERROR;
+            }
+
             // セッション保存
             session.setAttribute("customerID", webCustomer.getCustomerId());
             session.setAttribute("customerName", webCustomer.getCustomerName());

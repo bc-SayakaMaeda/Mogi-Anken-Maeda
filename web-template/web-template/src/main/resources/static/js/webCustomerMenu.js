@@ -22,6 +22,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const container = document.querySelector('.webCustomerMenu-container');
     const totalPages = toNumeric(container.getAttribute('data-total-pages'), Math.ceil(data.length / rowsPerPage));
     
+    container.setAttribute('data-total-pages', totalPages);
+    
     function renderTable(page) {
         const tableBody = document.querySelector('#book-table tbody');
         tableBody.innerHTML = '';

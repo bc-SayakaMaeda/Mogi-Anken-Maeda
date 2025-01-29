@@ -1,8 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
     const rowsPerPage = 10;
     let currentPage = 1;
-    const totalPages = parseInt(document.querySelector('.webCustomerMenu-container').getAttribute('data-total-pages'), 10) || 1;
-
+const container = document.querySelector('.webCustomerMenu-container');
+const totalPages = toNumeric(container.getAttribute('data-total-pages'), Math.ceil(data.length / rowsPerPage));
+    
     function renderTable(page) {
         const tableBody = document.querySelector('#book-table tbody');
         tableBody.innerHTML = '';
@@ -10,16 +11,15 @@ document.addEventListener('DOMContentLoaded', function() {
         const start = (page - 1) * rowsPerPage;
         const end = start + rowsPerPage;
         const pageData = data.slice(start, end);
+        const template = document.getElementById('book-row-template').content;
 
         pageData.forEach((item, index) => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${start + index + 1}</td>
-                <td>${item.title}</td>
-                <td>${item.author}</td>
-                <td>${item.stockCount}</td> 
-                <td>${item.stockCount > 0 ? `<input type="checkbox" id="book-${start + index + 1}" name="bookIds" value="${item.bookID}">` : '貸出中'}</td>
-            `;
+            const row = document.importNode(template, true);
+            row.querySelector('.book-id').textContent = start + index + 1;
+            row.querySelector('.book-title').textContent = item.title;
+            row.querySelector('.book-author').textContent = item.author;
+            row.querySelector('.book-stock').textContent = item.stock;
+            row.querySelector('.book-action').innerHTML = item.stock > 0 ? `<input type="checkbox" id="book-${start + index + 1}" name="bookIds" value="${item.bookID}">` : '貸出中';
             tableBody.appendChild(row);
         });
 

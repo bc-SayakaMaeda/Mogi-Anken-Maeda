@@ -36,14 +36,22 @@
                 </tr>
             </thead>
             <tbody>
-                <!--図書一覧レコード：JSで動的に作成-->
+                <template id="book-row-template">
+                    <tr>
+                        <td class="book-id"></td>
+                        <td class="book-title"></td>
+                        <td class="book-author"></td>
+                        <td class="book-stock"></td>
+                        <td class="book-action"></td>
+                    </tr>
+                </template>
             </tbody>
         </table>
-<div class="pagination">
-    <a href="#" id="prev-page" th:href="@{${prevPageUrl}}">＜前</a>
-    <span id="page-info" th:text="${currentPage} + ' / ' + ${totalPages}"></span>
-    <a href="#" id="next-page" th:href="@{${nextPageUrl}}">次＞</a>
-</div>
+        <div class="pagination">
+            <a href="#" id="prev-page" th:href="@{${prevPageUrl}}">＜前</a>
+            <span id="page-info" th:text="${currentPage} + ' / ' + ${totalPages}"></span>
+            <a href="#" id="next-page" th:href="@{${nextPageUrl}}">次＞</a>
+        </div>
         <div class="form-group">
             <button type="submit" id="webCustomerReservationCheckButton"
                 th:onclick="'confirmReservation()'">貸出希望確認</button>
@@ -54,6 +62,7 @@
         const data = /*[[${bookList}]]*/[];
         /*]]>*/
     </script>
+    <script type="module" th:src="@{/js/utils.js}"></script>
     <script type="module" th:src="@{/js/webCustomerMenu.js}"></script>
 </body>
 

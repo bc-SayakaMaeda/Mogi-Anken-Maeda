@@ -13,7 +13,7 @@
 </head>
 
 <body>
-    <div class="webCustomerMenu-container" th:attr="data-total-pages=${totalPages}">
+    <div class="webCustomerMenu-container">
         <div class="header">
             <div class="user-info">
                 <span id="user-id" th:text="'利用者ID：' + ${customerID}"></span>
@@ -25,6 +25,15 @@
         <div class="title-group">
             <p>貸出希望の本を選択してください</p>
         </div>
+        <template id="book-row-template">
+            <tr>
+                <td class="book-id"></td>
+                <td class="book-title"></td>
+                <td class="book-author"></td>
+                <td class="book-stock"></td>
+                <td class="book-action"></td>
+            </tr>
+        </template>
         <table id="book-table">
             <thead>
                 <tr>
@@ -35,17 +44,7 @@
                     <th>貸出希望</th>
                 </tr>
             </thead>
-            <tbody>
-                <template id="book-row-template">
-                    <tr>
-                        <td class="book-id"></td>
-                        <td class="book-title"></td>
-                        <td class="book-author"></td>
-                        <td class="book-stock"></td>
-                        <td class="book-action"></td>
-                    </tr>
-                </template>
-            </tbody>
+            <tbody id="book-row-block"></tbody>
         </table>
         <div class="pagination">
             <a href="#" id="prev-page" th:href="@{${prevPageUrl}}">＜前</a>

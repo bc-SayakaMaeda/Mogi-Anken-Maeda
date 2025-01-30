@@ -1,6 +1,7 @@
 package jp.co.benesse.web.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -61,15 +62,22 @@ public class WebCustomerMenuController {
         // 在庫数算出
         Map<String, Long> stockCountMap = webCustomerMenuService.calculateStock(bookList);
 
+        Map<String, BookData> bookMap = new HashMap<String, BookData>();
+        List<BookData> returnBookList = new ArrayList<BookData>();
+
         // 在庫数を各書籍に設定
         for (BookData book : bookList) {
-            book.setStockCount(stockCountMap.getOrDefault(book.getBookID(), 0L).intValue());
+            if (!bookMap.containsKey(book.getBookID())) {
+                book.setStockCount(stockCountMap.getOrDefault(book.getBookID(), 0L).intValue());
+                returnBookList.add(book);
+                bookMap.put(book.getBookID(), book);
+            }
         }
 
         // 総ページ数算出
         int totalPages = webCustomerMenuService.calculateTotalPages(bookList.size());
 
-        model.addAttribute("bookList", bookList);
+        model.addAttribute("bookList", returnBookList);
         model.addAttribute("totalPages", totalPages);
 
         return UrlConstants.VIEW_WEB_CUSTOMER_MENU;

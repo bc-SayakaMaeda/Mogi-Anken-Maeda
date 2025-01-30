@@ -2,8 +2,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const rowsPerPage = 10;
     let currentPage = 1;
 	const container = document.querySelector('.webCustomerMenu-container');
-	const totalPages = parseInt(container.getAttribute('data-total-pages'), 10) || 1;    
+	const totalPages = Math.ceil(data.length / rowsPerPage) || 1;   
 
+	// 指定されたページの情報をテーブルに表示する
     function renderTable(page) {
         const tableBody = document.querySelector('#book-table tbody');
         tableBody.innerHTML = '';
@@ -11,19 +12,22 @@ document.addEventListener('DOMContentLoaded', function() {
         const start = (page - 1) * rowsPerPage;
         const end = start + rowsPerPage;
         const pageData = data.slice(start, end);
-        const template = document.getElementById('book-row-template').content;
         
+        const template = document.getElementById('book-row-template').content;
         const fragment = document.createDocumentFragment();
 
         pageData.forEach((item, index) => {
+			// <tr><td>要素をコピーする
             const row = document.importNode(template, true);
             row.querySelector('.book-id').textContent = start + index + 1;
             row.querySelector('.book-title').textContent = item.title;
             row.querySelector('.book-author').textContent = item.author;
-            row.querySelector('.book-stock').textContent = item.stock;
-            row.querySelector('.book-action').innerHTML = item.stock > 0 ? `<input type="checkbox" id="book-${start + index + 1}" name="bookIds" value="${item.bookID}">` : '貸出中';
+            row.querySelector('.book-stock').textContent = item.stockCount;
+            row.querySelector('.book-action').innerHTML = item.stockCount > 0 ? `<input type="checkbox" class="large-checkbox" id="book-${start + index + 1}" name="bookIds" value="${item.bookID}">` : '貸出中';
             tableBody.appendChild(row);
         });
+        
+        console.log(data); 
         
         document.getElementById('book-row-block').appendChild(fragment);
 

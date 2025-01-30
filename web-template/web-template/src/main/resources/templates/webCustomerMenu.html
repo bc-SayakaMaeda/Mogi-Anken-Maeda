@@ -19,7 +19,7 @@
                 <span id="user-id" th:text="'利用者ID：' + ${customerID}"></span>
                 <span id="user-name" th:text="'利用者名：' + ${customerName}"></span>
             </div>
-            <a href="logout.html" id="logoutButton">ログアウト</a>
+            <a th:href="@{/webCustomerLogin}" id="logoutButton">ログアウト</a>
         </div>
         <hr>
         <div class="title-group">

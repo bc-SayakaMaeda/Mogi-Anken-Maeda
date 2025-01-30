@@ -44,11 +44,12 @@ public class WebCustomerMenuRepository extends SqlGeneratorBaseRepository {
             String sql = new String(Files.readAllBytes(Paths.get(UrlConstants.SQL_FIND_ALL_BOOKS)),
                     StandardCharsets.UTF_8);
 
-            // SQLクエリを実行し、結果をBookDTOクラスのリストとして返す
+            // SQLクエリを実行
             return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(BookData.class));
 
         } catch (Exception e) {
             throw new RuntimeException("SQLファイルを読み込めませんでした", e);
+
         }
     }
 }

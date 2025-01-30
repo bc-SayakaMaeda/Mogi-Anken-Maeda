@@ -21,7 +21,7 @@ import jp.co.benesse.web.service.WebCustomerMenuService;
  * メニュー画面コントローラークラス
  *
  * 作成日：2025/01/21
- * 更新日：2025/01/21
+ * 更新日：2025/01/30
  * </pre>
  *
  * @author BC)maeda
@@ -62,13 +62,15 @@ public class WebCustomerMenuController {
         // 在庫数算出
         Map<String, Long> stockCountMap = webCustomerMenuService.calculateStock(bookList);
 
-        Map<String, BookData> bookMap = new HashMap<String, BookData>();
         List<BookData> returnBookList = new ArrayList<BookData>();
+        Map<String, BookData> bookMap = new HashMap<String, BookData>();
 
         // 在庫数を各書籍に設定
         for (BookData book : bookList) {
+            // 同じ書籍IDが登録されていない場合に行う
             if (!bookMap.containsKey(book.getBookID())) {
                 book.setStockCount(stockCountMap.getOrDefault(book.getBookID(), 0L).intValue());
+                // 画面に渡す書籍一覧
                 returnBookList.add(book);
                 bookMap.put(book.getBookID(), book);
             }

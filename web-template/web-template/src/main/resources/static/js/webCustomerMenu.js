@@ -1,10 +1,10 @@
 document.addEventListener('DOMContentLoaded', function() {
     const rowsPerPage = 10;
     let currentPage = 1;
-	const container = document.querySelector('.webCustomerMenu-container');
-	const totalPages = Math.ceil(data.length / rowsPerPage) || 1;   
+    const container = document.querySelector('.webCustomerMenu-container');
+    const totalPages = Math.ceil(data.length / rowsPerPage) || 1;   
 
-	// 指定されたページの情報をテーブルに表示する
+    // 指定されたページの情報をテーブルに表示する
     function renderTable(page) {
         const tableBody = document.querySelector('#book-table tbody');
         tableBody.innerHTML = '';
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const fragment = document.createDocumentFragment();
 
         pageData.forEach((item, index) => {
-			// <tr><td>要素をコピーする
+
             const row = document.importNode(template, true);
             row.querySelector('.book-id').textContent = start + index + 1;
             row.querySelector('.book-title').textContent = item.title;

@@ -17,6 +17,7 @@ import jp.co.benesse.web.exception.WebParamException;
 import jp.co.benesse.web.exception.WebUnexpectedException;
 import jp.co.benesse.web.form.WebCustomerLoginForm;
 import jp.co.benesse.web.service.WebCustomerLoginService;
+import jp.co.benesse.web.util.LogUtil;
 import jp.co.benesse.web.util.MessageUtil;
 import jp.co.benesse.web.validationGroups.ValidationGroups.FormatCheck;
 import jp.co.benesse.web.validationGroups.ValidationGroups.LengthCheck;
@@ -27,10 +28,9 @@ import jp.co.benesse.web.validationGroups.ValidationGroups.RequiredCheck;
  * web利用者ログインコントローラークラス
  *
  * 作成日：2024/12/17
- * 更新日：2025/01/20
+ * 更新日：2025/01/27
  * </pre>
  *
- * @author BC)maeda
  * @version 1.0
  */
 @Controller
@@ -85,32 +85,16 @@ public class WebCustomerLoginController {
             BindingResult bindingResult, Model model) {
 
         // バリデーションチェック
-        // 必須チェック
-        validator.validate(webCustomerLoginForm, bindingResult, RequiredCheck.class);
-        if (bindingResult.hasErrors()) {
-            String errorRequired = MessageUtil.getMessage("error.required");
-            model.addAttribute("errorMessage", errorRequired);
-            return UrlConstants.VIEW_WEB_CUSTOMER_LOGIN;
-        }
-
-        // 文字列長チェック
-        validator.validate(webCustomerLoginForm, bindingResult, LengthCheck.class);
-        if (bindingResult.hasErrors()) {
-            String errorLoginLength = MessageUtil.getMessage("error.login.length", "IDまたはパスワード");
-            model.addAttribute("errorMessage", errorLoginLength);
-            return UrlConstants.VIEW_WEB_CUSTOMER_LOGIN;
-        }
-
-        // フォーマットチェック
-        validator.validate(webCustomerLoginForm, bindingResult, FormatCheck.class);
-        if (bindingResult.hasErrors()) {
-            String errorLoginFormat = MessageUtil.getMessage("error.login.format", "IDまたはパスワード");
-            model.addAttribute("errorMessage", errorLoginFormat);
+        if (!validateForm(webCustomerLoginForm, bindingResult, model)) {
             return UrlConstants.VIEW_WEB_CUSTOMER_LOGIN;
         }
 
         try {
             WebCustomerEntity webCustomer = webCustomerLoginService.login(webCustomerLoginForm);
+
+            if (webCustomer == null) {
+                return UrlConstants.VIEW_ERROR;
+            }
 
             // セッション保存
             session.setAttribute("customerID", webCustomer.getCustomerId());
@@ -125,7 +109,7 @@ public class WebCustomerLoginController {
         } catch (WebUnexpectedException e) {
 
             String errorMessage = MessageUtil.getMessage("XXXXX-001");
-            model.addAttribute("errorMessage", errorMessage);
+            LogUtil.errorDetail(errorMessage, e);
 
             // エラー発生時：エラー画面に遷移
             return UrlConstants.VIEW_ERROR;
@@ -136,5 +120,41 @@ public class WebCustomerLoginController {
             return UrlConstants.VIEW_WEB_CUSTOMER_LOGIN;
         }
 
+    }
+
+    /**
+     * フォームのバリデーションチェックを行う
+     * 
+     * @param webCustomerLoginForm web利用者ログインフォーム
+     * @param bindingResult formクラスでのバリデーション結果
+     * @param model モデル
+     * @return バリデーションエラーがない場合はtrue、エラーがある場合はfalse
+     */
+    private boolean validateForm(WebCustomerLoginForm webCustomerLoginForm, BindingResult bindingResult, Model model) {
+        // 必須チェック
+        validator.validate(webCustomerLoginForm, bindingResult, RequiredCheck.class);
+        if (bindingResult.hasErrors()) {
+            String errorRequired = MessageUtil.getMessage("error.required");
+            model.addAttribute("errorMessage", errorRequired);
+            return false;
+        }
+
+        // 文字列長チェック
+        validator.validate(webCustomerLoginForm, bindingResult, LengthCheck.class);
+        if (bindingResult.hasErrors()) {
+            String errorLoginLength = MessageUtil.getMessage("error.login.length", "IDまたはパスワード");
+            model.addAttribute("errorMessage", errorLoginLength);
+            return false;
+        }
+
+        // フォーマットチェック
+        validator.validate(webCustomerLoginForm, bindingResult, FormatCheck.class);
+        if (bindingResult.hasErrors()) {
+            String errorLoginFormat = MessageUtil.getMessage("error.login.format", "IDまたはパスワード");
+            model.addAttribute("errorMessage", errorLoginFormat);
+            return false;
+        }
+
+        return true;
     }
 }

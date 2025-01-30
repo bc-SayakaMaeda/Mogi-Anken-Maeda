@@ -1,7 +1,5 @@
 package jp.co.benesse.web.service;
 
-import java.security.NoSuchAlgorithmException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +9,7 @@ import jp.co.benesse.web.exception.WebUnexpectedException;
 import jp.co.benesse.web.form.WebCustomerLoginForm;
 import jp.co.benesse.web.repository.WebCustomerLoginRepository;
 import jp.co.benesse.web.util.HashUtil;
+import jp.co.benesse.web.util.LogUtil;
 import jp.co.benesse.web.util.MessageUtil;
 
 /**
@@ -18,7 +17,7 @@ import jp.co.benesse.web.util.MessageUtil;
  * web利用者ログインサービス
  *
  * 作成日：2024/12/24
- * 更新日：2025/01/21
+ * 更新日：2025/01/27
  * </pre>
  * 
  * @author bc)maeda
@@ -45,18 +44,21 @@ public class WebCustomerLoginService {
         String password = webCustomerLoginForm.getPassword();
 
         // パスワードのハッシュ化
-        String sha256HashedPassword;
-        try {
-            sha256HashedPassword = HashUtil.sha256(password);
-        } catch (NoSuchAlgorithmException e) {
-            throw new WebUnexpectedException("SHA-256アルゴリズムが見つかりません");
+        String sha256HashedPassword = HashUtil.sha256(password);
+        if (sha256HashedPassword == null) {
+            String errorMessage = MessageUtil.getMessage("パスワードのハッシュ化に失敗しました");
+            WebUnexpectedException exception = new WebUnexpectedException(errorMessage);
+            LogUtil.infoDetail(errorMessage, exception);
+            throw exception;
         }
 
         // DBアクセス（ログイン判定情報取得）
         WebCustomerEntity webCustomer = webCustomerLoginRepository.getLoginInfo(customerID, sha256HashedPassword);
 
         if (webCustomer == null) {
-            throw new WebParamException(MessageUtil.getMessage("XXXXX-009"));
+            String errorMessage = MessageUtil.getMessage("XXXXX-009");
+            WebParamException exception = new WebParamException(errorMessage);
+            LogUtil.infoDetail(errorMessage, exception);
         }
 
         return webCustomer;

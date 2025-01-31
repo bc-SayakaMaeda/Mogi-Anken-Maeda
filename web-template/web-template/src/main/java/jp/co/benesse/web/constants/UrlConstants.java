@@ -5,7 +5,7 @@ package jp.co.benesse.web.constants;
  * URL一覧
  * 
  * 作成日：2024/06/18
- * 更新日：2024/06/18
+ * 更新日：2024/12/20
  * </pre>
  * 
  * @author BC)yoda
@@ -24,4 +24,8 @@ public class UrlConstants {
 
     /** システムエラー */
     public static final String VIEW_ERROR = "/system_error";
+    
+    /** web利用者ログイン画面 */
+    public static final String VIEW_WEB_CUSTOMER_LOGIN = "/webCustomerLogin";
+    
 }

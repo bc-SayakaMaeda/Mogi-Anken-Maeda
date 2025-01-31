@@ -1,9 +1,15 @@
+import { validateRequiredField, validateFieldFormat } from './validation.js';
+import { MESSAGES, IMAGE_PATHS, REGEX } from './constants.js';
+
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('webCustomerLoginForm');
     const customerIDInput = document.getElementById('customerID');
     const passwordInput = document.getElementById('password');
     const errorMessageDiv = document.querySelector('.error-message');
     const togglePassword = document.getElementById('togglePassword');
+
+    // 初期表示のアイコン設定
+    togglePassword.src = IMAGE_PATHS.ICON_EYE_HIDE;
     
     function showError(message) {
         errorMessageDiv.innerHTML = message;
@@ -51,7 +57,6 @@ document.addEventListener('DOMContentLoaded', function() {
         passwordInput.setAttribute('type', type);
         this.src = type === 'password' ? IMAGE_PATHS.ICON_EYE_HIDE : IMAGE_PATHS.ICON_EYE_SHOW;
     });
-    
     passwordInput.addEventListener('input', function() {
         if (passwordInput.value) {
             togglePassword.style.display = 'block';

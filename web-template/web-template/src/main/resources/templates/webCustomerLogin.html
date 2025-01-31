@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>WEB利用者ログイン</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="×××市立図書館のWEB利用者ログイン画面です。">
+    <meta name="keywords" content="×××市立図書館, ログイン">
+    <link rel="stylesheet" th:href="@{/css/common.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/webCustomerLogin.css}" type="text/css">
+    <link rel="icon" href="data:,">
+</head>
+
+<body>
+    <div class="webCustomerLogin-container">
+        <h1 class="title-group">×××市立図書館　WEB利用者ログイン</h1>
+        <form name="webCustomerLoginForm" id="webCustomerLoginForm" method="post" th:action="@{/webCustomerLogin}">
+            <div class="form-group">
+                <label for="customerID">利用者ID</label>
+                <input type="text" id="customerID" name="customerID" maxlength="16" />
+            </div>
+            <div class="form-group password-container">
+                <label for="password">パスワード</label>
+                <input type="password" id="password" name="password" maxlength="16" />
+                <img id="togglePassword" alt="Toggle Password Visibility">
+            </div>
+            <div class="error-message">
+                <p>IDまたはパスワードの入力が適切ではありません。</p>
+            </div>
+            <div class="form-group">
+                <button type="submit" id="webCustomerLoginButton">ログイン</button>
+            </div>
+        </form>
+    </div>
+    <script type="module" th:src="@{/js/webCustomerLogin.js}"></script>
+</body>
+
+</html>

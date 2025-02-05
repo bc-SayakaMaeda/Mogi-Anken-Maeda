@@ -1,25 +1,23 @@
 package jp.co.benesse.web.repository;
 
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import jp.co.benesse.web.constants.UrlConstants;
 import jp.co.benesse.web.entity.BookData;
+import jp.co.benesse.web.exception.WebUnexpectedException;
 
 /**
  * <pre>
  * メニューリポジトリ
  *
  * 作成日：2025/01/21
- * 更新日：2025/01/21
+ * 更新日：2025/02/05
  * </pre>
  *
  * @author BC)maeda
@@ -36,20 +34,17 @@ public class WebCustomerMenuRepository extends SqlGeneratorBaseRepository {
     /**
      * 図書情報取得
      * 
-     * @return DBから取得した書籍情報
+     * @return BookData 書籍情報
+     * @throws WebUnexpectedException
      */
-    public List<BookData> findAllBooks() {
-        try {
-            // SQLファイルの内容を読み込む
-            String sql = new String(Files.readAllBytes(Paths.get(UrlConstants.SQL_FIND_ALL_BOOKS)),
-                    StandardCharsets.UTF_8);
+    public List<BookData> findAllBooks() throws WebUnexpectedException {
+        // 動的なSQLの作成
+        String sql = getSql(null);
 
-            // SQLクエリを実行
-            return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(BookData.class));
+        RowMapper<BookData> rowMapper = new BeanPropertyRowMapper<>(BookData.class);
 
-        } catch (Exception e) {
-            throw new RuntimeException("SQLファイルを読み込めませんでした", e);
+        // SQLクエリを実行して結果を取得
+        return jdbcTemplate.query(sql, rowMapper);
 
-        }
     }
 }

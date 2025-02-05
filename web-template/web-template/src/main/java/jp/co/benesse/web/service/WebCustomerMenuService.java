@@ -8,7 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jp.co.benesse.web.entity.BookData;
+import jp.co.benesse.web.exception.WebUnexpectedException;
 import jp.co.benesse.web.repository.WebCustomerMenuRepository;
+import jp.co.benesse.web.util.LogUtil;
+import jp.co.benesse.web.util.MessageUtil;
 
 /**
  * <pre>
@@ -32,9 +35,16 @@ public class WebCustomerMenuService {
      * 図書一覧取得
      * 
      * @return 図書一覧
+     * @throws WebUnexpectedException
      */
-    public List<BookData> getBookList() {
-        return webCustomerMenuRepository.findAllBooks();
+    public List<BookData> getBookList() throws WebUnexpectedException {
+        try {
+            return webCustomerMenuRepository.findAllBooks();
+        } catch (WebUnexpectedException e) {
+            String errorMessage = MessageUtil.getMessage("図書一覧の取得に失敗しました");
+            LogUtil.infoDetail(errorMessage, e);
+            throw new WebUnexpectedException(errorMessage, e);
+        }
     }
 
     /**
@@ -46,7 +56,7 @@ public class WebCustomerMenuService {
     public Map<String, Long> calculateStock(List<BookData> bookList) {
         // 貸出中の書籍をフィルタリング
         List<String> loanedBookIDs = bookList.stream()
-                .filter(BookData::isLoanFlag)
+                .filter(BookData::isLoanFlg)
                 .map(BookData::getLibraryBookID)
                 .collect(Collectors.toList());
 

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import jp.co.benesse.web.annotation.AppDescription;
+import jp.co.benesse.web.constants.AppDescriptions;
 import jp.co.benesse.web.constants.UrlConstants;
 import jp.co.benesse.web.entity.BookData;
 import jp.co.benesse.web.service.WebCustomerMenuService;
@@ -44,6 +46,7 @@ public class WebCustomerMenuController {
      * @return メニュー画面
      */
     @GetMapping(UrlConstants.VIEW_WEB_CUSTOMER_MENU)
+    @AppDescription(id = AppDescriptions.WEB_CUSTOMER_MENU_ID, name = AppDescriptions.WEB_CUSTOMER_MENU_NAME)
     public String showMenu(Model model, @ModelAttribute("customerID") String customerID,
             @ModelAttribute("customerName") String customerName) {
         // 利用者情報の取得

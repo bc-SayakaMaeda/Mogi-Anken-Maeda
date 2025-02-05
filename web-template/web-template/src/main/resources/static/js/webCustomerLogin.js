@@ -1,26 +1,35 @@
 import { validateRequiredField, validateFieldFormat } from './validation.js';
 import { MESSAGES, IMAGE_PATHS, REGEX } from './constants.js';
-
+    
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('webCustomerLoginForm');
     const customerIDInput = document.getElementById('customerID');
     const passwordInput = document.getElementById('password');
     const errorMessageDiv = document.querySelector('.error-message');
     const togglePassword = document.getElementById('togglePassword');
+    
 
     // 初期表示のアイコン設定
     togglePassword.src = IMAGE_PATHS.ICON_EYE_HIDE;
-    
+
     function showError(message) {
-        errorMessageDiv.innerHTML = message;
-        errorMessageDiv.style.visibility = 'visible';
+        if (message) {
+            errorMessageDiv.innerHTML = message;
+            errorMessageDiv.classList.remove('hidden');
+            errorMessageDiv.classList.add('visible');
+        } else {
+            errorMessageDiv.classList.remove('visible');
+            errorMessageDiv.classList.add('hidden');
+        }
     }
+    
+    showError(errorMessage);
 
     form.addEventListener('submit', function(event) {
         event.preventDefault();
-        errorMessageDiv.innerHTML = '';
-        errorMessageDiv.style.visibility = 'hidden';
-
+        if (errorMessageDiv) {
+            errorMessageDiv.innerHTML = '';
+        } 
         // 必須チェック
         let errorMessage = validateRequiredField(customerIDInput.value, MESSAGES.REQUIRED);
         if (errorMessage) {

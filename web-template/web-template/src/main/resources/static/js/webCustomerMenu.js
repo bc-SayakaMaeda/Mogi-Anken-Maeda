@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const rowsPerPage = 10;
     let currentPage = 1;
     const container = document.querySelector('.webCustomerMenu-container');
-    const totalPages = Math.ceil(data.length / rowsPerPage) || 1;   
+    const totalPages = Math.ceil(data.length / rowsPerPage) || currentPage;   
 
     // 指定されたページの情報をテーブルに表示する
     function renderTable(page) {
@@ -26,8 +26,6 @@ document.addEventListener('DOMContentLoaded', function() {
             row.querySelector('.book-action').innerHTML = item.stockCount > 0 ? `<input type="checkbox" class="large-checkbox" id="book-${start + index + 1}" name="bookIds" value="${item.bookID}">` : '貸出中';
             tableBody.appendChild(row);
         });
-        
-        console.log(data); 
         
         document.getElementById('book-row-block').appendChild(fragment);
 

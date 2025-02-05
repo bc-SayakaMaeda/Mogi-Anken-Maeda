@@ -8,7 +8,7 @@ SELECT
         AND loanDetail.logicDelFlg = '0' -- 削除なし
         THEN 1 -- 貸出中
         ELSE 0 -- 在庫
-    END AS loanFlag
+    END AS loanFlg
 FROM 
     M_MstBookData AS bookData
 LEFT JOIN M_MstLibraryBook AS libraryBook

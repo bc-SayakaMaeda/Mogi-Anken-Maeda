@@ -8,7 +8,7 @@ import lombok.Setter;
  * 書籍情報エンティティ
  *
  * 作成日：2025/01/21
- * 更新日：2025/01/21
+ * 更新日：2025/02/05
  * </pre>
  *
  * @author BC)maeda
@@ -21,21 +21,15 @@ public class BookData {
     /** 書籍ID */
     private String bookID;
 
+    /** 図書ID */
+    private String libraryBookID;
+
     /** タイトル */
     private String title;
 
     /** 著者 */
     private String author;
 
-    /** 論理削除フラグ */
-    private boolean logicDelFlg;
-
-    /** 図書ID */
-    private String libraryBookID;
-
     /** 貸出フラグ */
-    private boolean loanFlag;
-
-    /** 在庫数 */
-    private int stockCount;
+    private boolean loanFlg;
 }

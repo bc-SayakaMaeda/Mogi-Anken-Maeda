@@ -20,9 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const rowsPerPage = 10;
     let currentPage = 1;
     const container = document.querySelector('.webCustomerMenu-container');
-    const totalPages = toNumeric(container.getAttribute('data-total-pages'), Math.ceil(data.length / rowsPerPage));
-    
-    container.setAttribute('data-total-pages', totalPages);
+    const totalPages = Math.ceil(data.length / rowsPerPage) || currentPage;
     
     function renderTable(page) {
         const tableBody = document.querySelector('#book-table tbody');

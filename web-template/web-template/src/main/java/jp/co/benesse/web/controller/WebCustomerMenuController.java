@@ -6,9 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
+import jakarta.servlet.http.HttpSession;
 import jp.co.benesse.web.annotation.AppDescription;
 import jp.co.benesse.web.constants.AppDescriptions;
 import jp.co.benesse.web.constants.UrlConstants;
@@ -30,27 +29,31 @@ import jp.co.benesse.web.util.MessageUtil;
  * @version 1.0
  */
 @Controller
-@SessionAttributes({ "customerID", "customerName", "BookRequestList" })
 public class WebCustomerMenuController {
 
     /** メニューサービス */
     @Autowired
     private WebCustomerMenuService webCustomerMenuService;
 
+    /** セッション */
+    @Autowired
+    private HttpSession session;
+
     /**
      * メニュー画面 : 画面表示
      * 
      * @param model モデル
-     * @param customerID web利用者ID
-     * @param customerName 利用者名
      * @return メニュー画面
      */
     @GetMapping(UrlConstants.VIEW_WEB_CUSTOMER_MENU)
     @AppDescription(id = AppDescriptions.WEB_CUSTOMER_MENU_ID, name = AppDescriptions.WEB_CUSTOMER_MENU_NAME)
-    public String showMenu(Model model, @ModelAttribute("customerID") String customerID,
-            @ModelAttribute("customerName") String customerName) {
+    public String showMenu(Model model) {
 
-        // 利用者情報の取得
+        // セッションから利用者情報を取得
+        String customerID = (String) session.getAttribute("customerID");
+        String customerName = (String) session.getAttribute("customerName");
+
+        // 利用者情報をモデルに設定
         model.addAttribute("customerID", customerID);
         model.addAttribute("customerName", customerName);
 
@@ -75,5 +78,4 @@ public class WebCustomerMenuController {
 
         return UrlConstants.VIEW_WEB_CUSTOMER_MENU;
     }
-
 }

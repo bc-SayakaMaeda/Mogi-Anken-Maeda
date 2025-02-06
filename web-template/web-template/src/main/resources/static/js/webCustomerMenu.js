@@ -1,8 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const rowsPerPage = 10;
     let currentPage = 1;
-    const container = document.querySelector('.webCustomerMenu-container');
-    const totalPages = Math.ceil(data.length / rowsPerPage) || currentPage;   
+    const totalPages = Math.ceil(bookList.length / rowsPerPage) || 1;   
 
     // 指定されたページの情報をテーブルに表示する
     function renderTable(page) {
@@ -11,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const start = (page - 1) * rowsPerPage;
         const end = start + rowsPerPage;
-        const pageData = data.slice(start, end);
+        const pageData = bookList.slice(start, end);
         
         const template = document.getElementById('book-row-template').content;
         const fragment = document.createDocumentFragment();

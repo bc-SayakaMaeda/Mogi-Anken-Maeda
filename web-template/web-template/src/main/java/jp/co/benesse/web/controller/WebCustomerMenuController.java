@@ -76,14 +76,4 @@ public class WebCustomerMenuController {
         return UrlConstants.VIEW_WEB_CUSTOMER_MENU;
     }
 
-    /**
-     * セッションから書籍リクエストリストを取得
-     * 
-     * @param model モデル
-     * @return 書籍リクエストリスト
-     */
-    @SuppressWarnings("unchecked")
-    private List<BookData> getBookRequestList(Model model) {
-        return (List<BookData>) model.getAttribute("BookRequestList");
-    }
 }

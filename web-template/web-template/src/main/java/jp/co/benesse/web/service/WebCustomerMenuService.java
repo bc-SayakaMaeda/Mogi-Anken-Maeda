@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jp.co.benesse.web.dto.BookDataDTO;
 import jp.co.benesse.web.entity.BookData;
 import jp.co.benesse.web.exception.WebUnexpectedException;
 import jp.co.benesse.web.repository.WebCustomerMenuRepository;
@@ -18,7 +19,7 @@ import jp.co.benesse.web.util.MessageUtil;
  * メニュー画面サービス
  *
  * 作成日：2025/01/21
- * 更新日：2025/01/21
+ * 更新日：2025/02/06
  * </pre>
  *
  * @auther bc)maeda
@@ -27,19 +28,42 @@ import jp.co.benesse.web.util.MessageUtil;
 @Service
 public class WebCustomerMenuService {
 
-    /** レポジトリ */
+    /** メニューリポジトリ */
     @Autowired
     private WebCustomerMenuRepository webCustomerMenuRepository;
 
     /**
-     * 図書一覧取得
+     * 図書一覧取得と在庫数設定
      * 
-     * @return 図書一覧
+     * @return 在庫数を設定した図書一覧DTO
      * @throws WebUnexpectedException
      */
-    public List<BookData> getBookList() throws WebUnexpectedException {
+    public List<BookDataDTO> getBookListWithStock() throws WebUnexpectedException {
         try {
-            return webCustomerMenuRepository.findAllBooks();
+            // 図書一覧を取得
+            List<BookData> bookList = webCustomerMenuRepository.findAllBooks();
+
+            // 在庫数を計算
+            Map<String, Long> stockCountMap = calculateStock(bookList);
+
+            // DTOのリストを作成
+            List<BookDataDTO> bookDataDTOList = bookList.stream()
+                    .collect(Collectors.toMap(BookData::getBookID, book -> {
+                        BookDataDTO dto = new BookDataDTO();
+                        dto.setBookID(book.getBookID());
+                        dto.setLibraryBookID(book.getLibraryBookID());
+                        dto.setTitle(book.getTitle());
+                        dto.setAuthor(book.getAuthor());
+                        dto.setLoanFlg(book.isLoanFlg());
+                        dto.setStockCount(
+                                stockCountMap.getOrDefault(book.getBookID(), 0L).intValue());
+                        return dto;
+                    },
+                            (existing, replacement) -> existing))
+                    .values().stream().collect(Collectors.toList());
+
+            return bookDataDTOList;
+
         } catch (WebUnexpectedException e) {
             String errorMessage = MessageUtil.getMessage("図書一覧の取得に失敗しました");
             LogUtil.infoDetail(errorMessage, e);
@@ -53,7 +77,7 @@ public class WebCustomerMenuService {
      * @param bookList 図書一覧
      * @return 在庫数マップ
      */
-    public Map<String, Long> calculateStock(List<BookData> bookList) {
+    private Map<String, Long> calculateStock(List<BookData> bookList) {
         // 貸出中の書籍をフィルタリング
         List<String> loanedBookIDs = bookList.stream()
                 .filter(BookData::isLoanFlg)
@@ -61,11 +85,9 @@ public class WebCustomerMenuService {
                 .collect(Collectors.toList());
 
         // 在庫数を計算
-        Map<String, Long> stockCountMap = bookList.stream()
+        return bookList.stream()
                 .filter(book -> !loanedBookIDs.contains(book.getLibraryBookID()))
                 .collect(Collectors.groupingBy(BookData::getBookID, Collectors.counting()));
-
-        return stockCountMap;
     }
 
     /**

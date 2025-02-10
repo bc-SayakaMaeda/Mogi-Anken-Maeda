@@ -1,7 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
     const rowsPerPage = 10;
     let currentPage = 1;
-    const totalPages = Math.ceil(bookList.length / rowsPerPage) || 1;   
+    const totalPages = Math.ceil(bookList.length / rowsPerPage) || 1;  
+    const form = document.getElementById('reservationForm'); 
 
     // 指定されたページの情報をテーブルに表示する
     function renderTable(page) {
@@ -67,4 +68,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     renderTable(currentPage);
-});
+    
+    // 貸出希望確認ボタン押下時
+    form.addEventListener('submit', function (event) {
+        // 必須チェック
+        const checkboxes = document.querySelectorAll('#book-row-block input[type="checkbox"]'); 
+        const isChecked = Array.from(checkboxes).some(checkbox => checkbox.checked); 
+
+        if (!isChecked) {
+            event.preventDefault(); 
+            alert('貸出希望の本を1冊以上選択してください。'); 
+            return;
+        }
+
+    });
+        
+    });

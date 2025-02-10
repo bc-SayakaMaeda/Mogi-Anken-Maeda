@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.HttpSession;
 import jp.co.benesse.web.annotation.AppDescription;
@@ -77,5 +79,18 @@ public class WebCustomerMenuController {
         }
 
         return UrlConstants.VIEW_WEB_CUSTOMER_MENU;
+    }
+
+    /**
+     * 貸出希望確認ボタン押下時処理
+     * 
+     * @return メニュー画面
+     */
+    @PostMapping(UrlConstants.VIEW_WEB_CUSTOMER_MENU)
+    @AppDescription(id = AppDescriptions.WEB_CUSTOMER_MENU_ID, name = AppDescriptions.WEB_CUSTOMER_MENU_NAME)
+    public String reservationCheck(@RequestParam List<String> bookIds, Model model) {
+        model.addAttribute("bookIds", bookIds);
+        // 平常時：貸出希望確認画面に遷移
+        return "redirect:" + UrlConstants.VIEW_WEB_CUSTOMER_RESERVATION_CHECK;
     }
 }

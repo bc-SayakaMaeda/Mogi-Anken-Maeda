@@ -5,10 +5,10 @@ import lombok.Setter;
 
 /**
  * <pre>
- * 書籍情報DTO
+ * 貸出可能書籍情報DTO
  *
- * 作成日：2025/01/21
- * 更新日：2025/02/05
+ * 作成日：2025/02/12
+ * 更新日：2025/02/12
  * </pre>
  *
  * @author BC)maeda
@@ -16,22 +16,16 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class BookDataDTO {
+public class BookRequestDTO {
 
     /** 書籍ID */
     private String bookID;
-
-    /** 図書ID */
-    private String libraryBookID;
 
     /** タイトル */
     private String title;
 
     /** 著者 */
     private String author;
-
-    /** 貸出フラグ */
-    private boolean loanFlg;
 
     /** 在庫数 */
     private int stockCount;

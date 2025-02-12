@@ -14,6 +14,7 @@ import jp.co.benesse.web.annotation.AppDescription;
 import jp.co.benesse.web.constants.AppDescriptions;
 import jp.co.benesse.web.constants.UrlConstants;
 import jp.co.benesse.web.dto.BookDataDTO;
+import jp.co.benesse.web.dto.BookRequestDTO;
 import jp.co.benesse.web.exception.WebUnexpectedException;
 import jp.co.benesse.web.service.WebCustomerMenuService;
 import jp.co.benesse.web.util.LogUtil;
@@ -24,7 +25,7 @@ import jp.co.benesse.web.util.MessageUtil;
  * メニュー画面コントローラークラス
  *
  * 作成日：2025/01/21
- * 更新日：2025/02/06
+ * 更新日：2025/02/12
  * </pre>
  *
  * @author BC)maeda
@@ -66,7 +67,6 @@ public class WebCustomerMenuController {
             // 総ページ数算出
             int totalPages = webCustomerMenuService.calculateTotalPages(bookList.size());
 
-            // モデルにデータを設定
             model.addAttribute("bookList", bookList);
             model.addAttribute("totalPages", totalPages);
 
@@ -84,13 +84,37 @@ public class WebCustomerMenuController {
     /**
      * 貸出希望確認ボタン押下時処理
      * 
-     * @return メニュー画面
+     * @param bookIds
+     * @param model
+     * @return 貸出予約確認画面
      */
     @PostMapping(UrlConstants.VIEW_WEB_CUSTOMER_MENU)
     @AppDescription(id = AppDescriptions.WEB_CUSTOMER_MENU_ID, name = AppDescriptions.WEB_CUSTOMER_MENU_NAME)
-    public String reservationCheck(@RequestParam List<String> bookIds, Model model) {
-        model.addAttribute("bookIds", bookIds);
+    public String reservationCheck(@RequestParam(required = false) List<String> bookIds, Model model) {
+        // 必須チェック
+        if (bookIds == null || bookIds.isEmpty()) {
+            return UrlConstants.VIEW_WEB_CUSTOMER_MENU;
+        }
+
+        try {
+            // 書籍ID指定図書一覧取得（在庫数設定済み）
+            List<BookRequestDTO> selectBookList = webCustomerMenuService.getBookListByIdWithStock();
+
+            // 貸出可能判定
+            List<BookRequestDTO> reservatableBookList = webCustomerMenuService.getReservatableBooks(selectBookList);
+
+            model.addAttribute("reservatableBookList", reservatableBookList);
+
+        } catch (WebUnexpectedException e) {
+            String errorMessage = MessageUtil.getMessage("XXXXX-002");
+            LogUtil.errorDetail(errorMessage, e);
+
+            // エラー発生時：エラー画面に遷移
+            return UrlConstants.VIEW_ERROR;
+        }
+
         // 平常時：貸出希望確認画面に遷移
         return "redirect:" + UrlConstants.VIEW_WEB_CUSTOMER_RESERVATION_CHECK;
+
     }
 }

@@ -17,7 +17,7 @@ import jp.co.benesse.web.exception.WebUnexpectedException;
  * メニューリポジトリ
  *
  * 作成日：2025/01/21
- * 更新日：2025/02/05
+ * 更新日：2025/02/12
  * </pre>
  *
  * @author BC)maeda
@@ -38,6 +38,23 @@ public class WebCustomerMenuRepository extends SqlGeneratorBaseRepository {
      * @throws WebUnexpectedException
      */
     public List<BookData> findAllBooks() throws WebUnexpectedException {
+        // 動的なSQLの作成
+        String sql = getSql(null);
+
+        RowMapper<BookData> rowMapper = new BeanPropertyRowMapper<>(BookData.class);
+
+        // SQLクエリを実行して結果を取得
+        return jdbcTemplate.query(sql, rowMapper);
+
+    }
+
+    /**
+     * 図書情報取得(書籍ID指定)
+     * 
+     * @return BookData 書籍情報
+     * @throws WebUnexpectedException
+     */
+    public List<BookData> findSelectBooks() throws WebUnexpectedException {
         // 動的なSQLの作成
         String sql = getSql(null);
 

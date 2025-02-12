@@ -77,7 +77,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (!isChecked) {
             event.preventDefault(); 
-            alert('貸出希望の本を1冊以上選択してください。'); 
             return;
         }
 

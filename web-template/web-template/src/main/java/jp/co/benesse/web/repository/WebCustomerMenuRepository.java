@@ -7,6 +7,8 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import jp.co.benesse.web.entity.BookData;
@@ -27,9 +29,26 @@ import jp.co.benesse.web.exception.WebUnexpectedException;
 @Repository
 public class WebCustomerMenuRepository extends SqlGeneratorBaseRepository {
 
+    /** NamedParameterJdbcTemplate */
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
     /** JDBCテンプレート */
+    private final JdbcTemplate jdbcTemplate;
+
+    /** RowMapper */
+    private final RowMapper<BookData> rowMapper = new BeanPropertyRowMapper<>(BookData.class);
+
+    /**
+     * コンストラクタ
+     * 
+     * @param namedParameterJdbcTemplate NamedParameterJdbcTemplate
+     * @param jdbcTemplate JdbcTemplate
+     */
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    public WebCustomerMenuRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate, JdbcTemplate jdbcTemplate) {
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     /**
      * 図書情報取得
@@ -41,8 +60,6 @@ public class WebCustomerMenuRepository extends SqlGeneratorBaseRepository {
         // 動的なSQLの作成
         String sql = getSql(null);
 
-        RowMapper<BookData> rowMapper = new BeanPropertyRowMapper<>(BookData.class);
-
         // SQLクエリを実行して結果を取得
         return jdbcTemplate.query(sql, rowMapper);
 
@@ -51,17 +68,20 @@ public class WebCustomerMenuRepository extends SqlGeneratorBaseRepository {
     /**
      * 図書情報取得(書籍ID指定)
      * 
-     * @return BookData 書籍情報
+     * @param bookIds 貸出希望書籍IDリスト
+     * @return BookData 書籍情報リスト
      * @throws WebUnexpectedException
      */
-    public List<BookData> findSelectBooks() throws WebUnexpectedException {
-        // 動的なSQLの作成
-        String sql = getSql(null);
+    public List<BookData> findSelectBooks(List<String> bookIds) throws WebUnexpectedException {
 
-        RowMapper<BookData> rowMapper = new BeanPropertyRowMapper<>(BookData.class);
+        MapSqlParameterSource parameters = new MapSqlParameterSource()
+                .addValue("bookIds", bookIds);
+
+        // 動的なSQLの作成
+        String sql = getSql(parameters);
 
         // SQLクエリを実行して結果を取得
-        return jdbcTemplate.query(sql, rowMapper);
+        return namedParameterJdbcTemplate.query(sql, parameters, rowMapper);
 
     }
 }

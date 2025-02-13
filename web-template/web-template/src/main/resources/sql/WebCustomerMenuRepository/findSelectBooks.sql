@@ -18,4 +18,8 @@ LEFT JOIN M_BookLoanRecordsDetail AS loanDetail
 WHERE 
     bookData.logicDelFlg = '0' -- 削除なし
     AND libraryBook.logicDelFlg = '0' -- 削除なし
-    AND bookData.bookID = /*[# mb:p="bookIds"]*/ 'bookIds' /*[/]*/
+    AND bookData.bookID IN 
+    (/*[# th:each="bookId : ${bookIds}"]*/
+            /*[# mb:p="bookId"]*/ '1' /*[/]*/
+        /*[(${bookIdStat.last} ? '' : ',')]*/
+        /*[/]*/)

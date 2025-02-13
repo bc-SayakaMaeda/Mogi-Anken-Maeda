@@ -75,13 +75,14 @@ public class WebCustomerMenuService {
     /**
      * 図書一覧取得（書籍ID指定）と在庫数設定
      * 
+     * @param bookIds 貸出希望書籍IDリスト
      * @return 在庫数を設定した図書一覧DTO
      * @throws WebUnexpectedException
      */
-    public List<BookRequestDTO> getBookListByIdWithStock() throws WebUnexpectedException {
+    public List<BookRequestDTO> getBookListByIdWithStock(List<String> bookIds) throws WebUnexpectedException {
         try {
             // 書籍ID指定図書一覧を取得
-            List<BookData> selectBookList = webCustomerMenuRepository.findSelectBooks();
+            List<BookData> selectBookList = webCustomerMenuRepository.findSelectBooks(bookIds);
 
             // 在庫数を計算
             Map<String, Long> stockCountMap = calculateStock(selectBookList);
@@ -143,10 +144,6 @@ public class WebCustomerMenuService {
      * 貸出可能書籍判定メソッド
      * 
      * 在庫数が1以上の書籍を抽出し、貸出可能な書籍リストを作成して返す
-     * 1. 入力として渡された書籍リストをストリームに変換
-     * 2. 在庫数が1以上の書籍をフィルタリング
-     * 3. フィルタリング結果をリスト型に変換
-     * 4. 貸出可能な書籍リストを返却
      * </pre>
      * 
      * @param bookDataDTOList 書籍情報リスト

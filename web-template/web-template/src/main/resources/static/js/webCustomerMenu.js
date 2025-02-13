@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
             row.querySelector('.book-title').textContent = item.title;
             row.querySelector('.book-author').textContent = item.author;
             row.querySelector('.book-stock').textContent = item.stockCount;
-            row.querySelector('.book-action').innerHTML = item.stockCount > 0 ? `<input type="checkbox" class="large-checkbox" id="book-${start + index + 1}" name="bookIds" value="${item.bookID}">` : '貸出中';
+			row.querySelector('.book-action').innerHTML = item.stockCount > 0 ? `<input type="checkbox" class="large-checkbox" id="book-${start + index + 1}" name="bookIds" value="${item.bookID}">` : '貸出中';
             tableBody.appendChild(row);
         });
         
@@ -81,5 +81,5 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
     });
-        
+    
     });

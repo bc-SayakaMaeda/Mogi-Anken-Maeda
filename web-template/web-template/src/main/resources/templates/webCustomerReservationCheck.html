@@ -1,9 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <title>貸出予約確認画面</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="×××市立図書館の貸出確認画面です。">
+    <meta name="keywords" content="×××市立図書館, 貸出確認">
+    <link rel="stylesheet" th:href="@{/css/common.css}" type="text/css">
     <link rel="icon" href="data:,">
 </head>
 
@@ -12,8 +16,8 @@
         <div class="header">
             <div class="user-info">
                 <h1>貸出予約確認画面</h1>
-                <span id="user-id">利用者ID</span>
-                <span id="user-name">利用者名</span>
+                <span id="user-id" th:text="'利用者ID：' + ${customerID}"></span>
+                <span id="user-name" th:text="'利用者名：' + ${customerName}"></span>
             </div>
         </div>
     </div>

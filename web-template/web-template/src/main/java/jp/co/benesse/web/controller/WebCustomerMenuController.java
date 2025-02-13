@@ -84,8 +84,8 @@ public class WebCustomerMenuController {
     /**
      * 貸出希望確認ボタン押下時処理
      * 
-     * @param bookIds
-     * @param model
+     * @param bookIds 貸出希望書籍IDリスト
+     * @param model モデル
      * @return 貸出予約確認画面
      */
     @PostMapping(UrlConstants.VIEW_WEB_CUSTOMER_MENU)
@@ -97,8 +97,9 @@ public class WebCustomerMenuController {
         }
 
         try {
+
             // 書籍ID指定図書一覧取得（在庫数設定済み）
-            List<BookRequestDTO> selectBookList = webCustomerMenuService.getBookListByIdWithStock();
+            List<BookRequestDTO> selectBookList = webCustomerMenuService.getBookListByIdWithStock(bookIds);
 
             // 貸出可能判定
             List<BookRequestDTO> reservatableBookList = webCustomerMenuService.getReservatableBooks(selectBookList);

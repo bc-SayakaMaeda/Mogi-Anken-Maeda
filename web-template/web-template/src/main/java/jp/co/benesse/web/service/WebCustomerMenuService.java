@@ -21,11 +21,7 @@ import jp.co.benesse.web.util.MessageUtil;
  * メニュー画面サービス
  *
  * 作成日：2025/01/21
-<<<<<<< HEAD
- * 更新日：2025/02/12
-=======
  * 更新日：2025/02/13
->>>>>>> 30f854034e34631eb93da38f9453f440054adf18
  * </pre>
  *
  * @auther bc)maeda
@@ -84,25 +80,25 @@ public class WebCustomerMenuService {
      */
     public List<BookRequestDTO> getBookListByIdWithStock(List<String> bookIds) throws WebUnexpectedException {
         try {
-            // 書籍ID指定図書一覧を取得
+            // 書籍ID指定図書一覧取得
             List<BookData> selectBookList = webCustomerMenuRepository.findSelectBooks(bookIds);
+
+            // entityからdtoに詰め替え
+            List<BookRequestDTO> bookDataDTOList = selectBookList.stream()
+                    .map(book -> {
+                        BookRequestDTO dto = new BookRequestDTO();
+                        BeanUtils.copyProperties(book, dto);
+                        return dto;
+                    })
+                    .collect(Collectors.toList());
 
             // 在庫数を計算
             Map<String, Long> stockCountMap = calculateStock(selectBookList);
 
-            // DTOのリストを作成
-            List<BookRequestDTO> bookDataDTOList = selectBookList.stream()
-                    .collect(Collectors.toMap(BookData::getBookID, book -> {
-                        BookRequestDTO dto = new BookRequestDTO();
-                        dto.setBookID(book.getBookID());
-                        dto.setTitle(book.getTitle());
-                        dto.setAuthor(book.getAuthor());
-                        dto.setStockCount(
-                                stockCountMap.getOrDefault(book.getBookID(), 0L).intValue());
-                        return dto;
-                    },
-                            (existing, replacement) -> existing))
-                    .values().stream().collect(Collectors.toList());
+            // 在庫数をDTOに設定
+            bookDataDTOList.forEach(dto -> {
+                dto.setStockCount(stockCountMap.getOrDefault(dto.getBookID(), 0L).intValue());
+            });
 
             return bookDataDTOList;
 

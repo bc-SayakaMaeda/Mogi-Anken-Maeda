@@ -72,6 +72,7 @@ public class WebCustomerMenuController {
                 // 図書一覧取得（在庫数設定済み）
                 List<BookDataDTO> bookList = webCustomerMenuService.getBookListWithStock();
                 model.addAttribute("bookList", bookList);
+                session.setAttribute("bookList", bookList);
 
                 // 総ページ数算出
                 int totalPages = webCustomerMenuService.calculateTotalPages(bookList.size());

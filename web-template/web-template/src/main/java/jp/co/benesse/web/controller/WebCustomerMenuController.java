@@ -25,7 +25,7 @@ import jp.co.benesse.web.util.MessageUtil;
  * メニュー画面コントローラークラス
  *
  * 作成日：2025/01/21
- * 更新日：2025/02/12
+ * 更新日：2025/02/13
  * </pre>
  *
  * @author BC)maeda
@@ -93,6 +93,7 @@ public class WebCustomerMenuController {
     public String reservationCheck(@RequestParam(required = false) List<String> bookIds, Model model) {
         // 必須チェック
         if (bookIds == null || bookIds.isEmpty()) {
+            model.addAttribute("error", true);
             return UrlConstants.VIEW_WEB_CUSTOMER_MENU;
         }
 

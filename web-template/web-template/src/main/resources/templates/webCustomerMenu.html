@@ -23,7 +23,7 @@
         </div>
         <hr>
         <div class="title-group">
-            <p>貸出希望の本を選択してください</p>
+            <p th:class="${error} ? 'error' : ''">貸出希望の本を選択してください</p>
         </div>
         <template id="book-row-template">
             <tr>

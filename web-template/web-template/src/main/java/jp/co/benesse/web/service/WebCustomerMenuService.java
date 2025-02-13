@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ import jp.co.benesse.web.util.MessageUtil;
  * メニュー画面サービス
  *
  * 作成日：2025/01/21
- * 更新日：2025/02/06
+ * 更新日：2025/02/13
  * </pre>
  *
  * @auther bc)maeda
@@ -43,24 +44,22 @@ public class WebCustomerMenuService {
             // 図書一覧を取得
             List<BookData> bookList = webCustomerMenuRepository.findAllBooks();
 
+            // entityからdtoに詰め替え
+            List<BookDataDTO> bookDataDTOList = bookList.stream()
+                    .map(book -> {
+                        BookDataDTO dto = new BookDataDTO();
+                        BeanUtils.copyProperties(book, dto);
+                        return dto;
+                    })
+                    .collect(Collectors.toList());
+
             // 在庫数を計算
             Map<String, Long> stockCountMap = calculateStock(bookList);
 
-            // DTOのリストを作成
-            List<BookDataDTO> bookDataDTOList = bookList.stream()
-                    .collect(Collectors.toMap(BookData::getBookID, book -> {
-                        BookDataDTO dto = new BookDataDTO();
-                        dto.setBookID(book.getBookID());
-                        dto.setLibraryBookID(book.getLibraryBookID());
-                        dto.setTitle(book.getTitle());
-                        dto.setAuthor(book.getAuthor());
-                        dto.setLoanFlg(book.isLoanFlg());
-                        dto.setStockCount(
-                                stockCountMap.getOrDefault(book.getBookID(), 0L).intValue());
-                        return dto;
-                    },
-                            (existing, replacement) -> existing))
-                    .values().stream().collect(Collectors.toList());
+            // 在庫数をDTOに設定
+            bookDataDTOList.forEach(dto -> {
+                dto.setStockCount(stockCountMap.getOrDefault(dto.getBookID(), 0L).intValue());
+            });
 
             return bookDataDTOList;
 

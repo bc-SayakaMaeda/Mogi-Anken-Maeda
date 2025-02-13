@@ -74,10 +74,15 @@ document.addEventListener('DOMContentLoaded', function() {
         // 必須チェック
         const checkboxes = document.querySelectorAll('#book-row-block input[type="checkbox"]'); 
         const isChecked = Array.from(checkboxes).some(checkbox => checkbox.checked); 
+        const titleGroup = document.querySelector('.title-group p');
 
+        // 必須チェックNGの場合、文字を赤文字に変更する
         if (!isChecked) {
             event.preventDefault(); 
+            titleGroup.style.color = 'red';
             return;
+        } else {
+            titleGroup.style.color = ''; 
         }
 
     });

@@ -147,7 +147,7 @@ public class WebCustomerMenuService {
      * </pre>
      * 
      * @param bookDataDTOList 書籍情報リスト
-     * @return 貸出可能書籍一覧（List<BookRequestDTO>）
+     * @return 貸出可能書籍一覧
      */
     public List<BookRequestDTO> getReservatableBooks(List<BookRequestDTO> bookDataDTOList) {
         if (bookDataDTOList == null || bookDataDTOList.isEmpty()) {

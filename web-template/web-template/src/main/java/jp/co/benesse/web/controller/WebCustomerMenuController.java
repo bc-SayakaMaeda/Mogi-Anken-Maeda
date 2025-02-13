@@ -104,8 +104,19 @@ public class WebCustomerMenuController {
 
             // 貸出可能判定
             List<BookRequestDTO> reservatableBookList = webCustomerMenuService.getReservatableBooks(selectBookList);
-
             model.addAttribute("reservatableBookList", reservatableBookList);
+
+            if (reservatableBookList.size() == selectBookList.size()) {
+
+                // すべての書籍IDに対して貸出可の場合：貸出希望確認画面に遷移
+                return "redirect:" + UrlConstants.VIEW_WEB_CUSTOMER_RESERVATION_CHECK;
+
+            } else {
+                // 貸出不可の書籍IDが存在する場合
+                model.addAttribute("errorMessage", "申し訳ございません、貸出中の図書がございます。もう一度選択ください。");
+                // メニュー画面に留まる
+                return UrlConstants.VIEW_WEB_CUSTOMER_MENU;
+            }
 
         } catch (WebUnexpectedException e) {
             String errorMessage = MessageUtil.getMessage("XXXXX-002");
@@ -114,9 +125,6 @@ public class WebCustomerMenuController {
             // エラー発生時：エラー画面に遷移
             return UrlConstants.VIEW_ERROR;
         }
-
-        // 平常時：貸出希望確認画面に遷移
-        return "redirect:" + UrlConstants.VIEW_WEB_CUSTOMER_RESERVATION_CHECK;
 
     }
 }

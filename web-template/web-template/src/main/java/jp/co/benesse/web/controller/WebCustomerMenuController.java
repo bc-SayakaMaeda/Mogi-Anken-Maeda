@@ -61,14 +61,22 @@ public class WebCustomerMenuController {
         model.addAttribute("customerName", customerName);
 
         try {
-            // 図書一覧取得（在庫数設定済み）
-            List<BookDataDTO> bookList = webCustomerMenuService.getBookListWithStock();
+            // セッションから貸出希望書籍情報を取得
+            @SuppressWarnings("unchecked")
+            List<BookDataDTO> sessionBookList = (List<BookDataDTO>) session.getAttribute("bookList");
 
-            // 総ページ数算出
-            int totalPages = webCustomerMenuService.calculateTotalPages(bookList.size());
+            if (sessionBookList != null && !sessionBookList.isEmpty()) {
+                model.addAttribute("bookList", sessionBookList);
 
-            model.addAttribute("bookList", bookList);
-            model.addAttribute("totalPages", totalPages);
+            } else {
+                // 図書一覧取得（在庫数設定済み）
+                List<BookDataDTO> bookList = webCustomerMenuService.getBookListWithStock();
+                model.addAttribute("bookList", bookList);
+
+                // 総ページ数算出
+                int totalPages = webCustomerMenuService.calculateTotalPages(bookList.size());
+                model.addAttribute("totalPages", totalPages);
+            }
 
         } catch (WebUnexpectedException e) {
             String errorMessage = MessageUtil.getMessage("XXXXX-002");

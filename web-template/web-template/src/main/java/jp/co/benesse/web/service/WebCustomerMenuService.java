@@ -84,7 +84,7 @@ public class WebCustomerMenuService {
             List<BookData> selectBookList = webCustomerMenuRepository.findSelectBooks(bookIds);
 
             // entityからdtoに詰め替え
-            List<BookRequestDTO> bookDataDTOList = selectBookList.stream()
+            List<BookRequestDTO> bookRequestDTOList = selectBookList.stream()
                     .map(book -> {
                         BookRequestDTO dto = new BookRequestDTO();
                         BeanUtils.copyProperties(book, dto);
@@ -96,11 +96,11 @@ public class WebCustomerMenuService {
             Map<String, Long> stockCountMap = calculateStock(selectBookList);
 
             // 在庫数をDTOに設定
-            bookDataDTOList.forEach(dto -> {
+            bookRequestDTOList.forEach(dto -> {
                 dto.setStockCount(stockCountMap.getOrDefault(dto.getBookID(), 0L).intValue());
             });
 
-            return bookDataDTOList;
+            return bookRequestDTOList;
 
         } catch (WebUnexpectedException e) {
             String errorMessage = MessageUtil.getMessage("図書一覧の取得に失敗しました");

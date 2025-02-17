@@ -2,13 +2,10 @@ package jp.co.benesse.web.repository;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import jp.co.benesse.web.entity.BookData;
@@ -29,26 +26,8 @@ import jp.co.benesse.web.exception.WebUnexpectedException;
 @Repository
 public class WebCustomerMenuRepository extends SqlGeneratorBaseRepository {
 
-    /** NamedParameterJdbcTemplate */
-    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
-    /** JDBCテンプレート */
-    private final JdbcTemplate jdbcTemplate;
-
     /** RowMapper */
     private final RowMapper<BookData> rowMapper = new BeanPropertyRowMapper<>(BookData.class);
-
-    /**
-     * コンストラクタ
-     * 
-     * @param namedParameterJdbcTemplate NamedParameterJdbcTemplate
-     * @param jdbcTemplate JdbcTemplate
-     */
-    @Autowired
-    public WebCustomerMenuRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate, JdbcTemplate jdbcTemplate) {
-        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     /**
      * 図書情報取得
@@ -61,7 +40,7 @@ public class WebCustomerMenuRepository extends SqlGeneratorBaseRepository {
         String sql = getSql(null);
 
         // SQLクエリを実行して結果を取得
-        return jdbcTemplate.query(sql, rowMapper);
+        return kgwebjt.query(sql, rowMapper);
 
     }
 
@@ -81,7 +60,7 @@ public class WebCustomerMenuRepository extends SqlGeneratorBaseRepository {
         String sql = getSql(parameters);
 
         // SQLクエリを実行して結果を取得
-        return namedParameterJdbcTemplate.query(sql, parameters, rowMapper);
+        return kgwebjt.query(sql, parameters, rowMapper);
 
     }
 }

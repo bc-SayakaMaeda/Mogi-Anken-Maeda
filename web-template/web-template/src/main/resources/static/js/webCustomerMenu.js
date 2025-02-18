@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentPage = 1;
     const totalPages = Math.ceil(bookList.length / rowsPerPage) || 1;  
     const form = document.getElementById('reservationForm'); 
+    const selectedBooks = new Set();
 
     // 指定されたページの情報をテーブルに表示する
     function renderTable(page) {
@@ -23,14 +24,43 @@ document.addEventListener('DOMContentLoaded', function() {
             row.querySelector('.book-title').textContent = item.title;
             row.querySelector('.book-author').textContent = item.author;
             row.querySelector('.book-stock').textContent = item.stockCount;
-			row.querySelector('.book-action').innerHTML = item.stockCount > 0 ? `<input type="checkbox" class="large-checkbox" id="book-${start + index + 1}" name="bookIds" value="${item.bookID}">` : '貸出中';
-            tableBody.appendChild(row);
+            
+            const actionCell = row.querySelector('.book-action');
+            if (item.stockCount > 0) {
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.className = 'large-checkbox';
+                checkbox.id = `book-${start + index + 1}`;
+                checkbox.name = 'bookIds';
+                checkbox.value = item.bookID;
+
+                // 選択状態を復元
+                if (selectedBooks.has(item.bookID)) {
+                    checkbox.checked = true;
+                }
+
+                checkbox.addEventListener('change', function () {
+                    if (this.checked) {
+                        selectedBooks.add(this.value);
+                    } else {
+                        selectedBooks.delete(this.value);
+                    }
+                });
+                
+
+                actionCell.appendChild(checkbox);
+                
+            } else {
+                actionCell.textContent = '貸出中';
+            }
+
+            fragment.appendChild(row);
         });
+
+        tableBody.appendChild(fragment);
         
-        document.getElementById('book-row-block').appendChild(fragment);
-
         document.getElementById('page-info').textContent = `${page}/${totalPages}ページ`;
-
+        
         // 「前」ボタンの表示/非表示を切り替え
         const prevPageButton = document.getElementById('prev-page');
         if (prevPageButton) {

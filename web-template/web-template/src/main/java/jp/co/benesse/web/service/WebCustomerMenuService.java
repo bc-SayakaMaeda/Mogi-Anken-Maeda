@@ -21,7 +21,7 @@ import jp.co.benesse.web.util.MessageUtil;
  * メニュー画面サービス
  *
  * 作成日：2025/01/21
- * 更新日：2025/02/13
+ * 更新日：2025/02/18
  * </pre>
  *
  * @auther bc)maeda
@@ -45,22 +45,21 @@ public class WebCustomerMenuService {
             // 図書一覧を取得
             List<BookData> bookList = webCustomerMenuRepository.findAllBooks();
 
-            // entityからdtoに詰め替え
-            List<BookDataDTO> bookDataDTOList = bookList.stream()
-                    .map(book -> {
-                        BookDataDTO dto = new BookDataDTO();
-                        BeanUtils.copyProperties(book, dto);
-                        return dto;
-                    })
-                    .collect(Collectors.toList());
-
             // 在庫数を計算
             Map<String, Long> stockCountMap = calculateStock(bookList);
 
-            // 在庫数をDTOに設定
-            bookDataDTOList.forEach(dto -> {
-                dto.setStockCount(stockCountMap.getOrDefault(dto.getBookID(), 0L).intValue());
-            });
+            // entityからdtoに詰め替え
+            List<BookDataDTO> bookDataDTOList = bookList.stream()
+                    .collect(Collectors.groupingBy(BookData::getBookID))
+                    .entrySet().stream()
+                    .map(entry -> {
+                        BookDataDTO dto = new BookDataDTO();
+                        BookData book = entry.getValue().get(0);
+                        BeanUtils.copyProperties(book, dto);
+                        dto.setStockCount(stockCountMap.getOrDefault(book.getBookID(), 0L).intValue());
+                        return dto;
+                    })
+                    .collect(Collectors.toList());
 
             return bookDataDTOList;
 
@@ -83,24 +82,21 @@ public class WebCustomerMenuService {
             // 書籍ID指定図書一覧取得
             List<BookData> selectBookList = webCustomerMenuRepository.findSelectBooks(bookIds);
 
-            // entityからdtoに詰め替え
-            List<BookRequestDTO> bookRequestDTOList = selectBookList.stream()
-                    .map(book -> {
-                        BookRequestDTO dto = new BookRequestDTO();
-                        BeanUtils.copyProperties(book, dto);
-                        return dto;
-                    })
-                    .collect(Collectors.toList());
-
             // 在庫数を計算
             Map<String, Long> stockCountMap = calculateStock(selectBookList);
 
-            // 在庫数をDTOに設定
-            bookRequestDTOList.forEach(dto -> {
-                dto.setStockCount(stockCountMap.getOrDefault(dto.getBookID(), 0L).intValue());
-            });
-
-            return bookRequestDTOList;
+            // 書籍IDごとにグループ化し、DTOに詰め替え
+            return selectBookList.stream()
+                    .collect(Collectors.groupingBy(BookData::getBookID))
+                    .entrySet().stream()
+                    .map(entry -> {
+                        BookRequestDTO dto = new BookRequestDTO();
+                        BookData book = entry.getValue().get(0);
+                        BeanUtils.copyProperties(book, dto);
+                        dto.setStockCount(stockCountMap.getOrDefault(book.getBookID(), 0L).intValue());
+                        return dto;
+                    })
+                    .collect(Collectors.toList());
 
         } catch (WebUnexpectedException e) {
             String errorMessage = MessageUtil.getMessage("図書一覧の取得に失敗しました");
@@ -113,7 +109,7 @@ public class WebCustomerMenuService {
      * 在庫数算出
      * 
      * @param bookList 図書一覧
-     * @return 在庫数マップ
+     * @return 在庫数マップ キー：BookID、値：在庫数
      */
     private Map<String, Long> calculateStock(List<BookData> bookList) {
         // 貸出中の書籍をフィルタリング
@@ -145,16 +141,16 @@ public class WebCustomerMenuService {
      * 在庫数が1以上の書籍を抽出し、貸出可能な書籍リストを作成して返す
      * </pre>
      * 
-     * @param bookDataDTOList 書籍情報リスト
+     * @param bookRequestDTOList 書籍情報リスト
      * @return 貸出可能書籍一覧
      */
-    public List<BookRequestDTO> getReservatableBooks(List<BookRequestDTO> bookDataDTOList) {
-        if (bookDataDTOList == null || bookDataDTOList.isEmpty()) {
+    public List<BookRequestDTO> getReservatableBooks(List<BookRequestDTO> bookRequestDTOList) {
+        if (bookRequestDTOList == null || bookRequestDTOList.isEmpty()) {
             return List.of();
         }
 
         // 在庫数が1以上の書籍を抽出
-        return bookDataDTOList.stream()
+        return bookRequestDTOList.stream()
                 .filter(book -> book.getStockCount() > 0)
                 .collect(Collectors.toList());
     }

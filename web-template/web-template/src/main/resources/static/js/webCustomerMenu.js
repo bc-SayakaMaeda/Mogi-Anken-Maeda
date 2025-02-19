@@ -1,9 +1,21 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const rowsPerPage = 10;
     let currentPage = 1;
-    const totalPages = Math.ceil(bookList.length / rowsPerPage) || 1;  
-    const form = document.getElementById('reservationForm'); 
-    const selectedBooks = new Set(selectedBookIds);
+    const totalPages = Math.ceil(bookList.length / rowsPerPage) || 1;
+    const form = document.getElementById('reservationForm');
+    const selectedBooks = new Set(selectedBookIds); 
+
+    // 現在のページの選択状態を保存
+    function saveCurrentPageSelections() {
+        const checkboxes = document.querySelectorAll('#book-row-block input[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                selectedBooks.add(checkbox.value);
+            } else {
+                selectedBooks.delete(checkbox.value);
+            }
+        });
+    }
 
     // 指定されたページの情報をテーブルに表示する
     function renderTable(page) {
@@ -80,6 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (prevPageButton) {
         prevPageButton.addEventListener('click', function(event) {
             event.preventDefault();
+            saveCurrentPageSelections(); 
             if (currentPage > 1) {
                 currentPage--;
                 renderTable(currentPage);
@@ -90,6 +103,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (nextPageButton) {
         nextPageButton.addEventListener('click', function(event) {
             event.preventDefault();
+            saveCurrentPageSelections(); 
             if (currentPage < totalPages) {
                 currentPage++;
                 renderTable(currentPage);

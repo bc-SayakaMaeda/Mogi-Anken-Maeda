@@ -61,6 +61,7 @@
     <script type="text/javascript" th:inline="javascript">
         /*<![CDATA[*/
         const bookList = /*[[${bookList != null ? bookList : '[]'}]]*/[];
+        const selectedBookIds = /*[[${bookIds != null ? bookIds : '[]'}]]*/[];
         /*]]>*/
     </script>
     <script type="module" th:src="@{/js/utils.js}"></script>

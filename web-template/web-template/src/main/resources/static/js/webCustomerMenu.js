@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentPage = 1;
     const totalPages = Math.ceil(bookList.length / rowsPerPage) || 1;  
     const form = document.getElementById('reservationForm'); 
-    const selectedBooks = new Set();
+    const selectedBooks = new Set(selectedBookIds);
 
     // 指定されたページの情報をテーブルに表示する
     function renderTable(page) {

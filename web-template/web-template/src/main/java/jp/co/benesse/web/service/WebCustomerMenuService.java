@@ -71,19 +71,19 @@ public class WebCustomerMenuService {
     }
 
     /**
-     * 在庫数算出
+     * 書籍IDごとの在庫数算出
      * 
      * @param bookList 図書一覧
      * @return 在庫数マップ
      */
     private Map<String, Long> calculateStock(List<BookData> bookList) {
-        // 貸出中の書籍をフィルタリング
+        // 貸出中の書籍をリストとして保持
         List<String> loanedBookIDs = bookList.stream()
                 .filter(BookData::isLoanFlg)
                 .map(BookData::getLibraryBookID)
                 .collect(Collectors.toList());
 
-        // 在庫数を計算
+        // 書籍IDごとの在庫数を計算
         return bookList.stream()
                 .filter(book -> !loanedBookIDs.contains(book.getLibraryBookID()))
                 .collect(Collectors.groupingBy(BookData::getBookID, Collectors.counting()));

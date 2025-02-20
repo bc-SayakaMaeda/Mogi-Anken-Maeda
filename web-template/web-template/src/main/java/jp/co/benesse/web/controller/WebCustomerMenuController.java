@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import jakarta.servlet.http.HttpSession;
 import jp.co.benesse.web.annotation.AppDescription;
 import jp.co.benesse.web.constants.AppDescriptions;
+import jp.co.benesse.web.constants.SessionKeysConstants; // 追加
 import jp.co.benesse.web.constants.UrlConstants;
 import jp.co.benesse.web.dto.BookDataDTO;
 import jp.co.benesse.web.exception.WebUnexpectedException;
@@ -22,7 +23,7 @@ import jp.co.benesse.web.util.MessageUtil;
  * メニュー画面コントローラークラス
  *
  * 作成日：2025/01/21
- * 更新日：2025/02/06
+ * 更新日：2025/02/20
  * </pre>
  *
  * @author BC)maeda
@@ -50,8 +51,8 @@ public class WebCustomerMenuController {
     public String showMenu(Model model) {
 
         // セッションから利用者情報を取得
-        String customerID = (String) session.getAttribute("customerID");
-        String customerName = (String) session.getAttribute("customerName");
+        String customerID = (String) session.getAttribute(SessionKeysConstants.CUSTOMER_ID);
+        String customerName = (String) session.getAttribute(SessionKeysConstants.CUSTOMER_NAME);
 
         // 利用者情報をモデルに設定
         model.addAttribute("customerID", customerID);

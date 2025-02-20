@@ -50,22 +50,21 @@ public class WebCustomerMenuService {
             // 図書一覧を取得
             List<BookData> bookList = webCustomerMenuRepository.findAllBooks();
 
-            // entityからdtoに詰め替え
-            List<BookDataDTO> bookDataDTOList = bookList.stream()
-                    .map(book -> {
-                        BookDataDTO dto = new BookDataDTO();
-                        BeanUtils.copyProperties(book, dto);
-                        return dto;
-                    })
-                    .collect(Collectors.toList());
-
             // 在庫数を計算
             Map<String, Long> stockCountMap = calculateStock(bookList);
 
-            // 在庫数をDTOに設定
-            bookDataDTOList.forEach(dto -> {
-                dto.setStockCount(stockCountMap.getOrDefault(dto.getBookID(), 0L).intValue());
-            });
+            // entityからdtoに詰め替え
+            List<BookDataDTO> bookDataDTOList = bookList.stream()
+                    .collect(Collectors.groupingBy(BookData::getBookID))
+                    .entrySet().stream()
+                    .map(entry -> {
+                        BookDataDTO dto = new BookDataDTO();
+                        BookData book = entry.getValue().get(0);
+                        BeanUtils.copyProperties(book, dto);
+                        dto.setStockCount(stockCountMap.getOrDefault(book.getBookID(), 0L).intValue());
+                        return dto;
+                    })
+                    .collect(Collectors.toList());
 
             return bookDataDTOList;
 

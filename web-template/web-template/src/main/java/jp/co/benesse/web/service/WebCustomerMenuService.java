@@ -1,5 +1,6 @@
 package jp.co.benesse.web.service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -8,6 +9,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jp.co.benesse.web.config.PaginationProperties;
 import jp.co.benesse.web.dto.BookDataDTO;
 import jp.co.benesse.web.entity.BookData;
 import jp.co.benesse.web.exception.WebUnexpectedException;
@@ -20,18 +22,22 @@ import jp.co.benesse.web.util.MessageUtil;
  * メニュー画面サービス
  *
  * 作成日：2025/01/21
- * 更新日：2025/02/13
+ * 更新日：2025/02/20
  * </pre>
  *
- * @auther bc)maeda
+ * @auther bcｓ)maeda
  * @version 1.0
  */
 @Service
 public class WebCustomerMenuService {
 
-    /** メニューリポジトリ */
+    /** ｓ メニューリポジトリ */
     @Autowired
     private WebCustomerMenuRepository webCustomerMenuRepository;
+
+    /** ページングプロパティ */
+    @Autowired
+    private PaginationProperties paginationProperties;
 
     /**
      * 図書一覧取得と在庫数設定
@@ -77,6 +83,11 @@ public class WebCustomerMenuService {
      * @return 在庫数マップ
      */
     private Map<String, Long> calculateStock(List<BookData> bookList) {
+        // bookListがnullの場合は空のマップを返す
+        if (bookList == null) {
+            return Collections.emptyMap();
+        }
+
         // 貸出中の書籍をリストとして保持
         List<String> loanedBookIDs = bookList.stream()
                 .filter(BookData::isLoanFlg)
@@ -96,6 +107,6 @@ public class WebCustomerMenuService {
      * @return ページング機能総ページ数
      */
     public int calculateTotalPages(int totalBooks) {
-        return (int) Math.ceil((double) totalBooks / 10);
+        return (int) Math.ceil((double) totalBooks / paginationProperties.getRowsPerPage());
     }
 }

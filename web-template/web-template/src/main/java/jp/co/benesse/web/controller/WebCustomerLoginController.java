@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import jakarta.servlet.http.HttpSession;
 import jp.co.benesse.web.annotation.AppDescription;
 import jp.co.benesse.web.constants.AppDescriptions;
+import jp.co.benesse.web.constants.SessionKeysConstants; // 追加
 import jp.co.benesse.web.constants.UrlConstants;
 import jp.co.benesse.web.entity.WebCustomerEntity;
 import jp.co.benesse.web.exception.WebParamException;
@@ -28,9 +29,10 @@ import jp.co.benesse.web.validationGroups.ValidationGroups.RequiredCheck;
  * web利用者ログインコントローラークラス
  *
  * 作成日：2024/12/17
- * 更新日：2025/01/27
+ * 更新日：2025/02/20
  * </pre>
  *
+ * @author BC)maeda
  * @version 1.0
  */
 @Controller
@@ -97,11 +99,11 @@ public class WebCustomerLoginController {
             }
 
             // セッション保存
-            session.setAttribute("customerID", webCustomer.getCustomerId());
-            session.setAttribute("customerName", webCustomer.getCustomerName());
-            session.setAttribute("postCode", webCustomer.getPostCode());
-            session.setAttribute("address", webCustomer.getAddress());
-            session.setAttribute("email", webCustomer.getEmail());
+            session.setAttribute(SessionKeysConstants.CUSTOMER_ID, webCustomer.getCustomerId());
+            session.setAttribute(SessionKeysConstants.CUSTOMER_NAME, webCustomer.getCustomerName());
+            session.setAttribute(SessionKeysConstants.POST_CODE, webCustomer.getPostCode());
+            session.setAttribute(SessionKeysConstants.ADDRESS, webCustomer.getAddress());
+            session.setAttribute(SessionKeysConstants.EMAIL, webCustomer.getEmail());
 
             // 平常時：メニュー画面に遷移
             return "redirect:" + UrlConstants.VIEW_WEB_CUSTOMER_MENU;
@@ -119,7 +121,7 @@ public class WebCustomerLoginController {
             model.addAttribute("errorMessage", errorMessage);
             return UrlConstants.VIEW_WEB_CUSTOMER_LOGIN;
         }
-
+        
     }
 
     /**

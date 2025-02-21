@@ -1,6 +1,10 @@
 package jp.co.benesse.web.service;
 
+<<<<<<< HEAD
 import java.util.Comparator;
+=======
+import java.util.Collections;
+>>>>>>> c6a6c36692db17829dba15342c64e38d7caae630
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -9,6 +13,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jp.co.benesse.web.config.PaginationProperties;
 import jp.co.benesse.web.dto.BookDataDTO;
 import jp.co.benesse.web.dto.BookRequestDTO;
 import jp.co.benesse.web.entity.BookData;
@@ -22,18 +27,26 @@ import jp.co.benesse.web.util.MessageUtil;
  * メニュー画面サービス
  *
  * 作成日：2025/01/21
+<<<<<<< HEAD
  * 更新日：2025/02/18
+=======
+ * 更新日：2025/02/20
+>>>>>>> c6a6c36692db17829dba15342c64e38d7caae630
  * </pre>
  *
- * @auther bc)maeda
+ * @auther bcｓ)maeda
  * @version 1.0
  */
 @Service
 public class WebCustomerMenuService {
 
-    /** メニューリポジトリ */
+    /** ｓ メニューリポジトリ */
     @Autowired
     private WebCustomerMenuRepository webCustomerMenuRepository;
+
+    /** ページングプロパティ */
+    @Autowired
+    private PaginationProperties paginationProperties;
 
     /**
      * 図書一覧取得と在庫数設定
@@ -61,12 +74,15 @@ public class WebCustomerMenuService {
                         return dto;
                     })
                     .collect(Collectors.toList());
+<<<<<<< HEAD
 
             // bookIDで昇順ソート（数値として比較）
             bookDataDTOList.sort(Comparator.comparing(dto -> {
                 String bookID = dto.getBookID();
                 return bookID.isEmpty() ? Long.MAX_VALUE : Long.parseLong(bookID);
             }));
+=======
+>>>>>>> c6a6c36692db17829dba15342c64e38d7caae630
 
             return bookDataDTOList;
 
@@ -78,6 +94,7 @@ public class WebCustomerMenuService {
     }
 
     /**
+<<<<<<< HEAD
      * 図書一覧取得（書籍ID指定）と在庫数設定
      * 
      * @param bookIds 貸出希望書籍IDリスト
@@ -114,18 +131,26 @@ public class WebCustomerMenuService {
 
     /**
      * 在庫数算出
+=======
+     * 書籍IDごとの在庫数算出
+>>>>>>> c6a6c36692db17829dba15342c64e38d7caae630
      * 
      * @param bookList 図書一覧
      * @return 在庫数マップ キー：BookID、値：在庫数
      */
     private Map<String, Long> calculateStock(List<BookData> bookList) {
-        // 貸出中の書籍をフィルタリング
+        // bookListがnullの場合は空のマップを返す
+        if (bookList == null) {
+            return Collections.emptyMap();
+        }
+
+        // 貸出中の書籍をリストとして保持
         List<String> loanedBookIDs = bookList.stream()
                 .filter(BookData::isLoanFlg)
                 .map(BookData::getLibraryBookID)
                 .collect(Collectors.toList());
 
-        // 在庫数を計算
+        // 書籍IDごとの在庫数を計算
         return bookList.stream()
                 .filter(book -> !loanedBookIDs.contains(book.getLibraryBookID()))
                 .collect(Collectors.groupingBy(BookData::getBookID, Collectors.counting()));
@@ -138,7 +163,7 @@ public class WebCustomerMenuService {
      * @return ページング機能総ページ数
      */
     public int calculateTotalPages(int totalBooks) {
-        return (int) Math.ceil((double) totalBooks / 10);
+        return (int) Math.ceil((double) totalBooks / paginationProperties.getRowsPerPage());
     }
 
     /**

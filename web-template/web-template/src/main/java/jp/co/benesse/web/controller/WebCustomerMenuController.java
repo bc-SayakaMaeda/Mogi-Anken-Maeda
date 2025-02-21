@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jakarta.servlet.http.HttpSession;
 import jp.co.benesse.web.annotation.AppDescription;
 import jp.co.benesse.web.constants.AppDescriptions;
+import jp.co.benesse.web.constants.SessionKeysConstants; // 追加
 import jp.co.benesse.web.constants.UrlConstants;
 import jp.co.benesse.web.dto.BookDataDTO;
 import jp.co.benesse.web.dto.BookRequestDTO;
@@ -26,7 +27,11 @@ import jp.co.benesse.web.util.MessageUtil;
  * メニュー画面コントローラークラス
  *
  * 作成日：2025/01/21
+<<<<<<< HEAD
  * 更新日：2025/02/18
+=======
+ * 更新日：2025/02/20
+>>>>>>> c6a6c36692db17829dba15342c64e38d7caae630
  * </pre>
  *
  * @author BC)maeda
@@ -54,8 +59,8 @@ public class WebCustomerMenuController {
     public String showMenu(Model model) {
 
         // セッションから利用者情報を取得
-        String customerID = (String) session.getAttribute("customerID");
-        String customerName = (String) session.getAttribute("customerName");
+        String customerID = (String) session.getAttribute(SessionKeysConstants.CUSTOMER_ID);
+        String customerName = (String) session.getAttribute(SessionKeysConstants.CUSTOMER_NAME);
 
         // 利用者情報をモデルに設定
         model.addAttribute("customerID", customerID);

@@ -24,15 +24,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const start = (page - 1) * rowsPerPage;
         const end = start + rowsPerPage;
-        const pageData = bookList.slice(start, end);
-        
+    
         const template = document.getElementById('book-row-template').content;
         const fragment = document.createDocumentFragment();
-
-        pageData.forEach((item, index) => {
-
+    
+        // 全ての書籍をループ
+        bookList.forEach((item, index) => {
             const row = document.importNode(template, true);
-            row.querySelector('.book-id').textContent = start + index + 1;
+    
+            // 書籍情報を設定
+            row.querySelector('.book-id').textContent = index + 1;
             row.querySelector('.book-title').textContent = item.title;
             row.querySelector('.book-author').textContent = item.author;
             row.querySelector('.book-stock').textContent = item.stockCount;
@@ -42,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const checkbox = document.createElement('input');
                 checkbox.type = 'checkbox';
                 checkbox.className = 'large-checkbox';
-                checkbox.id = `book-${start + index + 1}`;
+                checkbox.id = `book-${index + 1}`;
                 checkbox.name = 'bookIds';
                 checkbox.value = item.bookID;
 
@@ -65,7 +66,14 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
                 actionCell.textContent = '貸出中';
             }
-
+    
+            // 選択された書籍のみ表示
+            if (selectedBooks.has(item.bookID) || (index >= start && index < end)) {
+                row.querySelector('tr').style.display = null;
+            } else {
+                row.querySelector('tr').style.display = 'none'; 
+            }
+    
             fragment.appendChild(row);
         });
 

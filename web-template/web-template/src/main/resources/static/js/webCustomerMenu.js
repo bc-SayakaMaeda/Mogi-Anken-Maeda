@@ -16,21 +16,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
-    
-        function showCurrentPageBooks(page) {
-        const table = document.getElementById('book-row-block');
-        const start = (page - 1) * rowsPerPage;
-        const end = start + rowsPerPage;
-
-        // 現在のページの10冊のみ非表示を解除
-        for (let i = 0; i < table.rows.length; i++) {
-            if (i >= start && i < end) {
-                table.rows[i].style.display = '';
-            } else {
-                table.rows[i].style.display = 'none';
-            }
-        }
-        }
 
     // 指定されたページの情報をテーブルに表示する
     function renderTable(page) {
@@ -97,6 +82,17 @@ document.addEventListener('DOMContentLoaded', function () {
         const nextPageButton = document.getElementById('next-page');
         if (nextPageButton) {
             nextPageButton.style.display = page === totalPages ? 'none' : 'inline';
+        }
+    }
+
+    // 現在のページの書籍を表示
+    function showCurrentPageBooks(page) {
+        const table = document.getElementById('book-row-block');
+        const start = (page - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+
+        for (let i = 0; i < table.rows.length; i++) {
+            table.rows[i].style.display = (i >= start && i < end) ? '' : 'none';
         }
     }
 

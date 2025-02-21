@@ -1,10 +1,7 @@
 package jp.co.benesse.web.service;
 
-<<<<<<< HEAD
-import java.util.Comparator;
-=======
 import java.util.Collections;
->>>>>>> c6a6c36692db17829dba15342c64e38d7caae630
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -27,20 +24,16 @@ import jp.co.benesse.web.util.MessageUtil;
  * メニュー画面サービス
  *
  * 作成日：2025/01/21
-<<<<<<< HEAD
- * 更新日：2025/02/18
-=======
  * 更新日：2025/02/20
->>>>>>> c6a6c36692db17829dba15342c64e38d7caae630
  * </pre>
  *
- * @auther bcｓ)maeda
+ * @auther bc)maeda
  * @version 1.0
  */
 @Service
 public class WebCustomerMenuService {
 
-    /** ｓ メニューリポジトリ */
+    /** メニューリポジトリ */
     @Autowired
     private WebCustomerMenuRepository webCustomerMenuRepository;
 
@@ -74,15 +67,12 @@ public class WebCustomerMenuService {
                         return dto;
                     })
                     .collect(Collectors.toList());
-<<<<<<< HEAD
 
             // bookIDで昇順ソート（数値として比較）
             bookDataDTOList.sort(Comparator.comparing(dto -> {
                 String bookID = dto.getBookID();
                 return bookID.isEmpty() ? Long.MAX_VALUE : Long.parseLong(bookID);
             }));
-=======
->>>>>>> c6a6c36692db17829dba15342c64e38d7caae630
 
             return bookDataDTOList;
 
@@ -94,7 +84,6 @@ public class WebCustomerMenuService {
     }
 
     /**
-<<<<<<< HEAD
      * 図書一覧取得（書籍ID指定）と在庫数設定
      * 
      * @param bookIds 貸出希望書籍IDリスト
@@ -131,9 +120,6 @@ public class WebCustomerMenuService {
 
     /**
      * 在庫数算出
-=======
-     * 書籍IDごとの在庫数算出
->>>>>>> c6a6c36692db17829dba15342c64e38d7caae630
      * 
      * @param bookList 図書一覧
      * @return 在庫数マップ キー：BookID、値：在庫数

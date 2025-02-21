@@ -27,11 +27,7 @@ import jp.co.benesse.web.util.MessageUtil;
  * メニュー画面コントローラークラス
  *
  * 作成日：2025/01/21
-<<<<<<< HEAD
  * 更新日：2025/02/18
-=======
- * 更新日：2025/02/20
->>>>>>> c6a6c36692db17829dba15342c64e38d7caae630
  * </pre>
  *
  * @author BC)maeda

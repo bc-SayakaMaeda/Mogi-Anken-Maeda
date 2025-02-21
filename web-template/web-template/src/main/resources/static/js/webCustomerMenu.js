@@ -17,7 +17,22 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // 指定されたページの情報をテーブルに表示する
+    // 現在のページの書籍を表示
+    function showCurrentPageBooks(page) {
+        const table = document.getElementById('book-row-block');
+        const start = (page - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+    
+        for (let i = 0; i < table.rows.length; i++) {
+            if (i >= start && i < end) {
+                table.rows[i].classList.remove('hidden'); 
+            } else {
+                table.rows[i].classList.add('hidden'); 
+            }
+        }
+    }
+    
+    // 指定されたページの情報をテーブルに表示
     function renderTable(page) {
         const tableBody = document.querySelector('#book-table tbody');
         tableBody.innerHTML = '';
@@ -85,16 +100,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // 現在のページの書籍を表示
-    function showCurrentPageBooks(page) {
-        const table = document.getElementById('book-row-block');
-        const start = (page - 1) * rowsPerPage;
-        const end = start + rowsPerPage;
-
-        for (let i = 0; i < table.rows.length; i++) {
-            table.rows[i].style.display = (i >= start && i < end) ? '' : 'none';
-        }
-    }
 
     const prevPageButton = document.getElementById('prev-page');
     const nextPageButton = document.getElementById('next-page');
@@ -130,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const isChecked = Array.from(checkboxes).some(checkbox => checkbox.checked); 
         const titleGroup = document.querySelector('.title-group p');
 
-        // 必須チェックNGの場合、文字を赤文字に変更する
+        // 必須チェックNGの場合、文字を赤文字に変更
         if (!isChecked) {
             event.preventDefault(); 
             titleGroup.style.color = 'red';

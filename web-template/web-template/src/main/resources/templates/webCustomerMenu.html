@@ -27,7 +27,7 @@
             <p th:if="${errorMessage != null}" th:class="error" th:text="${errorMessage}">申し訳ございません、貸出中の図書がございます。もう一度選択ください。</p>
         </div>
         <template id="book-row-template">
-            <tr style="display:none">
+            <tr class="hidden">
                 <td class="book-id"></td>
                 <td class="book-title"></td>
                 <td class="book-author"></td>

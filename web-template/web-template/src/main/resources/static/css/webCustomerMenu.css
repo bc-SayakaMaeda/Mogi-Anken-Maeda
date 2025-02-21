@@ -75,3 +75,7 @@ hr {
 .title-group p.error {
     color: red;
 }
+
+.hidden {
+    display: none;
+}

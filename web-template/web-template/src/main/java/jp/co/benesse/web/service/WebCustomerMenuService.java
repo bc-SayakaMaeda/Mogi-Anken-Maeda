@@ -1,5 +1,6 @@
 package jp.co.benesse.web.service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -60,6 +61,12 @@ public class WebCustomerMenuService {
                         return dto;
                     })
                     .collect(Collectors.toList());
+
+            // bookIDで昇順ソート（数値として比較）
+            bookDataDTOList.sort(Comparator.comparing(dto -> {
+                String bookID = dto.getBookID();
+                return bookID.isEmpty() ? Long.MAX_VALUE : Long.parseLong(bookID);
+            }));
 
             return bookDataDTOList;
 

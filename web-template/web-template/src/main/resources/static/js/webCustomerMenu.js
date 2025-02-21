@@ -16,15 +16,26 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
+    
+        function showCurrentPageBooks(page) {
+        const table = document.getElementById('book-row-block');
+        const start = (page - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+
+        // 現在のページの10冊のみ非表示を解除
+        for (let i = 0; i < table.rows.length; i++) {
+            if (i >= start && i < end) {
+                table.rows[i].style.display = '';
+            } else {
+                table.rows[i].style.display = 'none';
+            }
+        }
+        }
 
     // 指定されたページの情報をテーブルに表示する
     function renderTable(page) {
         const tableBody = document.querySelector('#book-table tbody');
         tableBody.innerHTML = '';
-
-        const start = (page - 1) * rowsPerPage;
-        const end = start + rowsPerPage;
-    
         const template = document.getElementById('book-row-template').content;
         const fragment = document.createDocumentFragment();
     
@@ -59,7 +70,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         selectedBooks.delete(this.value);
                     }
                 });
-                
 
                 actionCell.appendChild(checkbox);
                 
@@ -67,17 +77,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 actionCell.textContent = '貸出中';
             }
     
-            // 選択された書籍のみ表示
-            if (selectedBooks.has(item.bookID) || (index >= start && index < end)) {
-                row.querySelector('tr').style.display = null;
-            } else {
-                row.querySelector('tr').style.display = 'none'; 
-            }
-    
             fragment.appendChild(row);
         });
 
         tableBody.appendChild(fragment);
+        
+        // 現在のページの書籍のみ表示
+        showCurrentPageBooks(page);
         
         document.getElementById('page-info').textContent = `${page}/${totalPages}ページ`;
         
@@ -139,4 +145,4 @@ document.addEventListener('DOMContentLoaded', function () {
 
     });
     
-    });
+});

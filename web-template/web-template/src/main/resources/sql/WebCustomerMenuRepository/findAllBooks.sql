@@ -18,5 +18,3 @@ LEFT JOIN M_BookLoanRecordsDetail AS loanDetail
 WHERE 
     bookData.logicDelFlg = '0' -- 削除なし
     AND libraryBook.logicDelFlg = '0' -- 削除なし
-ORDER BY 
-    bookData.bookID; -- bookIDで昇順ソート

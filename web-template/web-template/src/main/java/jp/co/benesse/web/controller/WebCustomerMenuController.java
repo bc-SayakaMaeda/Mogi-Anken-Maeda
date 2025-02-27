@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -94,12 +95,12 @@ public class WebCustomerMenuController {
     @PostMapping(UrlConstants.VIEW_WEB_CUSTOMER_MENU)
     @AppDescription(id = AppDescriptions.WEB_CUSTOMER_MENU_ID, name = AppDescriptions.WEB_CUSTOMER_MENU_NAME)
     public String reservationCheck(@RequestParam(required = false) List<String> bookIds,
-            RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes, Model model) {
 
         // 必須チェック
-        if (bookIds == null || bookIds.isEmpty()) {
+        if (CollectionUtils.isEmpty(bookIds)) {
             redirectAttributes.addFlashAttribute("error", true);
-            return "redirect:" + UrlConstants.VIEW_WEB_CUSTOMER_MENU;
+            return showMenu(model);
         }
 
         try {
@@ -125,6 +126,6 @@ public class WebCustomerMenuController {
             // エラー発生時：エラー画面に遷移
             return UrlConstants.VIEW_ERROR;
         }
-        
+
     }
 }

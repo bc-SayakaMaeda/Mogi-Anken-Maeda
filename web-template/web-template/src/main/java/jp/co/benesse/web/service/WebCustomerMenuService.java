@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import jp.co.benesse.web.config.PaginationProperties;
 import jp.co.benesse.web.dto.BookDataDTO;
@@ -163,7 +164,7 @@ public class WebCustomerMenuService {
      * @return 貸出可能書籍一覧
      */
     public List<BookRequestDTO> getReservatableBooks(List<BookRequestDTO> bookRequestDTOList) {
-        if (bookRequestDTOList == null || bookRequestDTOList.isEmpty()) {
+        if (CollectionUtils.isEmpty(bookRequestDTOList)) {
             return List.of();
         }
 

@@ -126,8 +126,8 @@ public class WebCustomerMenuService {
      * @return 在庫数マップ キー：BookID、値：在庫数
      */
     private Map<String, Long> calculateStock(List<BookData> bookList) {
-        // bookListがnullの場合は空のマップを返す
-        if (bookList == null) {
+        // bookListがnullまたは空の場合は空のマップを返す
+        if (CollectionUtils.isEmpty(bookList)) {
             return Collections.emptyMap();
         }
 

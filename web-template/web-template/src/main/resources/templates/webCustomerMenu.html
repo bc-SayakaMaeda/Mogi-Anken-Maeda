@@ -23,10 +23,11 @@
         </div>
         <hr>
         <div class="title-group">
-            <p>貸出希望の本を選択してください</p>
+            <p th:if="${errorMessage == null}" th:class="${error} ? 'error' : ''">貸出希望の本を選択してください</p>
+            <p th:if="${errorMessage != null}" th:class="error" th:text="${errorMessage}">申し訳ございません、貸出中の図書がございます。もう一度選択ください。</p>
         </div>
         <template id="book-row-template">
-            <tr>
+            <tr class="hidden">
                 <td class="book-id"></td>
                 <td class="book-title"></td>
                 <td class="book-author"></td>
@@ -34,31 +35,33 @@
                 <td class="book-action"></td>
             </tr>
         </template>
-        <table id="book-table">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>タイトル</th>
-                    <th>著者</th>
-                    <th>在庫数</th>
-                    <th>貸出希望</th>
-                </tr>
-            </thead>
-            <tbody id="book-row-block"></tbody>
-        </table>
-        <div class="pagination">
-            <a href="#" id="prev-page" th:href="@{${prevPageUrl}}">＜前</a>
-            <span id="page-info" th:text="${currentPage} + ' / ' + ${totalPages}"></span>
-            <a href="#" id="next-page" th:href="@{${nextPageUrl}}">次＞</a>
-        </div>
-        <div class="form-group">
-            <button type="submit" id="webCustomerReservationCheckButton"
-                th:onclick="'confirmReservation()'">貸出希望確認</button>
-        </div>
+        <form id="reservationForm" th:action="@{/webCustomerMenu}" method="post">
+            <table id="book-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>タイトル</th>
+                        <th>著者</th>
+                        <th>在庫数</th>
+                        <th>貸出希望</th>
+                    </tr>
+                </thead>
+                <tbody id="book-row-block"></tbody>
+            </table>
+            <div class="pagination">
+                <a href="#" id="prev-page" th:href="@{${prevPageUrl}}">＜前</a>
+                <span id="page-info" th:text="${currentPage} + ' / ' + ${totalPages}"></span>
+                <a href="#" id="next-page" th:href="@{${nextPageUrl}}">次＞</a>
+            </div>
+            <div class="form-group">
+                <button type="submit" id="webCustomerReservationCheckButton">貸出希望確認</button>
+            </div>
+        </form>
     </div>
     <script type="text/javascript" th:inline="javascript">
         /*<![CDATA[*/
-        const bookList = /*[[${bookList}]]*/[];
+        const bookList = /*[[${bookList != null ? bookList : '[]'}]]*/[];
+        const selectedBookIds = /*[[${bookIds != null ? bookIds : '[]'}]]*/[];
         /*]]>*/
     </script>
     <script type="module" th:src="@{/js/utils.js}"></script>

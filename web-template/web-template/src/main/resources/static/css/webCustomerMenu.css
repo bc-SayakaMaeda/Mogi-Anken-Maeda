@@ -71,3 +71,11 @@ hr {
     width: 20px; 
     height: 20px; 
 }
+
+.title-group p.error {
+    color: red;
+}
+
+.hidden {
+    display: none;
+}

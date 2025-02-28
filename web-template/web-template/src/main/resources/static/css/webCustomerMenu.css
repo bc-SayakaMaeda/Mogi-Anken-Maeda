@@ -20,17 +20,6 @@ body {
     flex-grow: 1;
 }
 
-#logoutButton {
-    background-color: lightgray;
-    margin-left: auto;
-    padding: 10px 80px;
-    text-decoration: none; 
-    color: black; 
-    display: inline-block; 
-    border-radius: 5px; 
-    text-align: center; 
-}
-
 hr {
     margin: 20px 0;
 }
@@ -53,13 +42,13 @@ hr {
     color: white;
     border: 1px solid #ddd;
     padding: 8px;
-    text-align: center;
+    text-align: left;
 }
 
 #book-table td {
     border: 1px solid #ddd;
     padding: 5px;
-    text-align: center;
+    text-align: left
 }
 
 #book-table tr:nth-child(odd) {
@@ -81,4 +70,12 @@ hr {
 .large-checkbox {
     width: 20px; 
     height: 20px; 
+}
+
+.title-group p.error {
+    color: red;
+}
+
+.hidden {
+    display: none;
 }

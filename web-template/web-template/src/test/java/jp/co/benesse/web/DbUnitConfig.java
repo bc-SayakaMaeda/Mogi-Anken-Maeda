@@ -1,4 +1,4 @@
-package jp.ne.benesse.junit.test;
+package jp.co.benesse.web;
 
 import javax.sql.DataSource;
 

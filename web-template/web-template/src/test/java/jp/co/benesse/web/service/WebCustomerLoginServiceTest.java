@@ -1,5 +1,6 @@
 package jp.co.benesse.web.service;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.Test;
@@ -44,10 +45,10 @@ public class WebCustomerLoginServiceTest extends BaseTest {
      * 
      * 結果：
      * - 例外が発生せずに処理が終了する
+     * </pre>
      * 
      * @throws WebUnexpectedException
      * @throws WebParamException
-     * </pre>
      */
     @Test
     public void login_正常系() throws WebUnexpectedException, WebParamException {
@@ -65,7 +66,11 @@ public class WebCustomerLoginServiceTest extends BaseTest {
         form.setPassword("testPassword");
 
         // メソッドの呼び出し
-        webCustomerLoginService.login(form);
+        WebCustomerEntity result = webCustomerLoginService.login(form);
+
+        // 検証
+        assertEquals(result.getCustomerId(), "testCustomer");
+        assertEquals(result.getCustomerName(), "testUser");
     }
 
 }

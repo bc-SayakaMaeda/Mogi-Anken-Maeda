@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 
@@ -71,6 +73,39 @@ public class WebCustomerLoginServiceTest extends BaseTest {
         // 検証
         assertEquals(result.getCustomerId(), "testCustomer");
         assertEquals(result.getCustomerName(), "testUser");
+    }
+
+    /**
+     * 異常系テスト - パスワードのハッシュ化失敗
+     * 
+     * <pre>
+     * 前提：
+     * - HashUtil.sha256がnullを返す場合
+     * 
+     * 結果：
+     * - WebUnexpectedExceptionがスローされる
+     * </pre>
+     */
+    @Test
+    public void login_異常系_ハッシュ化失敗() {
+
+        // モックの挙動を定義
+        try (MockedStatic<HashUtil> mockedHashUtil = Mockito.mockStatic(HashUtil.class)) {
+            mockedHashUtil.when(() -> HashUtil.sha256("testPassword")).thenReturn(null);
+
+            // メソッド引数の準備
+            WebCustomerLoginForm form = new WebCustomerLoginForm();
+            form.setCustomerID("testCustomer");
+            form.setPassword("testPassword");
+
+            // メソッドの呼び出しと例外確認
+            WebUnexpectedException exception = assertThrows(WebUnexpectedException.class, () -> {
+                webCustomerLoginService.login(form);
+            });
+
+            // 検証
+            assertEquals("パスワードのハッシュ化に失敗しました。", exception.getMessage());
+        }
     }
 
 }

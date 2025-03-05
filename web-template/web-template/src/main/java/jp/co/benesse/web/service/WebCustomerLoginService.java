@@ -46,7 +46,7 @@ public class WebCustomerLoginService {
         // パスワードのハッシュ化
         String sha256HashedPassword = HashUtil.sha256(password);
         if (sha256HashedPassword == null) {
-            String errorMessage = MessageUtil.getMessage("パスワードのハッシュ化に失敗しました");
+            String errorMessage = MessageUtil.getMessage("error.hash.password");
             WebUnexpectedException exception = new WebUnexpectedException(errorMessage);
             LogUtil.infoDetail(errorMessage, exception);
             throw exception;

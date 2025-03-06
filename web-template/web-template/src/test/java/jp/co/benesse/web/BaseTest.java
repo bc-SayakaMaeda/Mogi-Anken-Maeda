@@ -63,7 +63,7 @@ public class BaseTest {
      */
     @AfterEach
     public void tearDown() {
-        // session.finishMocking();
+        session.finishMocking();
     }
 
     /**
@@ -77,8 +77,7 @@ public class BaseTest {
     @BeforeEach
     public void setup(TestInfo testInfo) {
 
-        // session =
-        // Mockito.mockitoSession().initMocks(this).strictness(Strictness.WARN).startMocking();
+        session = Mockito.mockitoSession().initMocks(this).strictness(Strictness.WARN).startMocking();
 
         this.testInfo = testInfo;
         Mockito.reset(mockAppender);
@@ -89,16 +88,15 @@ public class BaseTest {
         Mockito.when(mockAppender.isStopped()).thenReturn(false);
 
         // ROOTロガーを取り出し、Appenderの設定を行う。
-        // LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
-        // Configuration config = ctx.getConfiguration();
+        LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
+        Configuration config = ctx.getConfiguration();
 
-        // LoggerConfig loggerConfig =
-        // config.getLoggerConfig(LogManager.ROOT_LOGGER_NAME);
+        LoggerConfig loggerConfig = config.getLoggerConfig(LogManager.ROOT_LOGGER_NAME);
 
-        // loggerConfig.setLevel(Level.INFO);
-        // loggerConfig.removeAppender("MockAppender");
-        // loggerConfig.addAppender(mockAppender, Level.INFO, null);
-        // ctx.updateLoggers();
+        loggerConfig.setLevel(Level.INFO);
+        loggerConfig.removeAppender("MockAppender");
+        loggerConfig.addAppender(mockAppender, Level.INFO, null);
+        ctx.updateLoggers();
 
     }
 

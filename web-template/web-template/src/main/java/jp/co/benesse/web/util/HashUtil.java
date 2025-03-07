@@ -8,7 +8,7 @@ import java.security.NoSuchAlgorithmException;
  * ハッシュ化に関するユーティリティ
  *
  * 作成日：2025/01/07
- * 更新日：2025/01/24
+ * 更新日：2025/03/07
  * </pre>
  *
  * @author bc)maeda
@@ -42,8 +42,9 @@ public class HashUtil {
 
             // 16進数の文字列を返す
             return hexString.toString();
+
         } catch (NoSuchAlgorithmException e) {
-            String errorMessage = MessageUtil.getMessage("パスワードのハッシュ化に失敗しました");
+            String errorMessage = MessageUtil.getMessage("error.hash.password");
             LogUtil.logger.info(errorMessage, e);
 
             return null;

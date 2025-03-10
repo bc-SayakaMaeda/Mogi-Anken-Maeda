@@ -1,5 +1,7 @@
 package jp.co.benesse.web.service;
 
+import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
@@ -8,8 +10,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.apache.logging.log4j.core.config.Order;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import jp.co.benesse.web.BaseTest;
 import jp.co.benesse.web.config.PaginationProperties;
+import jp.co.benesse.web.dto.BookRequestDTO;
 import jp.co.benesse.web.entity.BookData;
 
 /**
@@ -78,9 +82,8 @@ public class WebCustomerMenuServiceTest extends BaseTest {
                     bookList);
 
             // 検証
-            assertNotNull(result);
             Map<String, Long> expectedResult = parseExpectedResultString(expectedResultStr);
-            assertEquals(expectedResult, result);
+            assertThat(result, is(expectedResult));
         }
 
         /**
@@ -150,8 +153,8 @@ public class WebCustomerMenuServiceTest extends BaseTest {
                     bookList);
 
             // 検証
-            assertNotNull(result); 
-            assertTrue(result.isEmpty()); 
+            assertTrue(result.isEmpty());
+        }
     }
 
     /**
@@ -183,7 +186,8 @@ public class WebCustomerMenuServiceTest extends BaseTest {
                 "10, 20, 2, '総書籍数がページングプロパティの行数で割り切れる場合'",
                 "10, 25, 3, '総書籍数がページングプロパティの行数で割り切れない場合'"
         })
-        public void calculateTotalPages_正常系(int rowsPerPage, int totalBooks, int expectedPages, String description) {
+        public void calculateTotalPages_正常系(int rowsPerPage, int totalBooks, int expectedPages,
+                String description) {
             // ページングプロパティの行数を設定
             paginationProperties.setRowsPerPage(rowsPerPage);
 
@@ -191,7 +195,7 @@ public class WebCustomerMenuServiceTest extends BaseTest {
             int result = webCustomerMenuService.calculateTotalPages(totalBooks);
 
             // 検証
-            assertEquals(expectedPages, result);
+            assertThat(result, is(expectedPages));
         }
 
         /**
@@ -223,7 +227,93 @@ public class WebCustomerMenuServiceTest extends BaseTest {
             int result = webCustomerMenuService.calculateTotalPages(totalBooks);
 
             // 検証
-            assertEquals(expectedPages, result);
+            assertThat(result, is(expectedPages));
+        }
+    }
+
+    /**
+     * 貸出可能書籍判定メソッドのテスト
+     */
+    @Nested
+    @Order(3)
+    class testGetReservatableBooks {
+        /**
+         * 正常系テスト
+         * 
+         * <pre>
+         * 前提：
+         * - 在庫数が1以上の書籍が含まれる場合
+         * 
+         * 結果：
+         * - 貸出可能な書籍リストを返す
+         * </pre>
+         */
+        @Test
+        public void getReservatableBooks_正常系() {
+            // 引数の準備
+            BookRequestDTO book1 = new BookRequestDTO();
+            book1.setBookID("book1");
+            book1.setTitle("タイトル1");
+            book1.setAuthor("著者1");
+            book1.setStockCount(2); // 貸出可能
+
+            BookRequestDTO book2 = new BookRequestDTO();
+            book2.setBookID("book2");
+            book2.setTitle("タイトル2");
+            book2.setAuthor("著者2");
+            book2.setStockCount(1); // 貸出可能
+
+            BookRequestDTO book3 = new BookRequestDTO();
+            book3.setBookID("book3");
+            book3.setTitle("タイトル3");
+            book3.setAuthor("著者3");
+            book3.setStockCount(0); // 貸出不可
+
+            List<BookRequestDTO> bookRequestDTOList = Arrays.asList(book1, book2, book3);
+
+            // メソッドの呼び出し
+            List<BookRequestDTO> result = webCustomerMenuService.getReservatableBooks(bookRequestDTOList);
+
+            // 期待値作成
+            BookRequestDTO expected1 = new BookRequestDTO();
+            expected1.setBookID("book1");
+            expected1.setTitle("タイトル1");
+            expected1.setAuthor("著者1");
+            expected1.setStockCount(2);
+
+            BookRequestDTO expected2 = new BookRequestDTO();
+            expected2.setBookID("book2");
+            expected2.setTitle("タイトル2");
+            expected2.setAuthor("著者2");
+            expected2.setStockCount(1);
+
+            // 結果比較
+            assertThat(result, containsInAnyOrder(
+                    samePropertyValuesAs(expected1),
+                    samePropertyValuesAs(expected2)));
+        }
+
+        /**
+         * 異常系テスト
+         * 
+         * <pre>
+         * 前提：
+         * - 書籍情報リストが空の場合
+         * 
+         * 結果：
+         * - 空のリストを返す
+         * </pre>
+         */
+        @Test
+        public void getReservatableBooks_異常系() {
+            // 引数の準備
+            List<BookRequestDTO> bookRequestDTOList = Collections.emptyList();
+
+            // メソッドの呼び出し
+            List<BookRequestDTO> result = webCustomerMenuService.getReservatableBooks(bookRequestDTOList);
+
+            // 検証
+            assertThat(result, empty());
         }
     }
 }

@@ -49,7 +49,7 @@ public class WebCustomerLoginRepositoryTest extends BaseTest {
      * @throws WebUnexpectedException
      */
     @Test
-    @DatabaseSetup(value = "classpath:repository/WebCustomerLoginRepositoryTest/正常系/input/")
+    @DatabaseSetup(value = "classpath:repository/WebCustomerLoginRepositoryTest/input/")
     public void getLoginInfo_正常系() throws WebUnexpectedException {
 
         // 期待値の設定

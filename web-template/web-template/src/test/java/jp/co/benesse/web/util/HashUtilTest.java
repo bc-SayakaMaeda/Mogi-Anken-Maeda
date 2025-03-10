@@ -21,7 +21,7 @@ import jp.co.benesse.web.BaseTest;
  * ハッシュ化に関するユーティリティのテストクラス
  *
  * 作成日：2025/03/06
- * 更新日：2025/03/06
+ * 更新日：2025/03/10
  * </pre>
  * 
  * @author BC)maeda
@@ -58,6 +58,46 @@ public class HashUtilTest extends BaseTest {
             assertEquals("fd5cb51bafd60f6fdbedde6e62c473da6f247db271633e15919bab78a02ee9eb", hashedPassword);
         } catch (Exception e) {
             fail("例外が発生しました: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 異常系テスト - 引数がnull
+     * 
+     * <pre>
+     * 前提：
+     * - 引数：インプットのパスワードがnullの場合
+     * 
+     * 結果：
+     * - nullが返される
+     * - ログに「エラー（例外）が発生しました」というメッセージが出力される
+     * </pre>
+     */
+    @Test
+    public void login_異常系_引数がnull() {
+        try (MockedStatic<MessageDigest> mockedStatic = mockStatic(MessageDigest.class);
+                MockedStatic<MessageUtil> messageUtilMockedStatic = mockStatic(MessageUtil.class)) {
+
+            // モックの挙動を定義
+            messageUtilMockedStatic.when(() -> MessageUtil.getMessage("XXXXX-001"))
+                    .thenReturn("エラー（例外）が発生しました");
+
+            // メソッドの呼び出し
+            String hashedPassword = HashUtil.sha256(null);
+
+            // 返り値がnullの検証
+            assertNull(hashedPassword);
+
+            // ログ出力の検証
+            verify(mockAppender, Mockito.times(1)).append(logCaptor.capture());
+            Level level = logCaptor.getAllValues().get(0).getLevel();
+            String message = logCaptor.getAllValues().get(0).getMessage().getFormattedMessage();
+
+            // ログレベル確認
+            assertThat(level, is(Level.INFO));
+
+            // 検証
+            assertThat(message, is("エラー（例外）が発生しました"));
         }
     }
 

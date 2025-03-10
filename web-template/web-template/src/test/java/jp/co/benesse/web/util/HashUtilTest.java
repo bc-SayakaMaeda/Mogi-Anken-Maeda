@@ -40,10 +40,11 @@ public class HashUtilTest extends BaseTest {
      * 
      * <pre>
      * 前提：
-     * - 入力値が正常(半角英数字8文字以上16文字以内)である場合
-     * - ケース1: 半角英字かつ8文字
-     * - ケース2: 半角数字かつ16文字
-     * - ケース3: 半角英数字（9文字）
+     * - 入力値が正常である場合
+     * - ケース1: 1文字
+     * - ケース2: 半角英数字・記号
+     * - ケース3: 全角英数字・記号・かな漢字
+     * - ケース4: 空文字
      * 
      * 結果：
      * - 例外が発生せずに処理が終了し、SHA-256形式のハッシュ値が返される
@@ -55,9 +56,10 @@ public class HashUtilTest extends BaseTest {
      */
     @ParameterizedTest(name = "【正常系】{2}")
     @CsvSource({
-            "password, 5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8, 半角英字8文字",
-            "1234567890123456, 7a51d064a1a216a692f753fcdab276e4ff201a01d8b66f56d50d4d719fd0dc87, 半角数字16文字",
-            "password1, 0b14d501a594442a01c6859541bcb3e8164d183d32937b851835442f69d5c94e, 半角英数字9文字"
+            "a, ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb, 1文字",
+            "abc123!@#, eaabc80d1d8991cd9d660c9f90447621494969d1d0f1d903822441e2446e6e70, 半角英数字・記号",
+            "ＡＢＣ１２３！＠＃漢字かな, 84713c307d68807592a010bc065d0765562aaa355814e8fe8e5d04e07db3b220, 全角英数字・記号・かな漢字",
+            "'', e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855, 空文字"
     })
     public void sha256_正常系(String input, String expectedHash, String description) {
         try {

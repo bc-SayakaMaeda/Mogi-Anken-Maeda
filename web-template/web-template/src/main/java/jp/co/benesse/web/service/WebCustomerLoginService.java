@@ -17,7 +17,7 @@ import jp.co.benesse.web.util.MessageUtil;
  * web利用者ログインサービス
  *
  * 作成日：2024/12/24
- * 更新日：2025/01/27
+ * 更新日：2025/03/10
  * </pre>
  * 
  * @author bc)maeda
@@ -40,6 +40,15 @@ public class WebCustomerLoginService {
      */
     public WebCustomerEntity login(WebCustomerLoginForm webCustomerLoginForm)
             throws WebUnexpectedException, WebParamException {
+
+        // 引数がnullの場合の処理
+        if (webCustomerLoginForm == null) {
+            String errorMessage = MessageUtil.getMessage("XXXXX-001");
+            WebParamException exception = new WebParamException(errorMessage);
+            LogUtil.infoDetail(errorMessage, exception);
+            throw exception;
+        }
+
         String customerID = webCustomerLoginForm.getCustomerID();
         String password = webCustomerLoginForm.getPassword();
 

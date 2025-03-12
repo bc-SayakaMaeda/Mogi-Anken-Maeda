@@ -2,10 +2,12 @@ package jp.co.benesse.web.repository;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import jp.co.benesse.web.entity.BookData;
@@ -16,7 +18,7 @@ import jp.co.benesse.web.exception.WebUnexpectedException;
  * メニューリポジトリ
  *
  * 作成日：2025/01/21
- * 更新日：2025/02/12
+ * 更新日：2025/03/12
  * </pre>
  *
  * @author BC)maeda
@@ -25,6 +27,10 @@ import jp.co.benesse.web.exception.WebUnexpectedException;
 @EnableAutoConfiguration
 @Repository
 public class WebCustomerMenuRepository extends SqlGeneratorBaseRepository {
+
+    /** JDBCテンプレート */
+    @Autowired
+    private NamedParameterJdbcTemplate kgwebjt;
 
     /** RowMapper */
     private final RowMapper<BookData> rowMapper = new BeanPropertyRowMapper<>(BookData.class);
@@ -35,7 +41,7 @@ public class WebCustomerMenuRepository extends SqlGeneratorBaseRepository {
      * @return BookData 書籍情報
      * @throws WebUnexpectedException
      */
-    public List<BookData> findAllBooks() throws WebUnexpectedException {
+    public List<BookData> findAllBooks() {
         // 動的なSQLの作成
         String sql = getSql(null);
 
@@ -51,7 +57,7 @@ public class WebCustomerMenuRepository extends SqlGeneratorBaseRepository {
      * @return BookData 書籍情報リスト
      * @throws WebUnexpectedException
      */
-    public List<BookData> findSelectBooks(List<String> bookIds) throws WebUnexpectedException {
+    public List<BookData> findSelectBooks(List<String> bookIds) {
 
         MapSqlParameterSource parameters = new MapSqlParameterSource()
                 .addValue("bookIds", bookIds);

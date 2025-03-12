@@ -80,32 +80,38 @@ public class WebCustomerLoginController {
      * @param model モデル
      * @return メニュー画面
      * @throws WebUnexpectedException
-     * @throws WebParamException
      */
     @PostMapping(UrlConstants.VIEW_WEB_CUSTOMER_LOGIN)
     @AppDescription(id = AppDescriptions.WEB_CUSTOMER_LOGIN_ID, name = AppDescriptions.WEB_CUSTOMER_LOGIN_NAME)
     public String login(WebCustomerLoginForm webCustomerLoginForm,
-            BindingResult bindingResult, Model model) throws WebUnexpectedException, WebParamException {
+            BindingResult bindingResult, Model model) throws WebUnexpectedException {
 
-        // バリデーションチェック
-        if (!validateForm(webCustomerLoginForm, bindingResult, model)) {
+        try {
+            // バリデーションチェック
+            if (!validateForm(webCustomerLoginForm, bindingResult, model)) {
+                return UrlConstants.VIEW_WEB_CUSTOMER_LOGIN;
+            }
+            WebCustomerEntity webCustomer = webCustomerLoginService.login(webCustomerLoginForm);
+
+            if (webCustomer == null) {
+                return UrlConstants.VIEW_ERROR;
+            }
+
+            // セッション保存
+            session.setAttribute(SessionKeysConstants.CUSTOMER_ID, webCustomer.getCustomerId());
+            session.setAttribute(SessionKeysConstants.CUSTOMER_NAME, webCustomer.getCustomerName());
+            session.setAttribute(SessionKeysConstants.POST_CODE, webCustomer.getPostCode());
+            session.setAttribute(SessionKeysConstants.ADDRESS, webCustomer.getAddress());
+            session.setAttribute(SessionKeysConstants.EMAIL, webCustomer.getEmail());
+
+            // 平常時：メニュー画面に遷移
+            return "redirect:" + UrlConstants.VIEW_WEB_CUSTOMER_MENU;
+
+        } catch (WebParamException e) {
+            String errorMessage = MessageUtil.getMessage("error.invalid.credentials", "IDまたはパスワード");
+            model.addAttribute("errorMessage", errorMessage);
             return UrlConstants.VIEW_WEB_CUSTOMER_LOGIN;
         }
-        WebCustomerEntity webCustomer = webCustomerLoginService.login(webCustomerLoginForm);
-
-        if (webCustomer == null) {
-            return UrlConstants.VIEW_ERROR;
-        }
-
-        // セッション保存
-        session.setAttribute(SessionKeysConstants.CUSTOMER_ID, webCustomer.getCustomerId());
-        session.setAttribute(SessionKeysConstants.CUSTOMER_NAME, webCustomer.getCustomerName());
-        session.setAttribute(SessionKeysConstants.POST_CODE, webCustomer.getPostCode());
-        session.setAttribute(SessionKeysConstants.ADDRESS, webCustomer.getAddress());
-        session.setAttribute(SessionKeysConstants.EMAIL, webCustomer.getEmail());
-
-        // 平常時：メニュー画面に遷移
-        return "redirect:" + UrlConstants.VIEW_WEB_CUSTOMER_MENU;
 
     }
 

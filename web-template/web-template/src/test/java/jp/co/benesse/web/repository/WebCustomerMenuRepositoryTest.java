@@ -57,9 +57,8 @@ public class WebCustomerMenuRepositoryTest extends BaseTest {
 
         // 期待値の設定
         BookDataDTO expected = new BookDataDTO();
-        expected.setBookID("1");
-        expected.setTitle("Book Title 1");
-        expected.setAuthor("Author 1");
+        expected.setTitle("タイトル1");
+        expected.setAuthor("著者1");
         expected.setLoanFlg(false);
 
         // メソッドの呼び出し

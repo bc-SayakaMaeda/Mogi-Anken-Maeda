@@ -14,10 +14,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jakarta.servlet.http.HttpSession;
 import jp.co.benesse.web.annotation.AppDescription;
 import jp.co.benesse.web.constants.AppDescriptions;
-import jp.co.benesse.web.constants.SessionKeysConstants; 
+import jp.co.benesse.web.constants.SessionKeysConstants;
 import jp.co.benesse.web.constants.UrlConstants;
 import jp.co.benesse.web.dto.BookDataDTO;
 import jp.co.benesse.web.dto.BookRequestDTO;
+import jp.co.benesse.web.exception.WebUnexpectedException;
 import jp.co.benesse.web.service.WebCustomerMenuService;
 
 /**
@@ -47,10 +48,11 @@ public class WebCustomerMenuController {
      * 
      * @param model モデル
      * @return メニュー画面
+     * @throws WebUnexpectedException
      */
     @GetMapping(UrlConstants.VIEW_WEB_CUSTOMER_MENU)
     @AppDescription(id = AppDescriptions.WEB_CUSTOMER_MENU_ID, name = AppDescriptions.WEB_CUSTOMER_MENU_NAME)
-    public String showMenu(Model model) {
+    public String showMenu(Model model) throws WebUnexpectedException {
 
         // セッションから利用者情報を取得
         String customerID = (String) session.getAttribute(SessionKeysConstants.CUSTOMER_ID);
@@ -79,11 +81,12 @@ public class WebCustomerMenuController {
      * @param redirectAttributes リダイレクト先にエラーメッセージを渡す
      * @param model モデル
      * @return 貸出予約確認画面
+     * @throws WebUnexpectedException
      */
     @PostMapping(UrlConstants.VIEW_WEB_CUSTOMER_MENU)
     @AppDescription(id = AppDescriptions.WEB_CUSTOMER_MENU_ID, name = AppDescriptions.WEB_CUSTOMER_MENU_NAME)
     public String reservationCheck(@RequestParam(required = false) List<String> bookIds,
-            RedirectAttributes redirectAttributes, Model model) {
+            RedirectAttributes redirectAttributes, Model model) throws WebUnexpectedException {
 
         // 必須チェック
         if (CollectionUtils.isEmpty(bookIds)) {

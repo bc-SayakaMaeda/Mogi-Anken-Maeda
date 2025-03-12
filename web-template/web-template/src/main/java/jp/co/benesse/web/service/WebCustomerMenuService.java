@@ -46,7 +46,7 @@ public class WebCustomerMenuService {
      * @return 在庫数を設定した図書一覧DTO
      * @throws WebUnexpectedException
      */
-    public List<BookDataDTO> getBookListWithStock() {
+    public List<BookDataDTO> getBookListWithStock() throws WebUnexpectedException {
         // 図書一覧を取得
         List<BookData> bookList = webCustomerMenuRepository.findAllBooks();
 
@@ -83,7 +83,7 @@ public class WebCustomerMenuService {
      * @return 在庫数を設定した図書一覧DTO
      * @throws WebUnexpectedException
      */
-    public List<BookRequestDTO> getBookListByIdWithStock(List<String> bookIds) {
+    public List<BookRequestDTO> getBookListByIdWithStock(List<String> bookIds) throws WebUnexpectedException {
         // 書籍ID指定図書一覧取得
         List<BookData> selectBookList = webCustomerMenuRepository.findSelectBooks(bookIds);
 

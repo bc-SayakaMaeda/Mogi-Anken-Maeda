@@ -1,14 +1,13 @@
 package jp.co.benesse.web.repository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import jp.co.benesse.web.entity.WebCustomerEntity;
+import jp.co.benesse.web.exception.WebUnexpectedException;
 
 /**
  * <pre>
@@ -25,18 +24,15 @@ import jp.co.benesse.web.entity.WebCustomerEntity;
 @Repository
 public class WebCustomerLoginRepository extends SqlGeneratorBaseRepository {
 
-    /** JDBCテンプレート */
-    @Autowired
-    private NamedParameterJdbcTemplate kgwebjt;
-
     /**
      * ログイン情報を取得するメソッド
      * 
      * @param customerID 利用者ID
      * @param hashedPassword ハッシュ化されたパスワード
      * @return WebCustomer ログイン判定情報
+     * @throws WebUnexpectedException
      */
-    public WebCustomerEntity getLoginInfo(String customerID, String hashedPassword) {
+    public WebCustomerEntity getLoginInfo(String customerID, String hashedPassword) throws WebUnexpectedException {
 
         // SQLに渡すパラメータを設定
         MapSqlParameterSource params = new MapSqlParameterSource()

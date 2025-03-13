@@ -51,10 +51,6 @@ public class WebCustomerLoginService {
         // DBアクセス（ログイン判定情報取得）
         WebCustomerEntity webCustomer = webCustomerLoginRepository.getLoginInfo(customerID, sha256HashedPassword);
 
-        if (webCustomer == null) {
-            throw new WebParamException(MessageUtil.getMessage("XXXXX-009"));
-        }
-
         return webCustomer;
     }
 }

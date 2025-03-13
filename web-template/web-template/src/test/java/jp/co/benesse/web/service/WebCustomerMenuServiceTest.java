@@ -10,12 +10,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -110,10 +113,71 @@ public class WebCustomerMenuServiceTest extends BaseTest {
     }
 
     /**
-     * 在庫数算出メソッドのテスト
+     * 図書一覧取得と在庫数設定メソッドのテスト
      */
     @Nested
     @Order(2)
+    @Transactional
+    @DbUnitConfiguration(dataSetLoader = CsvDataSetLoader.class, databaseOperationLookup = MicrosoftSqlDatabaseOperationLookup.class)
+    class testGetBookListByIdWithStock {
+
+        /**
+         * 正常系テスト
+         * 
+         * <pre>
+         * 前提：
+         * - 貸出中で貸出不可の図書1冊の書籍
+         * - 返却済み・未貸出の図書計2冊の書籍
+         * 
+         * 結果：
+         * - 例外が発生せずに処理が終了し、在庫数を設定した図書一覧DTOが返される
+         * </pre>
+         * 
+         * @param bookIds
+         * @throws WebUnexpectedException
+         */
+        @ParameterizedTest(name = "【{0}】")
+        @MethodSource("bookIdsProvider")
+        @DatabaseSetup(value = "classpath:service/WebCustomerMenuServiceTest/getBookListByIdWithStock/正常系/input/")
+        public void getBookListByIdWithStock_正常系(List<String> bookIds) throws WebUnexpectedException {
+
+            // 期待値の設定
+            BookRequestDTO expected1 = new BookRequestDTO();
+            expected1.setBookID("1");
+            expected1.setTitle("タイトル1");
+            expected1.setAuthor("著者1");
+            expected1.setStockCount(0);
+
+            BookRequestDTO expected2 = new BookRequestDTO();
+            expected2.setBookID("2");
+            expected2.setTitle("タイトル2");
+            expected2.setAuthor("著者2");
+            expected2.setStockCount(2);
+
+            // メソッドの呼び出し
+            List<BookRequestDTO> result = webCustomerMenuService.getBookListByIdWithStock(bookIds);
+
+            // 検証
+            assertThat(result.size(), is(2));
+            assertThat(result.get(0), is(samePropertyValuesAs(expected1)));
+            assertThat(result.get(1), is(samePropertyValuesAs(expected2)));
+        }
+
+        /**
+         * @return 書籍IDリスト
+         */
+        static Stream<Arguments> bookIdsProvider() {
+            return Stream.of(
+                    Arguments.of(List.of("1", "2")));
+        }
+
+    }
+
+    /**
+     * 在庫数算出メソッドのテスト
+     */
+    @Nested
+    @Order(3)
     class testCalculateStock {
 
         /**
@@ -138,7 +202,7 @@ public class WebCustomerMenuServiceTest extends BaseTest {
                 "'book1,lib1,false;book1,lib2,true;book2,lib3,false;book2,lib4,true', 'book1=1,book2=1', '貸出中の書籍が含まれる場合'"
         })
         public void calculateStock_正常系(String bookDataStr, String expectedResultStr, String description) {
-            // テスト準備
+            // テスト実施準備
             List<BookData> bookList = parseBookDataString(bookDataStr);
             Map<String, Long> expectedResult = parseExpectedResultString(expectedResultStr);
 
@@ -225,7 +289,7 @@ public class WebCustomerMenuServiceTest extends BaseTest {
      * ページング機能総ページ数算出メソッドのテスト
      */
     @Nested
-    @Order(3)
+    @Order(4)
     class testCalculateTotalPages {
 
         /**
@@ -299,7 +363,7 @@ public class WebCustomerMenuServiceTest extends BaseTest {
      * 貸出可能書籍判定メソッドのテスト
      */
     @Nested
-    @Order(4)
+    @Order(5)
     class testGetReservatableBooks {
         /**
          * 正常系テスト

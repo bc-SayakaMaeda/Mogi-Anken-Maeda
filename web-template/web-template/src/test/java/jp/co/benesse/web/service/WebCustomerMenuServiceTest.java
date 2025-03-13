@@ -1,8 +1,9 @@
 package jp.co.benesse.web.service;
 
-import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -18,18 +19,26 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DbUnitConfiguration;
+import com.github.springtestdbunit.operation.MicrosoftSqlDatabaseOperationLookup;
 
 import jp.co.benesse.web.BaseTest;
+import jp.co.benesse.web.CsvDataSetLoader;
 import jp.co.benesse.web.config.PaginationProperties;
+import jp.co.benesse.web.dto.BookDataDTO;
 import jp.co.benesse.web.dto.BookRequestDTO;
 import jp.co.benesse.web.entity.BookData;
+import jp.co.benesse.web.exception.WebUnexpectedException;
 
 /**
  * <pre>
  * web利用者メニューのテストクラス
  *
  * 作成日：2025/03/10
- * 更新日：2025/03/10
+ * 更新日：2025/03/13
  * </pre>
  * 
  * @author BC)maeda
@@ -46,10 +55,65 @@ public class WebCustomerMenuServiceTest extends BaseTest {
     private PaginationProperties paginationProperties;
 
     /**
-     * 在庫数算出メソッドのテスト
+     * 図書一覧取得と在庫数設定メソッドのテスト
      */
     @Nested
     @Order(1)
+    @Transactional
+    @DbUnitConfiguration(dataSetLoader = CsvDataSetLoader.class, databaseOperationLookup = MicrosoftSqlDatabaseOperationLookup.class)
+    class testGetBookListWithStock {
+
+        /**
+         * 正常系テスト
+         * 
+         * <pre>
+         * 前提：
+         * - 貸出中で貸出不可の図書1冊の書籍
+         * - 返却済み・未貸出の図書計2冊の書籍
+         * 
+         * 結果：
+         * - 例外が発生せずに処理が終了し、在庫数を設定した図書一覧DTOが返される
+         * </pre>
+         * 
+         * @throws WebUnexpectedException
+         */
+        @Test
+        @DatabaseSetup(value = "classpath:service/WebCustomerMenuServiceTest/getBookListWithStock/正常系/input/")
+        public void getBookListWithStock_正常系() throws WebUnexpectedException {
+
+            // 期待値の設定
+            BookDataDTO expected1 = new BookDataDTO();
+            expected1.setBookID("1");
+            expected1.setTitle("タイトル1");
+            expected1.setAuthor("著者1");
+            expected1.setStockCount(0);
+            expected1.setLibraryBookID("1");
+            expected1.setLoanFlg(true);
+
+            BookDataDTO expected2 = new BookDataDTO();
+            expected2.setBookID("2");
+            expected2.setTitle("タイトル2");
+            expected2.setAuthor("著者2");
+            expected2.setStockCount(2);
+            expected2.setLibraryBookID("2");
+            expected2.setLoanFlg(false);
+
+            // メソッドの呼び出し
+            List<BookDataDTO> result = webCustomerMenuService.getBookListWithStock();
+
+            // 検証
+            assertThat(result.size(), is(2));
+            assertThat(result.get(0), is(samePropertyValuesAs(expected1)));
+            assertThat(result.get(1), is(samePropertyValuesAs(expected2)));
+        }
+
+    }
+
+    /**
+     * 在庫数算出メソッドのテスト
+     */
+    @Nested
+    @Order(2)
     class testCalculateStock {
 
         /**
@@ -161,7 +225,7 @@ public class WebCustomerMenuServiceTest extends BaseTest {
      * ページング機能総ページ数算出メソッドのテスト
      */
     @Nested
-    @Order(2)
+    @Order(3)
     class testCalculateTotalPages {
 
         /**
@@ -235,7 +299,7 @@ public class WebCustomerMenuServiceTest extends BaseTest {
      * 貸出可能書籍判定メソッドのテスト
      */
     @Nested
-    @Order(3)
+    @Order(4)
     class testGetReservatableBooks {
         /**
          * 正常系テスト

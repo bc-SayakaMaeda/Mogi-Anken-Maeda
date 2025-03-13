@@ -18,7 +18,6 @@ import jp.co.benesse.web.exception.WebParamException;
 import jp.co.benesse.web.exception.WebUnexpectedException;
 import jp.co.benesse.web.form.WebCustomerLoginForm;
 import jp.co.benesse.web.service.WebCustomerLoginService;
-import jp.co.benesse.web.util.LogUtil;
 import jp.co.benesse.web.util.MessageUtil;
 import jp.co.benesse.web.validationGroups.ValidationGroups.FormatCheck;
 import jp.co.benesse.web.validationGroups.ValidationGroups.LengthCheck;
@@ -80,48 +79,36 @@ public class WebCustomerLoginController {
      * @param bindingResult formクラスでのバリデーション結果
      * @param model モデル
      * @return メニュー画面
+     * @throws WebUnexpectedException
+     * @throws WebParamException
      */
     @PostMapping(UrlConstants.VIEW_WEB_CUSTOMER_LOGIN)
     @AppDescription(id = AppDescriptions.WEB_CUSTOMER_LOGIN_ID, name = AppDescriptions.WEB_CUSTOMER_LOGIN_NAME)
     public String login(WebCustomerLoginForm webCustomerLoginForm,
-            BindingResult bindingResult, Model model) {
+            BindingResult bindingResult, Model model) throws WebUnexpectedException {
 
         // バリデーションチェック
         if (!validateForm(webCustomerLoginForm, bindingResult, model)) {
             return UrlConstants.VIEW_WEB_CUSTOMER_LOGIN;
         }
+        WebCustomerEntity webCustomer = webCustomerLoginService.login(webCustomerLoginForm);
 
-        try {
-            WebCustomerEntity webCustomer = webCustomerLoginService.login(webCustomerLoginForm);
-
-            if (webCustomer == null) {
-                return UrlConstants.VIEW_ERROR;
-            }
-
-            // セッション保存
-            session.setAttribute(SessionKeysConstants.CUSTOMER_ID, webCustomer.getCustomerId());
-            session.setAttribute(SessionKeysConstants.CUSTOMER_NAME, webCustomer.getCustomerName());
-            session.setAttribute(SessionKeysConstants.POST_CODE, webCustomer.getPostCode());
-            session.setAttribute(SessionKeysConstants.ADDRESS, webCustomer.getAddress());
-            session.setAttribute(SessionKeysConstants.EMAIL, webCustomer.getEmail());
-
-            // 平常時：メニュー画面に遷移
-            return "redirect:" + UrlConstants.VIEW_WEB_CUSTOMER_MENU;
-
-        } catch (WebUnexpectedException e) {
-
-            String errorMessage = MessageUtil.getMessage("XXXXX-001");
-            LogUtil.errorDetail(errorMessage, e);
-
-            // エラー発生時：エラー画面に遷移
-            return UrlConstants.VIEW_ERROR;
-
-        } catch (WebParamException e) {
+        if (webCustomer == null) {
             String errorMessage = MessageUtil.getMessage("error.invalid.credentials", "IDまたはパスワード");
             model.addAttribute("errorMessage", errorMessage);
             return UrlConstants.VIEW_WEB_CUSTOMER_LOGIN;
         }
-        
+
+        // セッション保存
+        session.setAttribute(SessionKeysConstants.CUSTOMER_ID, webCustomer.getCustomerId());
+        session.setAttribute(SessionKeysConstants.CUSTOMER_NAME, webCustomer.getCustomerName());
+        session.setAttribute(SessionKeysConstants.POST_CODE, webCustomer.getPostCode());
+        session.setAttribute(SessionKeysConstants.ADDRESS, webCustomer.getAddress());
+        session.setAttribute(SessionKeysConstants.EMAIL, webCustomer.getEmail());
+
+        // 平常時：メニュー画面に遷移
+        return "redirect:" + UrlConstants.VIEW_WEB_CUSTOMER_MENU;
+
     }
 
     /**

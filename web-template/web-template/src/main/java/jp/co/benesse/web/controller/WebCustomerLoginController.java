@@ -85,7 +85,7 @@ public class WebCustomerLoginController {
     @PostMapping(UrlConstants.VIEW_WEB_CUSTOMER_LOGIN)
     @AppDescription(id = AppDescriptions.WEB_CUSTOMER_LOGIN_ID, name = AppDescriptions.WEB_CUSTOMER_LOGIN_NAME)
     public String login(WebCustomerLoginForm webCustomerLoginForm,
-            BindingResult bindingResult, Model model) throws WebUnexpectedException, WebParamException {
+            BindingResult bindingResult, Model model) throws WebUnexpectedException {
 
         // バリデーションチェック
         if (!validateForm(webCustomerLoginForm, bindingResult, model)) {

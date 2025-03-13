@@ -38,7 +38,7 @@ public class WebCustomerLoginService {
      * @throws WebParamException
      */
     public WebCustomerEntity login(WebCustomerLoginForm webCustomerLoginForm)
-            throws WebUnexpectedException, WebParamException {
+            throws WebUnexpectedException {
         String customerID = webCustomerLoginForm.getCustomerID();
         String password = webCustomerLoginForm.getPassword();
 

@@ -138,15 +138,15 @@ public class WebCustomerMenuServiceTest extends BaseTest {
                 "'book1,lib1,false;book1,lib2,true;book2,lib3,false;book2,lib4,true', 'book1=1,book2=1', '貸出中の書籍が含まれる場合'"
         })
         public void calculateStock_正常系(String bookDataStr, String expectedResultStr, String description) {
-            // 引数の準備
+            // テスト準備
             List<BookData> bookList = parseBookDataString(bookDataStr);
+            Map<String, Long> expectedResult = parseExpectedResultString(expectedResultStr);
 
             // メソッドの呼び出し
             Map<String, Long> result = ReflectionTestUtils.invokeMethod(webCustomerMenuService, "calculateStock",
                     bookList);
 
             // 検証
-            Map<String, Long> expectedResult = parseExpectedResultString(expectedResultStr);
             assertThat(result, is(expectedResult));
         }
 

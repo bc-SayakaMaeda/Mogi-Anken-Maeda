@@ -14,7 +14,7 @@ import jp.co.benesse.web.exception.WebUnexpectedException;
  * web利用者ログインリポジトリ
  *
  * 作成日：2024/12/24
- * 更新日：2024/12/24
+ * 更新日：2025/03/12
  * </pre>
  * 
  * @author BC)maeda

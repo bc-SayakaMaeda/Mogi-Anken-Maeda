@@ -17,15 +17,13 @@ import jp.co.benesse.web.dto.BookRequestDTO;
 import jp.co.benesse.web.entity.BookData;
 import jp.co.benesse.web.exception.WebUnexpectedException;
 import jp.co.benesse.web.repository.WebCustomerMenuRepository;
-import jp.co.benesse.web.util.LogUtil;
-import jp.co.benesse.web.util.MessageUtil;
 
 /**
  * <pre>
  * メニュー画面サービス
  *
  * 作成日：2025/01/21
- * 更新日：2025/02/20
+ * 更新日：2025/03/12
  * </pre>
  *
  * @auther bc)maeda
@@ -49,39 +47,33 @@ public class WebCustomerMenuService {
      * @throws WebUnexpectedException
      */
     public List<BookDataDTO> getBookListWithStock() throws WebUnexpectedException {
-        try {
-            // 図書一覧を取得
-            List<BookData> bookList = webCustomerMenuRepository.findAllBooks();
+        // 図書一覧を取得
+        List<BookData> bookList = webCustomerMenuRepository.findAllBooks();
 
-            // 在庫数を計算
-            Map<String, Long> stockCountMap = calculateStock(bookList);
+        // 在庫数を計算
+        Map<String, Long> stockCountMap = calculateStock(bookList);
 
-            // entityからdtoに詰め替え
-            List<BookDataDTO> bookDataDTOList = bookList.stream()
-                    .collect(Collectors.groupingBy(BookData::getBookID))
-                    .entrySet().stream()
-                    .map(entry -> {
-                        BookDataDTO dto = new BookDataDTO();
-                        BookData book = entry.getValue().get(0);
-                        BeanUtils.copyProperties(book, dto);
-                        dto.setStockCount(stockCountMap.getOrDefault(book.getBookID(), 0L).intValue());
-                        return dto;
-                    })
-                    .collect(Collectors.toList());
+        // entityからdtoに詰め替え
+        List<BookDataDTO> bookDataDTOList = bookList.stream()
+                .collect(Collectors.groupingBy(BookData::getBookID))
+                .entrySet().stream()
+                .map(entry -> {
+                    BookDataDTO dto = new BookDataDTO();
+                    BookData book = entry.getValue().get(0);
+                    BeanUtils.copyProperties(book, dto);
+                    dto.setStockCount(stockCountMap.getOrDefault(book.getBookID(), 0L).intValue());
+                    return dto;
+                })
+                .collect(Collectors.toList());
 
-            // bookIDで昇順ソート（数値として比較）
-            bookDataDTOList.sort(Comparator.comparing(dto -> {
-                String bookID = dto.getBookID();
-                return bookID.isEmpty() ? Long.MAX_VALUE : Long.parseLong(bookID);
-            }));
+        // bookIDで昇順ソート（数値として比較）
+        bookDataDTOList.sort(Comparator.comparing(dto -> {
+            String bookID = dto.getBookID();
+            return bookID.isEmpty() ? Long.MAX_VALUE : Long.parseLong(bookID);
+        }));
 
-            return bookDataDTOList;
+        return bookDataDTOList;
 
-        } catch (WebUnexpectedException e) {
-            String errorMessage = MessageUtil.getMessage("図書一覧の取得に失敗しました");
-            LogUtil.infoDetail(errorMessage, e);
-            throw new WebUnexpectedException(errorMessage, e);
-        }
     }
 
     /**
@@ -92,31 +84,25 @@ public class WebCustomerMenuService {
      * @throws WebUnexpectedException
      */
     public List<BookRequestDTO> getBookListByIdWithStock(List<String> bookIds) throws WebUnexpectedException {
-        try {
-            // 書籍ID指定図書一覧取得
-            List<BookData> selectBookList = webCustomerMenuRepository.findSelectBooks(bookIds);
+        // 書籍ID指定図書一覧取得
+        List<BookData> selectBookList = webCustomerMenuRepository.findSelectBooks(bookIds);
 
-            // 在庫数を計算
-            Map<String, Long> stockCountMap = calculateStock(selectBookList);
+        // 在庫数を計算
+        Map<String, Long> stockCountMap = calculateStock(selectBookList);
 
-            // 書籍IDごとにグループ化し、DTOに詰め替え
-            return selectBookList.stream()
-                    .collect(Collectors.groupingBy(BookData::getBookID))
-                    .entrySet().stream()
-                    .map(entry -> {
-                        BookRequestDTO dto = new BookRequestDTO();
-                        BookData book = entry.getValue().get(0);
-                        BeanUtils.copyProperties(book, dto);
-                        dto.setStockCount(stockCountMap.getOrDefault(book.getBookID(), 0L).intValue());
-                        return dto;
-                    })
-                    .collect(Collectors.toList());
+        // 書籍IDごとにグループ化し、DTOに詰め替え
+        return selectBookList.stream()
+                .collect(Collectors.groupingBy(BookData::getBookID))
+                .entrySet().stream()
+                .map(entry -> {
+                    BookRequestDTO dto = new BookRequestDTO();
+                    BookData book = entry.getValue().get(0);
+                    BeanUtils.copyProperties(book, dto);
+                    dto.setStockCount(stockCountMap.getOrDefault(book.getBookID(), 0L).intValue());
+                    return dto;
+                })
+                .collect(Collectors.toList());
 
-        } catch (WebUnexpectedException e) {
-            String errorMessage = MessageUtil.getMessage("図書一覧の取得に失敗しました");
-            LogUtil.infoDetail(errorMessage, e);
-            throw new WebUnexpectedException(errorMessage, e);
-        }
     }
 
     /**

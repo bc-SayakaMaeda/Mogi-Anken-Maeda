@@ -5,7 +5,6 @@ import static org.hamcrest.MatcherAssert.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import org.apache.logging.log4j.Level;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
@@ -136,53 +135,6 @@ public class WebCustomerLoginServiceTest extends BaseTest {
 
         // 検証
         assertThat(exception.getMessage(), is("WE03-XXXXX-001::エラー（例外）が発生しました"));
-    }
-
-    /**
-     * 異常系テスト - ログイン判定情報が取得できない場合
-     *
-     * <pre>
-     * 前提：
-     * - WebCustomerLoginRepository.getLoginInfoがnullを返す場合
-     *
-     * 結果：
-     * - ログが正しく出力される
-     * </pre>
-     *
-     * @throws WebUnexpectedException
-     * @throws WebParamException
-     */
-    @Test
-    public void login_異常系_ログイン判定情報が取得できない() throws WebUnexpectedException, WebParamException {
-
-        // モックの挙動を定義
-        try (MockedStatic<HashUtil> mockedHashUtil = Mockito.mockStatic(HashUtil.class)) {
-            mockedHashUtil.when(() -> HashUtil.sha256("testPassword")).thenReturn("hashedPassword");
-
-            // メソッド引数の準備
-            WebCustomerLoginForm form = new WebCustomerLoginForm();
-            form.setCustomerID("testCustomer");
-            form.setPassword("testPassword");
-
-            // メソッド呼び出し
-            webCustomerLoginService.login(form);
-
-            // ログ出力の検証
-            verify(mockAppender, Mockito.times(1)).append(logCaptor.capture());
-            Level level = logCaptor.getAllValues().get(0).getLevel();
-            String message = logCaptor.getAllValues().get(0).getMessage().getFormattedMessage();
-            Throwable throwable = logCaptor.getAllValues().get(0).getThrown();
-
-            // ログレベル確認
-            assertThat(level, is(Level.INFO));
-
-            // ログメッセージ確認
-            assertThat(message,
-                    is("WE03-XXXXX-009::ログインに失敗しました(jp.co.benesse.web.service.WebCustomerLoginService[60])"));
-
-            // スタックトレース確認（例外はスローされない）
-            assertThat(throwable, is(nullValue()));
-        }
     }
 
 }

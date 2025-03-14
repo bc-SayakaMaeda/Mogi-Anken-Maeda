@@ -1,0 +1,2 @@
+bookLoanID,libraryBookID,returnFlg,returnDateTime,memo,logicDelFlg,createBy,createTime,updateBy,updateTime
+1,1,0,2024-11-27 23:25:42,aaa,0,9999,2024-11-27 23:25:42,9999,2025-02-14 12:00:00

@@ -67,23 +67,90 @@ public class WebCustomerMenuServiceTest extends BaseTest {
     class testGetBookListWithStock {
 
         /**
-         * 正常系テスト
+         * 本が1種類で貸出中の場合のテスト
          * 
          * <pre>
          * 前提：
-         * - 貸出中で貸出不可の図書1冊の書籍
-         * - 返却済み・未貸出の図書計2冊の書籍
+         * - 貸出中で貸出不可の図書1冊のみが存在する
          * 
          * 結果：
-         * - 例外が発生せずに処理が終了し、在庫数を設定した図書一覧DTOが返される
+         * - 例外が発生せずに処理が終了する
+         * - 在庫数0で貸出中フラグがtrueの図書一覧DTOが1件返される
          * </pre>
          * 
          * @throws WebUnexpectedException
          */
         @Test
-        @DatabaseSetup(value = "classpath:service/WebCustomerMenuServiceTest/getBookListWithStock/正常系/input/")
-        public void getBookListWithStock_正常系() throws WebUnexpectedException {
+        @DatabaseSetup(value = "classpath:service/WebCustomerMenuServiceTest/getBookListWithStock/本が1種類_貸出中/input/")
+        public void getBookListWithStock_本が1種類_貸出中() throws WebUnexpectedException {
+            // 期待値の設定
+            BookDataDTO expected = new BookDataDTO();
+            expected.setBookID("1");
+            expected.setTitle("タイトル1");
+            expected.setAuthor("著者1");
+            expected.setStockCount(0);
+            expected.setLibraryBookID("1");
+            expected.setLoanFlg(true);
 
+            // メソッドの呼び出し
+            List<BookDataDTO> result = webCustomerMenuService.getBookListWithStock();
+
+            // 検証
+            assertThat(result.size(), is(1));
+            assertThat(result.get(0), is(samePropertyValuesAs(expected)));
+        }
+
+        /**
+         * 本が1種類で貸出可能な場合のテスト
+         * 
+         * <pre>
+         * 前提：
+         * - 貸出可能な図書1冊のみが存在する
+         * 
+         * 結果：
+         * - 例外が発生せずに処理が終了する
+         * - 在庫数1で貸出中フラグがfalseの図書一覧DTOが1件返される
+         * </pre>
+         * 
+         * @throws WebUnexpectedException
+         */
+        @Test
+        @DatabaseSetup(value = "classpath:service/WebCustomerMenuServiceTest/getBookListWithStock/本が1種類_貸出可能/input/")
+        public void getBookListWithStock_本が1種類_貸出可能() throws WebUnexpectedException {
+            // 期待値の設定
+            BookDataDTO expected = new BookDataDTO();
+            expected.setBookID("1");
+            expected.setTitle("タイトル1");
+            expected.setAuthor("著者1");
+            expected.setStockCount(1);
+            expected.setLibraryBookID("1");
+            expected.setLoanFlg(false);
+
+            // メソッドの呼び出し
+            List<BookDataDTO> result = webCustomerMenuService.getBookListWithStock();
+
+            // 検証
+            assertThat(result.size(), is(1));
+            assertThat(result.get(0), is(samePropertyValuesAs(expected)));
+        }
+
+        /**
+         * 本が2種類以上ですべて貸出中の場合のテスト
+         * 
+         * <pre>
+         * 前提：
+         * - 貸出中で貸出不可の図書が2冊以上存在する
+         * 
+         * 結果：
+         * - 例外が発生せずに処理が終了する
+         * - すべての本の在庫数が0で貸出中フラグがtrueの図書一覧DTOが返される
+         * </pre>
+         * 
+         * @throws WebUnexpectedException
+         */
+        @Test
+        @DatabaseSetup(value = "classpath:service/WebCustomerMenuServiceTest/getBookListWithStock/本が2種類以上_すべて貸出中/input/")
+        public void getBookListWithStock_本が2種類以上_すべて貸出中() throws WebUnexpectedException {
             // 期待値の設定
             BookDataDTO expected1 = new BookDataDTO();
             expected1.setBookID("1");
@@ -97,7 +164,94 @@ public class WebCustomerMenuServiceTest extends BaseTest {
             expected2.setBookID("2");
             expected2.setTitle("タイトル2");
             expected2.setAuthor("著者2");
-            expected2.setStockCount(2);
+            expected2.setStockCount(0);
+            expected2.setLibraryBookID("2");
+            expected2.setLoanFlg(true);
+
+            // メソッドの呼び出し
+            List<BookDataDTO> result = webCustomerMenuService.getBookListWithStock();
+
+            // 検証
+            assertThat(result.size(), is(2));
+            assertThat(result.get(0), is(samePropertyValuesAs(expected1)));
+            assertThat(result.get(1), is(samePropertyValuesAs(expected2)));
+        }
+
+        /**
+         * 本が2種類以上で一部貸出可能な場合のテスト
+         * 
+         * <pre>
+         * 前提：
+         * - 貸出可能な図書が一部存在する
+         * 
+         * 結果：
+         * - 例外が発生せずに処理が終了する
+         * - 在庫数が0で貸出フラグがtrueと1以上の本で貸出中フラグがfalseの図書一覧DTOが返される
+         * </pre>
+         * 
+         * @throws WebUnexpectedException
+         */
+        @Test
+        @DatabaseSetup(value = "classpath:service/WebCustomerMenuServiceTest/getBookListWithStock/本が2種類以上_一部貸出中/input/")
+        public void getBookListWithStock_本が2種類以上_一部貸出中() throws WebUnexpectedException {
+            // 期待値の設定
+            BookDataDTO expected1 = new BookDataDTO();
+            expected1.setBookID("1");
+            expected1.setTitle("タイトル1");
+            expected1.setAuthor("著者1");
+            expected1.setStockCount(0);
+            expected1.setLibraryBookID("1");
+            expected1.setLoanFlg(true);
+
+            BookDataDTO expected2 = new BookDataDTO();
+            expected2.setBookID("2");
+            expected2.setTitle("タイトル2");
+            expected2.setAuthor("著者2");
+            expected2.setStockCount(1);
+            expected2.setLibraryBookID("2");
+            expected2.setLoanFlg(false);
+
+            // メソッドの呼び出し
+            List<BookDataDTO> result = webCustomerMenuService.getBookListWithStock();
+
+            // 検証
+            assertThat(result.size(), is(2));
+            assertThat(result.get(0), is(samePropertyValuesAs(expected1)));
+            assertThat(result.get(1), is(samePropertyValuesAs(expected2)));
+        }
+
+        /**
+         * 本が2種類以上ですべて貸出可能な場合のテスト
+         * 
+         * <pre>
+         * 前提：
+         * - 貸出可能な図書が2冊以上存在する
+         * - 返却済み、未貸出が含まれる
+         * 
+         * 結果：
+         * - 例外が発生せずに処理が終了する
+         * - すべての本の在庫数が1以上で貸出中フラグがfalseの図書一覧DTOが返される
+         * </pre>
+         * 
+         * @throws WebUnexpectedException
+         */
+        @Test
+        @DatabaseSetup(value = "classpath:service/WebCustomerMenuServiceTest/getBookListWithStock/本が2種類以上_すべて貸出可能/input/")
+        public void getBookListWithStock_本が2種類以上_すべて貸出可能() throws WebUnexpectedException {
+            // 期待値の設定
+            BookDataDTO expected1 = new BookDataDTO();
+            expected1.setBookID("1");
+            expected1.setTitle("タイトル1");
+            expected1.setAuthor("著者1");
+            expected1.setStockCount(1);
+            expected1.setLibraryBookID("1");
+            expected1.setLoanFlg(false);
+
+            BookDataDTO expected2 = new BookDataDTO();
+            expected2.setBookID("2");
+            expected2.setTitle("タイトル2");
+            expected2.setAuthor("著者2");
+            expected2.setStockCount(1);
             expected2.setLibraryBookID("2");
             expected2.setLoanFlg(false);
 

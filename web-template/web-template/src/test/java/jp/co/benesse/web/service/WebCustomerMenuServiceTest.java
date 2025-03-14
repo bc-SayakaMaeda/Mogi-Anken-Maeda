@@ -67,7 +67,7 @@ public class WebCustomerMenuServiceTest extends BaseTest {
     class testGetBookListWithStock {
 
         /**
-         * 本が1種類で貸出中の場合のテスト
+         * 書籍が1種類で貸出中の場合のテスト
          * 
          * <pre>
          * 前提：
@@ -101,7 +101,7 @@ public class WebCustomerMenuServiceTest extends BaseTest {
         }
 
         /**
-         * 本が1種類で貸出可能な場合のテスト
+         * 書籍が1種類で貸出可能な場合のテスト
          * 
          * <pre>
          * 前提：
@@ -135,7 +135,7 @@ public class WebCustomerMenuServiceTest extends BaseTest {
         }
 
         /**
-         * 本が2種類以上ですべて貸出中の場合のテスト
+         * 書籍が2種類以上ですべて貸出中の場合のテスト
          * 
          * <pre>
          * 前提：
@@ -178,7 +178,7 @@ public class WebCustomerMenuServiceTest extends BaseTest {
         }
 
         /**
-         * 本が2種類以上で一部貸出可能な場合のテスト
+         * 書籍2種類以上で一部貸出可能な場合のテスト
          * 
          * <pre>
          * 前提：
@@ -221,7 +221,7 @@ public class WebCustomerMenuServiceTest extends BaseTest {
         }
 
         /**
-         * 本が2種類以上ですべて貸出可能な場合のテスト
+         * 書籍が2種類以上ですべて貸出可能な場合のテスト
          * 
          * <pre>
          * 前提：
@@ -262,6 +262,111 @@ public class WebCustomerMenuServiceTest extends BaseTest {
             assertThat(result.size(), is(2));
             assertThat(result.get(0), is(samePropertyValuesAs(expected1)));
             assertThat(result.get(1), is(samePropertyValuesAs(expected2)));
+        }
+
+        /**
+         * 正常系テスト
+         * 
+         * <pre>
+         * 前提：
+         * - 図書が1冊_貸出中
+         * - 図書が1冊_貸出可能_返却済み
+         * - 図書が2冊以上_すべて貸出中
+         * - 図書が2冊以上_一部貸出中・未貸出
+         * - 図書が2冊以上_すべて貸出可能_未貸出
+         * 
+         * 結果：
+         * - 例外が発生せずに処理が終了する
+         * </pre>
+         * 
+         * @throws WebUnexpectedException
+         */
+        @Test
+        @DatabaseSetup(value = "classpath:service/WebCustomerMenuServiceTest/getBookListWithStock/正常系/input/")
+        public void getBookListWithStock_正常系() throws WebUnexpectedException {
+            // 期待値の設定
+            // 図書が1冊_貸出中
+            BookDataDTO expected1 = new BookDataDTO();
+            expected1.setBookID("1");
+            expected1.setTitle("タイトル1");
+            expected1.setAuthor("著者1");
+            expected1.setStockCount(0);
+            expected1.setLibraryBookID("1");
+            expected1.setLoanFlg(true);
+
+            // 図書が1冊_貸出可能_返却済み
+            BookDataDTO expected2 = new BookDataDTO();
+            expected2.setBookID("2");
+            expected2.setTitle("タイトル2");
+            expected2.setAuthor("著者2");
+            expected2.setStockCount(1);
+            expected2.setLibraryBookID("2");
+            expected2.setLoanFlg(false);
+
+            // 図書が2冊以上_すべて貸出中
+            BookDataDTO expected3 = new BookDataDTO();
+            expected3.setBookID("3");
+            expected3.setTitle("タイトル3");
+            expected3.setAuthor("著者3");
+            expected3.setStockCount(0);
+            expected3.setLibraryBookID("3");
+            expected3.setLoanFlg(true);
+
+            BookDataDTO expected4 = new BookDataDTO();
+            expected4.setBookID("3");
+            expected4.setTitle("タイトル3");
+            expected4.setAuthor("著者3");
+            expected4.setStockCount(0);
+            expected4.setLibraryBookID("4");
+            expected4.setLoanFlg(true);
+
+            // 図書が2冊以上_一部貸出中・未貸出
+            BookDataDTO expected5 = new BookDataDTO();
+            expected5.setBookID("4");
+            expected5.setTitle("タイトル4");
+            expected5.setAuthor("著者4");
+            expected5.setStockCount(0);
+            expected5.setLibraryBookID("5");
+            expected5.setLoanFlg(true);
+
+            BookDataDTO expected6 = new BookDataDTO();
+            expected6.setBookID("4");
+            expected6.setTitle("タイトル4");
+            expected6.setAuthor("著者4");
+            expected6.setStockCount(1);
+            expected6.setLibraryBookID("6");
+            expected6.setLoanFlg(false);
+
+            // 図書が2冊以上_すべて貸出可能_未貸出
+            BookDataDTO expected7 = new BookDataDTO();
+            expected7.setBookID("5");
+            expected7.setTitle("タイトル5");
+            expected7.setAuthor("著者5");
+            expected7.setStockCount(1);
+            expected7.setLibraryBookID("7");
+            expected7.setLoanFlg(false);
+
+            BookDataDTO expected8 = new BookDataDTO();
+            expected8.setBookID("5");
+            expected8.setTitle("タイトル5");
+            expected8.setAuthor("著者5");
+            expected8.setStockCount(1);
+            expected8.setLibraryBookID("8");
+            expected8.setLoanFlg(false);
+
+            // メソッドの呼び出し
+            List<BookDataDTO> result = webCustomerMenuService.getBookListWithStock();
+
+            // 検証
+            assertThat("結果のサイズが期待値と一致しません", result.size(), is(5));
+            assertThat("図書が1冊_貸出中の検証に失敗しました", result.get(0), is(samePropertyValuesAs(expected1)));
+            assertThat("図書が1冊_貸出可能の検証に失敗しました", result.get(1), is(samePropertyValuesAs(expected2)));
+            assertThat("図書が2冊以上_すべて貸出中の検証に失敗しました (1冊目)", result.get(2), is(samePropertyValuesAs(expected3)));
+            assertThat("図書が2冊以上_すべて貸出中の検証に失敗しました (2冊目)", result.get(3), is(samePropertyValuesAs(expected4)));
+            assertThat("図書が2冊以上_一部貸出中の検証に失敗しました (貸出中)", result.get(4), is(samePropertyValuesAs(expected5)));
+            assertThat("図書が2冊以上_一部貸出中の検証に失敗しました (貸出可能)", result.get(5), is(samePropertyValuesAs(expected6)));
+            assertThat("図書が2冊以上_すべて貸出可能の検証に失敗しました (1冊目)", result.get(6), is(samePropertyValuesAs(expected7)));
+            assertThat("図書が2冊以上_すべて貸出可能の検証に失敗しました (2冊目)", result.get(7), is(samePropertyValuesAs(expected8)));
         }
 
     }

@@ -444,8 +444,11 @@ public class WebCustomerMenuServiceTest extends BaseTest {
          * 
          * <pre>
          * 前提：
-         * - ケース1: 貸出中の書籍が含まれない場合
-         * - ケース2: 貸出中の書籍が含まれる場合
+         * - ケース1: 本が1種類、貸出中の書籍が含まれない場合
+         * - ケース2: 本が1種類、貸出中の書籍が含まれる場合
+         * - ケース3: 本が2種類以上、貸出中の書籍が含まれない場合
+         * - ケース4: 本が2種類以上、貸出中の書籍が含まれる場合
+         * - ケース5: 本が2種類以上、1冊貸出中、1冊貸出中ではない場合
          * 
          * 結果：
          * - 例外が発生せずに処理が終了し、在庫数マップが返される（キー：BookID, 値：在庫数）
@@ -457,8 +460,11 @@ public class WebCustomerMenuServiceTest extends BaseTest {
          */
         @ParameterizedTest(name = "【正常系】{2}")
         @CsvSource(value = {
-                "'book1,lib1,false;book1,lib2,false;book2,lib3,false', 'book1=2,book2=1', '貸出中の書籍が含まれない場合'",
-                "'book1,lib1,false;book1,lib2,true;book2,lib3,false;book2,lib4,true', 'book1=1,book2=1', '貸出中の書籍が含まれる場合'"
+                "'book1,lib1,false;book1,lib2,false', 'book1=2', '本が1種類、貸出中の書籍が含まれない場合'",
+                "'book1,lib1,false;book1,lib2,true', 'book1=1', '本が1種類、貸出中の書籍が含まれる場合'",
+                "'book1,lib1,false;book1,lib2,false;book2,lib3,false', 'book1=2,book2=1', '本が2種類以上、貸出中の書籍が含まれない場合'",
+                "'book1,lib1,false;book1,lib2,true;book2,lib3,false;book2,lib4,true', 'book1=1,book2=1', '本が2種類以上、貸出中の書籍が含まれる場合'",
+                "'book1,lib1,true;book1,lib2,false;book2,lib3,true;book2,lib4,false', 'book1=1,book2=1', '本が2種類以上、1冊貸出中、1冊貸出中ではない場合'"
         })
         public void calculateStock_正常系(String bookDataStr, String expectedResultStr, String description) {
             // テスト実施準備

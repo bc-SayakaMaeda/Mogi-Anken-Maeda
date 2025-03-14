@@ -79,18 +79,18 @@ public class WebCustomerLoginServiceTest extends BaseTest {
     }
 
     /**
-     * 異常系テスト - 引数がnull
+     * 異常系テスト - パスワードのハッシュ化失敗
      * 
      * <pre>
      * 前提：
-     * - 引数：WebCustomerLoginFormがnullの場合
+     * - HashUtil.sha256がnullを返す場合
      * 
      * 結果：
      * - WebUnexpectedExceptionがスローされる
      * </pre>
      */
     @Test
-    public void login_異常系_引数がnull() {
+    public void login_異常系_ハッシュ化失敗() {
 
         // モックの挙動を定義
         try (MockedStatic<HashUtil> mockedHashUtil = Mockito.mockStatic(HashUtil.class)) {
@@ -112,18 +112,19 @@ public class WebCustomerLoginServiceTest extends BaseTest {
     }
 
     /**
-     * 異常系テスト - パスワードのハッシュ化失敗
+     * 異常系テスト - 引数がnull
      * 
      * <pre>
      * 前提：
-     * - HashUtil.sha256がnullを返す場合
+     * - 引数：WebCustomerLoginFormがnullの場合
+     * 
      * 
      * 結果：
      * - WebParamExceptionがスローされる
      * </pre>
      */
     @Test
-    public void login_異常系_ハッシュ化失敗() {
+    public void login_異常系_引数がnull() {
 
         // メソッド引数の準備
         WebCustomerLoginForm form = null;
@@ -134,7 +135,7 @@ public class WebCustomerLoginServiceTest extends BaseTest {
         });
 
         // 検証
-        assertThat(exception.getMessage(), is("エラー（例外）が発生しました"));
+        assertThat(exception.getMessage(), is("WE03-XXXXX-001::エラー（例外）が発生しました"));
     }
 
     /**

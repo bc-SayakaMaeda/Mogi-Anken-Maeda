@@ -34,7 +34,7 @@ class WebCustomerLoginFormTest extends BaseTest {
 
     /** スマートバリデーター */
     @Autowired
-    private SmartValidator smartValidator;
+    private SmartValidator validator;
 
     /** フォーム */
     private WebCustomerLoginForm form;
@@ -65,10 +65,15 @@ class WebCustomerLoginFormTest extends BaseTest {
         Errors errors = new BeanPropertyBindingResult(form, "form");
 
         // バリデーション実行
-        smartValidator.validate(form, errors);
+        validator.validate(form, errors);
 
         // 検証
         assertThat(errors.hasErrors()).isFalse();
+
+        // 検証（getter）
+        assertThat(form.getCustomerID()).isEqualTo("User1234");
+        assertThat(form.getPassword()).isEqualTo("Password123");
+
     }
 
     /**
@@ -77,20 +82,22 @@ class WebCustomerLoginFormTest extends BaseTest {
      * 
      * 前提：
      * - customerIDまたはpasswordが以下の条件を満たさない場合
-     *   - ケース1: customerIDがnull
-     *   - ケース2: passwordがnull
-     *   - ケース3: customerIDが空文字
-     *   - ケース4: passwordが空文字
-     *   - ケース5: customerIDが短すぎる（8文字未満）
-     *   - ケース6: customerIDが長すぎる（16文字を超える）
-     *   - ケース7: passwordが短すぎる（8文字未満）
-     *   - ケース8: passwordが長すぎる（16文字を超える）
-     *   - ケース9: customerIDに特殊文字が含まれる
-     *   - ケース10: customerIDに全角文字が含まれる
-     *   - ケース11: customerIDに漢字が含まれる
-     *   - ケース12: passwordに全角文字が含まれる
-     *   - ケース13: passwordに漢字が含まれる
-     *   - ケース14: passwordに特殊文字が含まれる
+     * customerID
+     *   - ケース1: null
+     *   - ケース2: 空文字
+     *   - ケース3: 短すぎる（8文字未満）
+     *   - ケース4: 長すぎる（16文字を超える）
+     *   - ケース5: 特殊文字が含まれる（@）
+     *   - ケース6: 全角文字が含まれる
+     *   - ケース7: 漢字が含まれる
+     *  password
+     *   - ケース8: null
+     *   - ケース9: 空文字
+     *   - ケース10: 短すぎる（8文字未満）
+     *   - ケース11: 長すぎる（16文字を超える）
+     *   - ケース12: 特殊文字が含まれる（@）
+     *   - ケース13: 全角文字が含まれる
+     *   - ケース14: 漢字が含まれる
      * 
      * 結果：
      * - バリデーションエラーが発生する
@@ -106,20 +113,18 @@ class WebCustomerLoginFormTest extends BaseTest {
         form.setCustomerID(customerID);
         form.setPassword(password);
 
-        // Errorsオブジェクトを作成
         Errors errors = new BeanPropertyBindingResult(form, "form");
 
         // バリデーション実行（グループを指定）
-        smartValidator.validate(form, errors, RequiredCheck.class, LengthCheck.class, FormatCheck.class);
-
-        // ログ出力
-        System.out.println("Errors: " + errors);
+        validator.validate(form, errors, RequiredCheck.class, LengthCheck.class, FormatCheck.class);
 
         // 検証
         assertThat(errors.hasErrors()).isTrue();
-        errors.getFieldErrors().forEach(error -> {
-            System.out.println("Field: " + error.getField() + ", Message: " + error.getDefaultMessage());
-        });
+
+        // 検証（getter）
+        assertThat(form.getCustomerID()).isEqualTo(customerID);
+        assertThat(form.getPassword()).isEqualTo(password);
+
     }
 
     /**
@@ -130,79 +135,55 @@ class WebCustomerLoginFormTest extends BaseTest {
     static Stream<Arguments> webCustomerLoginForm_異常系_パラメータ() {
         String[] testCase = {
                 "ケース1: customerIDがnull",
-                "ケース2: passwordがnull",
-                "ケース3: customerIDが空文字",
-                "ケース4: passwordが空文字",
-                "ケース5: customerIDが短すぎる（8文字未満）",
-                "ケース6: customerIDが長すぎる（16文字を超える）",
-                "ケース7: passwordが短すぎる（8文字未満）",
-                "ケース8: passwordが長すぎる（16文字を超える）",
-                "ケース9: customerIDに特殊文字が含まれる",
-                "ケース10: customerIDに全角文字が含まれる",
-                "ケース11: customerIDに漢字が含まれる",
-                "ケース12: passwordに全角文字が含まれる",
-                "ケース13: passwordに漢字が含まれる",
-                "ケース14: passwordに特殊文字が含まれる"
+                "ケース2: customerIDが空文字",
+                "ケース3: customerIDが短すぎる（8文字未満）",
+                "ケース4: customerIDが長すぎる（16文字を超える）",
+                "ケース5: customerIDに特殊文字が含まれる（@）",
+                "ケース6: customerIDに全角文字が含まれる",
+                "ケース7: customerIDに漢字が含まれる",
+                "ケース8: passwordがnull",
+                "ケース9: passwordが空文字",
+                "ケース10: passwordが短すぎる（8文字未満）",
+                "ケース11: passwordが長すぎる（16文字を超える）",
+                "ケース12: passwordに特殊文字が含まれる（@）",
+                "ケース13: passwordに全角文字が含まれる",
+                "ケース14: passwordに漢字が含まれる"
         };
 
         // テストデータの準備
+        String customerID = "User1234";
+        String password = "Password123";
+
         String customerID1 = null;
-        String password1 = "Password123";
+        String customerID2 = "";
+        String customerID3 = "User12";
+        String customerID4 = "User12345678901234";
+        String customerID5 = "User@1234";
+        String customerID6 = "Ｕｓｅｒ１２３４";
+        String customerID7 = "漢字1234";
 
-        String customerID2 = "User1234";
-        String password2 = null;
+        String password1 = null;
+        String password2 = "";
+        String password3 = "Pass12";
+        String password4 = "Password1234567890";
+        String password5 = "Pass@word123";
+        String password6 = "Ｐａｓｓｗｏｒｄ１２３";
+        String password7 = "漢字Password";
 
-        String customerID3 = "";
-        String password3 = "Password123";
-
-        String customerID4 = "User1234";
-        String password4 = "";
-
-        String customerID5 = "User";
-        String password5 = "Password123";
-
-        String customerID6 = "User123456789012345";
-        String password6 = "Password123";
-
-        String customerID7 = "User1234";
-        String password7 = "Pass";
-
-        String customerID8 = "User1234";
-        String password8 = "Password123456789012345";
-
-        String customerID9 = "User@123";
-        String password9 = "Password123";
-
-        String customerID10 = "ユーザー1234";
-        String password10 = "Password123";
-
-        String customerID11 = "漢字1234";
-        String password11 = "Password123";
-
-        String customerID12 = "User1234";
-        String password12 = "パスワード123";
-
-        String customerID13 = "User1234";
-        String password13 = "漢字パスワード";
-
-        String customerID14 = "User1234";
-        String password14 = "Pass@123";
-
-        int i = 0;
         return Stream.of(
-                Arguments.arguments(customerID1, password1, testCase[i++]),
-                Arguments.arguments(customerID2, password2, testCase[i++]),
-                Arguments.arguments(customerID3, password3, testCase[i++]),
-                Arguments.arguments(customerID4, password4, testCase[i++]),
-                Arguments.arguments(customerID5, password5, testCase[i++]),
-                Arguments.arguments(customerID6, password6, testCase[i++]),
-                Arguments.arguments(customerID7, password7, testCase[i++]),
-                Arguments.arguments(customerID8, password8, testCase[i++]),
-                Arguments.arguments(customerID9, password9, testCase[i++]),
-                Arguments.arguments(customerID10, password10, testCase[i++]),
-                Arguments.arguments(customerID11, password11, testCase[i++]),
-                Arguments.arguments(customerID12, password12, testCase[i++]),
-                Arguments.arguments(customerID13, password13, testCase[i++]),
-                Arguments.arguments(customerID14, password14, testCase[i++]));
+                Arguments.of(customerID1, password, testCase[0]),
+                Arguments.of(customerID2, password, testCase[1]),
+                Arguments.of(customerID3, password, testCase[2]),
+                Arguments.of(customerID4, password, testCase[3]),
+                Arguments.of(customerID5, password, testCase[4]),
+                Arguments.of(customerID6, password, testCase[5]),
+                Arguments.of(customerID7, password, testCase[6]),
+                Arguments.of(customerID, password1, testCase[7]),
+                Arguments.of(customerID, password2, testCase[8]),
+                Arguments.of(customerID, password3, testCase[9]),
+                Arguments.of(customerID, password4, testCase[10]),
+                Arguments.of(customerID, password5, testCase[11]),
+                Arguments.of(customerID, password6, testCase[12]),
+                Arguments.of(customerID, password7, testCase[13]));
     }
 }

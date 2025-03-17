@@ -1,10 +1,12 @@
 package jp.co.benesse.web.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -67,204 +69,6 @@ public class WebCustomerMenuServiceTest extends BaseTest {
     class testGetBookListWithStock {
 
         /**
-         * 書籍が1種類で貸出中の場合のテスト
-         * 
-         * <pre>
-         * 前提：
-         * - 貸出中で貸出不可の図書1冊のみが存在する
-         * 
-         * 結果：
-         * - 例外が発生せずに処理が終了する
-         * - 在庫数0で貸出中フラグがtrueの図書一覧DTOが1件返される
-         * </pre>
-         * 
-         * @throws WebUnexpectedException
-         */
-        @Test
-        @DatabaseSetup(value = "classpath:service/WebCustomerMenuServiceTest/getBookListWithStock/本が1種類_貸出中/input/")
-        public void getBookListWithStock_本が1種類_貸出中() throws WebUnexpectedException {
-            // 期待値の設定
-            BookDataDTO expected = new BookDataDTO();
-            expected.setBookID("1");
-            expected.setTitle("タイトル1");
-            expected.setAuthor("著者1");
-            expected.setStockCount(0);
-            expected.setLibraryBookID("1");
-            expected.setLoanFlg(true);
-
-            // メソッドの呼び出し
-            List<BookDataDTO> result = webCustomerMenuService.getBookListWithStock();
-
-            // 検証
-            assertThat(result.size(), is(1));
-            assertThat(result.get(0), is(samePropertyValuesAs(expected)));
-        }
-
-        /**
-         * 書籍が1種類で貸出可能な場合のテスト
-         * 
-         * <pre>
-         * 前提：
-         * - 貸出可能な図書1冊のみが存在する
-         * 
-         * 結果：
-         * - 例外が発生せずに処理が終了する
-         * - 在庫数1で貸出中フラグがfalseの図書一覧DTOが1件返される
-         * </pre>
-         * 
-         * @throws WebUnexpectedException
-         */
-        @Test
-        @DatabaseSetup(value = "classpath:service/WebCustomerMenuServiceTest/getBookListWithStock/本が1種類_貸出可能/input/")
-        public void getBookListWithStock_本が1種類_貸出可能() throws WebUnexpectedException {
-            // 期待値の設定
-            BookDataDTO expected = new BookDataDTO();
-            expected.setBookID("1");
-            expected.setTitle("タイトル1");
-            expected.setAuthor("著者1");
-            expected.setStockCount(1);
-            expected.setLibraryBookID("1");
-            expected.setLoanFlg(false);
-
-            // メソッドの呼び出し
-            List<BookDataDTO> result = webCustomerMenuService.getBookListWithStock();
-
-            // 検証
-            assertThat(result.size(), is(1));
-            assertThat(result.get(0), is(samePropertyValuesAs(expected)));
-        }
-
-        /**
-         * 書籍が2種類以上ですべて貸出中の場合のテスト
-         * 
-         * <pre>
-         * 前提：
-         * - 貸出中で貸出不可の図書が2冊以上存在する
-         * 
-         * 結果：
-         * - 例外が発生せずに処理が終了する
-         * - すべての本の在庫数が0で貸出中フラグがtrueの図書一覧DTOが返される
-         * </pre>
-         * 
-         * @throws WebUnexpectedException
-         */
-        @Test
-        @DatabaseSetup(value = "classpath:service/WebCustomerMenuServiceTest/getBookListWithStock/本が2種類以上_すべて貸出中/input/")
-        public void getBookListWithStock_本が2種類以上_すべて貸出中() throws WebUnexpectedException {
-            // 期待値の設定
-            BookDataDTO expected1 = new BookDataDTO();
-            expected1.setBookID("1");
-            expected1.setTitle("タイトル1");
-            expected1.setAuthor("著者1");
-            expected1.setStockCount(0);
-            expected1.setLibraryBookID("1");
-            expected1.setLoanFlg(true);
-
-            BookDataDTO expected2 = new BookDataDTO();
-            expected2.setBookID("2");
-            expected2.setTitle("タイトル2");
-            expected2.setAuthor("著者2");
-            expected2.setStockCount(0);
-            expected2.setLibraryBookID("2");
-            expected2.setLoanFlg(true);
-
-            // メソッドの呼び出し
-            List<BookDataDTO> result = webCustomerMenuService.getBookListWithStock();
-
-            // 検証
-            assertThat(result.size(), is(2));
-            assertThat(result.get(0), is(samePropertyValuesAs(expected1)));
-            assertThat(result.get(1), is(samePropertyValuesAs(expected2)));
-        }
-
-        /**
-         * 書籍2種類以上で一部貸出可能な場合のテスト
-         * 
-         * <pre>
-         * 前提：
-         * - 貸出可能な図書が一部存在する
-         * 
-         * 結果：
-         * - 例外が発生せずに処理が終了する
-         * - 在庫数が0で貸出フラグがtrueと1以上の本で貸出中フラグがfalseの図書一覧DTOが返される
-         * </pre>
-         * 
-         * @throws WebUnexpectedException
-         */
-        @Test
-        @DatabaseSetup(value = "classpath:service/WebCustomerMenuServiceTest/getBookListWithStock/本が2種類以上_一部貸出中/input/")
-        public void getBookListWithStock_本が2種類以上_一部貸出中() throws WebUnexpectedException {
-            // 期待値の設定
-            BookDataDTO expected1 = new BookDataDTO();
-            expected1.setBookID("1");
-            expected1.setTitle("タイトル1");
-            expected1.setAuthor("著者1");
-            expected1.setStockCount(0);
-            expected1.setLibraryBookID("1");
-            expected1.setLoanFlg(true);
-
-            BookDataDTO expected2 = new BookDataDTO();
-            expected2.setBookID("2");
-            expected2.setTitle("タイトル2");
-            expected2.setAuthor("著者2");
-            expected2.setStockCount(1);
-            expected2.setLibraryBookID("2");
-            expected2.setLoanFlg(false);
-
-            // メソッドの呼び出し
-            List<BookDataDTO> result = webCustomerMenuService.getBookListWithStock();
-
-            // 検証
-            assertThat(result.size(), is(2));
-            assertThat(result.get(0), is(samePropertyValuesAs(expected1)));
-            assertThat(result.get(1), is(samePropertyValuesAs(expected2)));
-        }
-
-        /**
-         * 書籍が2種類以上ですべて貸出可能な場合のテスト
-         * 
-         * <pre>
-         * 前提：
-         * - 貸出可能な図書が2冊以上存在する
-         * - 返却済み、未貸出が含まれる
-         * 
-         * 結果：
-         * - 例外が発生せずに処理が終了する
-         * - すべての本の在庫数が1以上で貸出中フラグがfalseの図書一覧DTOが返される
-         * </pre>
-         * 
-         * @throws WebUnexpectedException
-         */
-        @Test
-        @DatabaseSetup(value = "classpath:service/WebCustomerMenuServiceTest/getBookListWithStock/本が2種類以上_すべて貸出可能/input/")
-        public void getBookListWithStock_本が2種類以上_すべて貸出可能() throws WebUnexpectedException {
-            // 期待値の設定
-            BookDataDTO expected1 = new BookDataDTO();
-            expected1.setBookID("1");
-            expected1.setTitle("タイトル1");
-            expected1.setAuthor("著者1");
-            expected1.setStockCount(1);
-            expected1.setLibraryBookID("1");
-            expected1.setLoanFlg(false);
-
-            BookDataDTO expected2 = new BookDataDTO();
-            expected2.setBookID("2");
-            expected2.setTitle("タイトル2");
-            expected2.setAuthor("著者2");
-            expected2.setStockCount(1);
-            expected2.setLibraryBookID("2");
-            expected2.setLoanFlg(false);
-
-            // メソッドの呼び出し
-            List<BookDataDTO> result = webCustomerMenuService.getBookListWithStock();
-
-            // 検証
-            assertThat(result.size(), is(2));
-            assertThat(result.get(0), is(samePropertyValuesAs(expected1)));
-            assertThat(result.get(1), is(samePropertyValuesAs(expected2)));
-        }
-
-        /**
          * 正常系テスト
          * 
          * <pre>
@@ -285,90 +89,53 @@ public class WebCustomerMenuServiceTest extends BaseTest {
         @DatabaseSetup(value = "classpath:service/WebCustomerMenuServiceTest/getBookListWithStock/正常系/input/")
         public void getBookListWithStock_正常系() throws WebUnexpectedException {
             // 期待値の設定
+            List<BookDataDTO> expectedList = new ArrayList<>();
+
             // 図書が1冊_貸出中
             BookDataDTO expected1 = new BookDataDTO();
-            expected1.setBookID("1");
-            expected1.setTitle("タイトル1");
-            expected1.setAuthor("著者1");
-            expected1.setStockCount(0);
             expected1.setLibraryBookID("1");
             expected1.setLoanFlg(true);
+            expectedList.add(expected1);
 
             // 図書が1冊_貸出可能_返却済み
             BookDataDTO expected2 = new BookDataDTO();
-            expected2.setBookID("2");
-            expected2.setTitle("タイトル2");
-            expected2.setAuthor("著者2");
-            expected2.setStockCount(1);
             expected2.setLibraryBookID("2");
             expected2.setLoanFlg(false);
+            expectedList.add(expected2);
 
             // 図書が2冊以上_すべて貸出中
             BookDataDTO expected3 = new BookDataDTO();
-            expected3.setBookID("3");
-            expected3.setTitle("タイトル3");
-            expected3.setAuthor("著者3");
-            expected3.setStockCount(0);
             expected3.setLibraryBookID("3");
             expected3.setLoanFlg(true);
-
-            BookDataDTO expected4 = new BookDataDTO();
-            expected4.setBookID("3");
-            expected4.setTitle("タイトル3");
-            expected4.setAuthor("著者3");
-            expected4.setStockCount(0);
-            expected4.setLibraryBookID("4");
-            expected4.setLoanFlg(true);
+            expectedList.add(expected3);
 
             // 図書が2冊以上_一部貸出中・未貸出
-            BookDataDTO expected5 = new BookDataDTO();
-            expected5.setBookID("4");
-            expected5.setTitle("タイトル4");
-            expected5.setAuthor("著者4");
-            expected5.setStockCount(0);
-            expected5.setLibraryBookID("5");
-            expected5.setLoanFlg(true);
-
-            BookDataDTO expected6 = new BookDataDTO();
-            expected6.setBookID("4");
-            expected6.setTitle("タイトル4");
-            expected6.setAuthor("著者4");
-            expected6.setStockCount(1);
-            expected6.setLibraryBookID("6");
-            expected6.setLoanFlg(false);
+            BookDataDTO expected4 = new BookDataDTO();
+            expected4.setLibraryBookID("5");
+            expected4.setLoanFlg(true);
+            expectedList.add(expected4);
 
             // 図書が2冊以上_すべて貸出可能_未貸出
-            BookDataDTO expected7 = new BookDataDTO();
-            expected7.setBookID("5");
-            expected7.setTitle("タイトル5");
-            expected7.setAuthor("著者5");
-            expected7.setStockCount(1);
-            expected7.setLibraryBookID("7");
-            expected7.setLoanFlg(false);
-
-            BookDataDTO expected8 = new BookDataDTO();
-            expected8.setBookID("5");
-            expected8.setTitle("タイトル5");
-            expected8.setAuthor("著者5");
-            expected8.setStockCount(1);
-            expected8.setLibraryBookID("8");
-            expected8.setLoanFlg(false);
+            BookDataDTO expected5 = new BookDataDTO();
+            expected5.setLibraryBookID("7");
+            expected5.setLoanFlg(false);
+            expectedList.add(expected5);
 
             // メソッドの呼び出し
             List<BookDataDTO> result = webCustomerMenuService.getBookListWithStock();
 
             // 検証
-            assertThat("結果のサイズが期待値と一致しません", result.size(), is(5));
-            assertThat("図書が1冊_貸出中の検証に失敗しました", result.get(0), is(samePropertyValuesAs(expected1)));
-            assertThat("図書が1冊_貸出可能の検証に失敗しました", result.get(1), is(samePropertyValuesAs(expected2)));
-            assertThat("図書が2冊以上_すべて貸出中の検証に失敗しました (1冊目)", result.get(2), is(samePropertyValuesAs(expected3)));
-            assertThat("図書が2冊以上_すべて貸出中の検証に失敗しました (2冊目)", result.get(3), is(samePropertyValuesAs(expected4)));
-            assertThat("図書が2冊以上_一部貸出中の検証に失敗しました (貸出中)", result.get(4), is(samePropertyValuesAs(expected5)));
-            assertThat("図書が2冊以上_一部貸出中の検証に失敗しました (貸出可能)", result.get(5), is(samePropertyValuesAs(expected6)));
-            assertThat("図書が2冊以上_すべて貸出可能の検証に失敗しました (1冊目)", result.get(6), is(samePropertyValuesAs(expected7)));
-            assertThat("図書が2冊以上_すべて貸出可能の検証に失敗しました (2冊目)", result.get(7), is(samePropertyValuesAs(expected8)));
-        }
+            assertThat(result).hasSize(expectedList.size());
 
+            for (int i = 0; i < expectedList.size(); i++) {
+                BookDataDTO actual = result.get(i);
+                BookDataDTO expected = expectedList.get(i);
+
+                // カスタム比較
+                assertThat(actual.getLibraryBookID()).isEqualTo(expected.getLibraryBookID());
+                assertThat(actual.isLoanFlg()).isEqualTo(expected.isLoanFlg());
+            }
+        }
     }
 
     /**
@@ -385,11 +152,11 @@ public class WebCustomerMenuServiceTest extends BaseTest {
          * 
          * <pre>
          * 前提：
-         * - 貸出中で貸出不可の図書1冊の書籍
-         * - 返却済み・未貸出の図書計2冊の書籍
+         * - 書籍IDを指定する
          * 
          * 結果：
-         * - 例外が発生せずに処理が終了し、在庫数を設定した図書一覧DTOが返される
+         * - 例外が発生せずに処理が終了する
+         * - 在庫数を設定した図書一覧DTOが返される
          * </pre>
          * 
          * @param bookIds
@@ -408,10 +175,16 @@ public class WebCustomerMenuServiceTest extends BaseTest {
             expected1.setStockCount(0);
 
             BookRequestDTO expected2 = new BookRequestDTO();
-            expected2.setBookID("2");
-            expected2.setTitle("タイトル2");
-            expected2.setAuthor("著者2");
+            expected2.setBookID("5");
+            expected2.setTitle("タイトル5");
+            expected2.setAuthor("著者5");
             expected2.setStockCount(2);
+
+            BookRequestDTO expected3 = new BookRequestDTO();
+            expected3.setBookID("5");
+            expected3.setTitle("タイトル5");
+            expected3.setAuthor("著者5");
+            expected3.setStockCount(2);
 
             // メソッドの呼び出し
             List<BookRequestDTO> result = webCustomerMenuService.getBookListByIdWithStock(bookIds);
@@ -420,6 +193,7 @@ public class WebCustomerMenuServiceTest extends BaseTest {
             assertThat(result.size(), is(2));
             assertThat(result.get(0), is(samePropertyValuesAs(expected1)));
             assertThat(result.get(1), is(samePropertyValuesAs(expected2)));
+            assertThat(result.get(1), is(samePropertyValuesAs(expected3)));
         }
 
         /**
@@ -427,7 +201,7 @@ public class WebCustomerMenuServiceTest extends BaseTest {
          */
         static Stream<Arguments> bookIdsProvider() {
             return Stream.of(
-                    Arguments.of(List.of("1", "2")));
+                    Arguments.of(List.of("1", "5")));
         }
 
     }

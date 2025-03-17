@@ -139,7 +139,7 @@ public class WebCustomerMenuServiceTest extends BaseTest {
     }
 
     /**
-     * 図書一覧取得と在庫数設定メソッドのテスト
+     * 図書一覧取得（書籍ID指定）と在庫数設定メソッドのテスト
      */
     @Nested
     @Order(2)

@@ -89,7 +89,7 @@ class WebCustomerLoginFormTest extends BaseTest {
      *   - ケース4: 長すぎる（16文字を超える）
      *   - ケース5: 特殊文字が含まれる（@）
      *   - ケース6: 全角文字が含まれる
-     *   - ケース7: 漢字が含まれる
+     *   - ケース7: かな・漢字が含まれる
      *  password
      *   - ケース8: null
      *   - ケース9: 空文字
@@ -97,7 +97,7 @@ class WebCustomerLoginFormTest extends BaseTest {
      *   - ケース11: 長すぎる（16文字を超える）
      *   - ケース12: 特殊文字が含まれる（@）
      *   - ケース13: 全角文字が含まれる
-     *   - ケース14: 漢字が含まれる
+     *   - ケース14: かな・漢字が含まれる
      * 
      * 結果：
      * - バリデーションエラーが発生する
@@ -159,8 +159,8 @@ class WebCustomerLoginFormTest extends BaseTest {
         String customerID3 = "User12";
         String customerID4 = "User12345678901234";
         String customerID5 = "User@1234";
-        String customerID6 = "Ｕｓｅｒ１２３４";
-        String customerID7 = "漢字1234";
+        String customerID6 = "Ｕｓｅｒ１２３４５";
+        String customerID7 = "あいうえおかき漢字";
 
         String password1 = null;
         String password2 = "";
@@ -168,7 +168,7 @@ class WebCustomerLoginFormTest extends BaseTest {
         String password4 = "Password1234567890";
         String password5 = "Pass@word123";
         String password6 = "Ｐａｓｓｗｏｒｄ１２３";
-        String password7 = "漢字Password";
+        String password7 = "あいうえおかき漢字";
 
         return Stream.of(
                 Arguments.of(customerID1, password, testCase[0]),

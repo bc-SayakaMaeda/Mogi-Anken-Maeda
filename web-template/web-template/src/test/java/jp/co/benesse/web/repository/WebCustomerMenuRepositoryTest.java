@@ -71,13 +71,21 @@ public class WebCustomerMenuRepositoryTest extends BaseTest {
         expected2.setAuthor("著者2");
         expected2.setLoanFlg(true);
 
+        BookData expected3 = new BookData();
+        expected3.setBookID("2");
+        expected3.setLibraryBookID("3");
+        expected3.setTitle("タイトル2");
+        expected3.setAuthor("著者2");
+        expected3.setLoanFlg(false);
+
         // メソッドの呼び出し
         List<BookData> result = webCustomerMenuRepository.findAllBooks();
 
         // 検証
-        assertThat(result.size(), is(2));
+        assertThat(result.size(), is(3));
         assertThat(result.get(0), is(samePropertyValuesAs(expected1)));
         assertThat(result.get(1), is(samePropertyValuesAs(expected2)));
+        assertThat(result.get(2), is(samePropertyValuesAs(expected3)));
     }
 
     /**

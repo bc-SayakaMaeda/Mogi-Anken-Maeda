@@ -60,7 +60,7 @@ class WebCustomerLoginFormTest extends BaseTest {
     void webCustomerLoginForm_正常系() {
         // テストデータ
         form.setCustomerID("User1234");
-        form.setPassword("Password123");
+        form.setPassword("Password12345678");
 
         Errors errors = new BeanPropertyBindingResult(form, "form");
 
@@ -72,7 +72,7 @@ class WebCustomerLoginFormTest extends BaseTest {
 
         // 検証（getter）
         assertThat(form.getCustomerID()).isEqualTo("User1234");
-        assertThat(form.getPassword()).isEqualTo("Password123");
+        assertThat(form.getPassword()).isEqualTo("Password12345678");
 
     }
 
@@ -140,14 +140,14 @@ class WebCustomerLoginFormTest extends BaseTest {
                 "ケース4: customerIDが長すぎる（16文字を超える）",
                 "ケース5: customerIDに特殊文字が含まれる（@）",
                 "ケース6: customerIDに全角文字が含まれる",
-                "ケース7: customerIDに漢字が含まれる",
+                "ケース7: customerIDにかな・漢字が含まれる",
                 "ケース8: passwordがnull",
                 "ケース9: passwordが空文字",
                 "ケース10: passwordが短すぎる（8文字未満）",
                 "ケース11: passwordが長すぎる（16文字を超える）",
                 "ケース12: passwordに特殊文字が含まれる（@）",
                 "ケース13: passwordに全角文字が含まれる",
-                "ケース14: passwordに漢字が含まれる"
+                "ケース14: passwordにかな・漢字が含まれる"
         };
 
         // テストデータの準備
@@ -156,16 +156,16 @@ class WebCustomerLoginFormTest extends BaseTest {
 
         String customerID1 = null;
         String customerID2 = "";
-        String customerID3 = "User12";
-        String customerID4 = "User12345678901234";
+        String customerID3 = "User123";
+        String customerID4 = "User1234567890123";
         String customerID5 = "User@1234";
         String customerID6 = "Ｕｓｅｒ１２３４５";
         String customerID7 = "あいうえおかき漢字";
 
         String password1 = null;
         String password2 = "";
-        String password3 = "Pass12";
-        String password4 = "Password1234567890";
+        String password3 = "Pass123";
+        String password4 = "Password123456789";
         String password5 = "Pass@word123";
         String password6 = "Ｐａｓｓｗｏｒｄ１２３";
         String password7 = "あいうえおかき漢字";

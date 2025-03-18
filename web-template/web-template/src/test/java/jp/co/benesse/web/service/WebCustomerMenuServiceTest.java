@@ -180,12 +180,6 @@ public class WebCustomerMenuServiceTest extends BaseTest {
             expected2.setAuthor("著者5");
             expected2.setStockCount(2);
 
-            BookRequestDTO expected3 = new BookRequestDTO();
-            expected3.setBookID("5");
-            expected3.setTitle("タイトル5");
-            expected3.setAuthor("著者5");
-            expected3.setStockCount(2);
-
             // メソッドの呼び出し
             List<BookRequestDTO> result = webCustomerMenuService.getBookListByIdWithStock(bookIds);
 
@@ -193,7 +187,6 @@ public class WebCustomerMenuServiceTest extends BaseTest {
             assertThat(result.size(), is(2));
             assertThat(result.get(0), is(samePropertyValuesAs(expected1)));
             assertThat(result.get(1), is(samePropertyValuesAs(expected2)));
-            assertThat(result.get(1), is(samePropertyValuesAs(expected3)));
         }
 
         /**
@@ -254,44 +247,6 @@ public class WebCustomerMenuServiceTest extends BaseTest {
         }
 
         /**
-         * 書籍データを文字列から BookData のリストに変換
-         * 
-         * @param bookDataStr
-         * @return List<BookData>
-         */
-        private List<BookData> parseBookDataString(String bookDataStr) {
-            String[] bookDataArray = bookDataStr.split(";");
-            return Arrays.stream(bookDataArray)
-                    .map(data -> {
-                        String[] parts = data.split(",");
-                        if (parts.length < 3) {
-                            throw new IllegalArgumentException("不正なデータ形式: " + data);
-                        }
-                        BookData bookData = new BookData();
-                        bookData.setBookID(parts[0]);
-                        bookData.setLibraryBookID(parts[1]);
-                        bookData.setLoanFlg(Boolean.parseBoolean(parts[2]));
-                        return bookData;
-                    })
-                    .collect(Collectors.toList());
-        }
-
-        /**
-         * 期待される結果を文字列から Map<String, Long> に変換
-         * 
-         * @param expectedResultStr
-         * @return Map<String, Long>
-         */
-        private Map<String, Long> parseExpectedResultString(String expectedResultStr) {
-            String[] resultPairs = expectedResultStr.split(",");
-            return Arrays.stream(resultPairs)
-                    .map(pair -> pair.split("="))
-                    .collect(Collectors.toMap(
-                            parts -> parts[0],
-                            parts -> Long.parseLong(parts[1])));
-        }
-
-        /**
          * 異常系テスト
          * 
          * <pre>
@@ -322,6 +277,44 @@ public class WebCustomerMenuServiceTest extends BaseTest {
             // 検証
             assertTrue(result.isEmpty());
         }
+    }
+
+    /**
+     * 準備コード：書籍データを文字列から BookData のリストに変換
+     * 
+     * @param bookDataStr
+     * @return List<BookData>
+     */
+    private List<BookData> parseBookDataString(String bookDataStr) {
+        String[] bookDataArray = bookDataStr.split(";");
+        return Arrays.stream(bookDataArray)
+                .map(data -> {
+                    String[] parts = data.split(",");
+                    if (parts.length < 3) {
+                        throw new IllegalArgumentException("不正なデータ形式: " + data);
+                    }
+                    BookData bookData = new BookData();
+                    bookData.setBookID(parts[0]);
+                    bookData.setLibraryBookID(parts[1]);
+                    bookData.setLoanFlg(Boolean.parseBoolean(parts[2]));
+                    return bookData;
+                })
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 期待される結果を文字列から Map<String, Long> に変換
+     * 
+     * @param expectedResultStr
+     * @return Map<String, Long>
+     */
+    private Map<String, Long> parseExpectedResultString(String expectedResultStr) {
+        String[] resultPairs = expectedResultStr.split(",");
+        return Arrays.stream(resultPairs)
+                .map(pair -> pair.split("="))
+                .collect(Collectors.toMap(
+                        parts -> parts[0],
+                        parts -> Long.parseLong(parts[1])));
     }
 
     /**

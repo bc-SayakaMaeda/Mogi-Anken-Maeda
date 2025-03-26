@@ -5,9 +5,10 @@
     <meta charset="utf-8">
     <title>貸出予約確認画面</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="×××市立図書館の貸出確認画面です。">
-    <meta name="keywords" content="×××市立図書館, 貸出確認">
-    <link rel="stylesheet" th:href="@{/css/common.css}" type="text/css">
+    <meta name="description" content="×××市立図書館の貸出予約確認画面です。">
+    <meta name="keywords" content="×××市立図書館, 貸出予約確認">
+    <link rel="stylesheet" th:href="@{/css/common.css}" type="text/css"> <!-- 共通CSS -->
+    <link rel="stylesheet" th:href="@{/css/webCustomerReservationCheck.css}" type="text/css"> <!-- 画面専用CSS -->
     <link rel="icon" href="data:,">
 </head>
 
@@ -15,12 +16,40 @@
     <div class="webCustomerReservationCheck-container">
         <div class="header">
             <div class="user-info">
-                <h1>貸出予約確認画面</h1>
                 <span id="user-id" th:text="'利用者ID：' + ${customerID}"></span>
                 <span id="user-name" th:text="'利用者名：' + ${customerName}"></span>
+                <a th:href="@{/webCustomerLogin}" id="logoutButton">ログアウト</a>
             </div>
         </div>
+        <hr>
+        <div class="title-group">
+            <p>以下を貸出確定しますか？　<span class="warning-text"> ※まだ予約は完了していません※</span></p>
+        </div>
+        <form id="reservationForm" th:action="@{/webCustomerReservationCheck}" method="post">
+            <table id="book-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>タイトル</th>
+                        <th>著者</th>
+                    </tr>
+                </thead>
+                <tbody id="book-row-block"></tbody>
+            </table>
+
+            <div class="form-group">
+                <button type="submit" id="webCustomerReservationConfirmButton">貸出予約確定</button>
+                <button type="submit" id="webCustomerReservationEditButton">修正</button>
+            </div>
+        </form>
     </div>
+    <script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+        const bookList = /*[[${bookRequestList != null ? bookRequestList : '[]'}]]*/[];
+        /*]]>*/
+    </script>
+    <script type="module" th:src="@{/js/utils.js}"></script>
+    <script type="module" th:src="@{/js/webCustomerReservationCheck}"></script>
 </body>
 
 </html>

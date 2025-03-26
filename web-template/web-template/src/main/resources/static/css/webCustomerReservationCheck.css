@@ -1,0 +1,76 @@
+body {
+    align-items: flex-start;
+}
+
+.webCustomerReservationCheck-container {
+    width: 80%;
+    margin: 20px auto;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.user-info {
+    display: flex;
+    gap: 10px;
+    flex-grow: 1;
+}
+
+.title-group {
+    font-size: 1em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.warning-text {
+    color: red;
+    font-weight: bold;
+}
+
+#book-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+#book-table th {
+    background-color: black;
+    color: white;
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#book-table td {
+    border: 1px solid #ddd;
+    padding: 5px;
+    text-align: left
+}
+
+#book-table tr:nth-child(odd) {
+    background-color: rgb(195, 195, 195); 
+}
+
+#book-table tr:nth-child(even) {
+    background-color: rgb(233, 233, 233);
+}
+
+.form-group {
+    display: flex;
+    justify-content: center;
+    gap: 20px; 
+}
+
+#webCustomerReservationConfirmButton {
+    background-color: rgb(191, 228, 255); 
+    }
+
+#webCustomerReservationEditButton {
+    background-color: rgb(255, 182, 193); 
+    }
+   

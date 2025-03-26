@@ -31,4 +31,10 @@ public class AppDescriptions {
     /** メニュー名 */
     public static final String WEB_CUSTOMER_MENU_NAME = "メニュー";
 
+    /** 貸出予約確認ID */
+    public static final String WEB_CUSTOMER_RESERVATIONCHECK_ID = "WEB_CUSTOMER_RESERVATIONCHECK";
+
+    /** 貸出予約確認名 */
+    public static final String WEB_CUSTOMER_RESERVATIONCHECK_NAME = "貸出予約確認";
+
 }

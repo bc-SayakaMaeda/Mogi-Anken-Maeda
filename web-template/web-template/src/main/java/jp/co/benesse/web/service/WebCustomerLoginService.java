@@ -38,7 +38,13 @@ public class WebCustomerLoginService {
      * @throws WebParamException
      */
     public WebCustomerEntity login(WebCustomerLoginForm webCustomerLoginForm)
-            throws WebUnexpectedException {
+            throws WebUnexpectedException, WebParamException {
+
+        // 引数がnullの場合の処理
+        if (webCustomerLoginForm == null) {
+            throw new WebParamException(MessageUtil.getMessage("XXXXX-001"));
+        }
+
         String customerID = webCustomerLoginForm.getCustomerID();
         String password = webCustomerLoginForm.getPassword();
 

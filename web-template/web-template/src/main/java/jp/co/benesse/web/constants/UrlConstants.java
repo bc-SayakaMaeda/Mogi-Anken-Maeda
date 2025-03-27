@@ -34,4 +34,7 @@ public class UrlConstants {
     /** 貸出予約確認画面 */
     public static final String VIEW_WEB_CUSTOMER_RESERVATION_CHECK = "/webCustomerReservationCheck";
 
+    /** 貸出予約確定画面 */
+    public static final String VIEW_WEB_CUSTOMER_RESERVATION_CONFIRM = "/webCustomerReservationConfirm";
+
 }

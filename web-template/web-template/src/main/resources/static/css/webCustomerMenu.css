@@ -67,11 +67,6 @@ hr {
     margin-bottom: 20px;
 }
 
-.large-checkbox {
-    width: 20px; 
-    height: 20px; 
-}
-
 .title-group p.error {
     color: red;
 }

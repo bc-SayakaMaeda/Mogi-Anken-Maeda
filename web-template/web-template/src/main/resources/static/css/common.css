@@ -53,3 +53,8 @@ button:active {
     font-weight: bold;
     font-size: 1em;
 }
+
+.large-checkbox {
+    width: 20px; 
+    height: 20px; 
+}

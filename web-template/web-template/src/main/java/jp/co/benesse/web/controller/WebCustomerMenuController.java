@@ -109,6 +109,7 @@ public class WebCustomerMenuController {
 
         // すべての書籍が貸出可能な場合、セッションに保存
         session.setAttribute(SessionKeysConstants.BOOK_REQUEST, reservatableBookList);
+        session.setAttribute(SessionKeysConstants.BOOK_IDS, bookIds);
 
         // リダイレクト
         return "redirect:" + UrlConstants.VIEW_WEB_CUSTOMER_RESERVATION_CHECK;

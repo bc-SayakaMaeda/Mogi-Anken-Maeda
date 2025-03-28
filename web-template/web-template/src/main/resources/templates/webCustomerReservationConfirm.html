@@ -3,16 +3,15 @@
 
 <head>
     <meta charset="utf-8">
-    <title>貸出予約確認画面</title>
+    <title>貸出予約確定画面</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="×××市立図書館の貸出予約確認画面です。">
-    <meta name="keywords" content="×××市立図書館, 貸出予約確認">
+    <meta name="description" content="×××市立図書館の貸出予約確定画面です。">
+    <meta name="keywords" content="×××市立図書館, 貸出予約確定">
     <link rel="stylesheet" th:href="@{/css/common.css}" type="text/css"> 
     <link rel="stylesheet" th:href="@{/css/webCustomerReservationCheck.css}" type="text/css"> 
     <link rel="icon" href="data:,">
 </head>
 
-<body>
     <div class="webCustomerReservationCheck-container">
         <div class="header">
             <div class="user-info">
@@ -23,9 +22,9 @@
         </div>
         <hr>
         <div class="title-group">
-            <p>以下を貸出確定しますか？　<span class="warning-text"> ※まだ予約は完了していません※</span></p>
+            <p>貸出予約が確定しました。到着までしばらくお待ちください。</p>
         </div>
-        <form id="reservationForm" th:action="@{/webCustomerReservationCheck}" method="post">
+        <form id="reservationForm" th:action="@{/webCustomerReservationConfirm}" method="post">
             <table id="book-table">
                 <thead>
                     <tr>
@@ -40,18 +39,8 @@
             </table>
 
             <div class="form-group">
-                <button type="submit" id="webCustomerReservationConfirmButton">貸出予約確定</button>
-    <a th:href="@{/webCustomerMenu}" id="webCustomerReservationEditButton">修正</a>
+                <button type="submit" id="returnMenuButton">メニューに戻る</button>
             </div>
         </form>
     </div>
-    <script type="text/javascript" th:inline="javascript">
-        /*<![CDATA[*/
-        const bookList = /*[[${bookRequestList != null ? bookRequestList : '[]'}]]*/[];
-        /*]]>*/
-    </script>
-    <script type="module" th:src="@{/js/utils.js}"></script>
-    <script type="module" th:src="@{/js/webCustomerReservationCheck.js}"></script>
-</body>
-
 </html>

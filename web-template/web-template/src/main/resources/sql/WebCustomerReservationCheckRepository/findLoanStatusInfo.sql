@@ -19,10 +19,9 @@ WHERE
     bookData.logicDelFlg = '0' -- 削除なし
     AND libraryBook.logicDelFlg = '0' -- 削除なし
     AND bookData.bookID IN         
-    (/*[# th:each="bookRequestList : ${bookRequestList}"]*/
-            /*[# mb:p="bookId"]*/ '1' /*[/]*/
-        /*[(${bookIdStat.last} ? '' : ',')]*/
-        /*[/]*/
+    (/*[# th:each="bookRequest : ${bookRequestList}"]*/
+    /*[# mb:p="bookRequest"]*/ '1' /*[/]*/
+/*[/]*/
     )
 ORDER BY 
     bookData.bookID ASC; -- bookIDで昇順ソート

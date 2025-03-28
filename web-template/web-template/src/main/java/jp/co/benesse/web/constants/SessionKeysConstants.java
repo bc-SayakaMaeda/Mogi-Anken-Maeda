@@ -34,6 +34,10 @@ public class SessionKeysConstants {
     /** メールアドレス */
     public static final String EMAIL = "email";
 
-    /** 貸出希望書籍情報 */
+    /** 貸出希望書籍情報一覧 */
     public static final String BOOK_REQUEST = "bookRequestList";
+
+    /** 貸出希望書籍ID一覧 */
+    public static final String BOOK_IDS = "bookIds";
+
 }

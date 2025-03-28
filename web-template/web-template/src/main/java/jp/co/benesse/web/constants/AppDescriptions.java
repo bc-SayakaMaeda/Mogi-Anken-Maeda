@@ -37,4 +37,10 @@ public class AppDescriptions {
     /** 貸出予約確認名 */
     public static final String WEB_CUSTOMER_RESERVATIONCHECK_NAME = "貸出予約確認";
 
+    /** 貸出予約確認ID */
+    public static final String WEB_CUSTOMER_RESERVATIONCONFIRM_ID = "WEB_CUSTOMER_RESERVATIONCONFIRM";
+
+    /** 貸出予約確認名 */
+    public static final String WEB_CUSTOMER_RESERVATIONCONFIRM_NAME = "貸出予約確定";
+
 }

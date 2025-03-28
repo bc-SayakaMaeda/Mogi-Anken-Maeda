@@ -1,7 +1,6 @@
 package jp.co.benesse.web.repository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -39,14 +38,7 @@ public class WebCustomerReservationCheckRepository extends SqlGeneratorBaseRepos
      * @return BookData 書籍情報
      * @throws WebUnexpectedException
      */
-    public List<BookData> findLoanStatusInfo(List<BookData> bookRequestList) throws WebUnexpectedException {
-
-        // BookIDのみを抽出
-        List<String> bookIdList = bookRequestList.stream()
-                .map(BookData::getBookID)
-                .distinct()
-                .collect(Collectors.toList());
-
+    public List<BookData> findLoanStatusInfo(List<String> bookRequestList) throws WebUnexpectedException {
         MapSqlParameterSource parameters = new MapSqlParameterSource()
                 .addValue("bookRequestList", bookRequestList);
 
@@ -55,7 +47,6 @@ public class WebCustomerReservationCheckRepository extends SqlGeneratorBaseRepos
 
         // SQLクエリを実行して結果を取得
         return kgwebjt.query(sql, parameters, rowMapper);
-
     }
 
     /**
@@ -76,52 +67,61 @@ public class WebCustomerReservationCheckRepository extends SqlGeneratorBaseRepos
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         // SQLを実行し、自動発番されたIDを取得
-        kgwebjt.update(sql, params, keyHolder);
+        int rowsAffected = kgwebjt.update(sql, params, keyHolder);
+
+        // 自動発番されたIDを確認
+        Integer generatedId = keyHolder.getKey() != null ? keyHolder.getKey().intValue() : null;
+        if (generatedId == null) {
+            throw new WebUnexpectedException("自動発番されたIDが取得できませんでした。");
+        }
 
         // 自動発番されたIDを返却
-        return keyHolder.getKey().intValue();
-
+        return generatedId;
     }
 
     /**
      * 図書貸出明細登録
      * 
-     * @param bookLoanId
-     * @param libraryBookId
+     * @param bookLoanID
+     * @param string
      * @throws WebUnexpectedException
      */
-    public void regLoanDetail(String bookLoanId, String libraryBookId) throws WebUnexpectedException {
-
+    public void regLoanDetail(int bookLoanID, String string) throws WebUnexpectedException {
         // パラメータを設定
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("bookLoanId", bookLoanId);
-        params.addValue("libraryBookId", libraryBookId);
+        params.addValue("bookLoanID", bookLoanID);
+        params.addValue("libraryBookID", string);
 
         // 動的なSQLの作成
-        String sql = getSql(null);
+        String sql = getSql(params); // paramsを渡す
 
         // SQLを実行
-        kgwebjt.update(sql, params);
-
+        int rowsAffected = kgwebjt.update(sql, params);
+        if (rowsAffected == 0) {
+            throw new WebUnexpectedException("図書貸出明細の登録に失敗しました。");
+        }
     }
 
     /**
      * web利用者履歴情報登録
      * 
-     * @param bookRequestList
+     * @param bookLoanID
+     * @param customerId
      * @throws WebUnexpectedException
      */
-    public void regWebCustomerHistoryInfo(String bookRequestList) throws WebUnexpectedException {
-
+    public void regWebCustomerHistoryInfo(int bookLoanID, String customerId) throws WebUnexpectedException {
         // パラメータを設定
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("bookRequestList", bookRequestList);
+        params.addValue("bookLoanID", bookLoanID);
+        params.addValue("customerId", customerId);
 
         // 動的なSQLの作成
-        String sql = getSql(null);
+        String sql = getSql(params); // paramsを渡す
 
         // SQLクエリを実行して結果を取得
-        kgwebjt.update(sql, params);
-
+        int rowsAffected = kgwebjt.update(sql, params);
+        if (rowsAffected == 0) {
+            throw new WebUnexpectedException("Web利用者履歴情報の登録に失敗しました。");
+        }
     }
 }

@@ -42,15 +42,7 @@ public class WebCustomerReservationCheckService {
      * @return 在庫数を設定した図書貸出状況一覧DTO
      * @throws WebUnexpectedException
      */
-    public List<BookDataDTO> getBookLoanInfoWithStock(List<BookData> bookDataList2) throws WebUnexpectedException {
-        // DTOからEntityに変換
-        List<BookData> bookDataList = bookDataList2.stream()
-                .map(dto -> {
-                    BookData bookData = new BookData();
-                    bookData.setBookID(dto.getBookID());
-                    return bookData;
-                })
-                .collect(Collectors.toList());
+    public List<BookDataDTO> getBookLoanInfoWithStock(List<String> bookDataList) throws WebUnexpectedException {
 
         // 貸出状況取得
         List<BookData> bookList = webCustomerReservationCheckRepository.findLoanStatusInfo(bookDataList);
@@ -136,15 +128,15 @@ public class WebCustomerReservationCheckService {
     public void registerLoanInfo(String customerId, List<BookDataDTO> confirmBookList)
             throws WebUnexpectedException {
         // 貸出情報登録し、自動発番された図書貸出IDを取得
-        int bookLoanId = webCustomerReservationCheckRepository.regLoanInfo(customerId);
+        int bookLoanID = webCustomerReservationCheckRepository.regLoanInfo(customerId);
 
         // 貸出明細情報登録
         for (BookDataDTO bookRequest : confirmBookList) {
-            webCustomerReservationCheckRepository.regLoanDetail(String.valueOf(bookLoanId),
+            webCustomerReservationCheckRepository.regLoanDetail(bookLoanID,
                     bookRequest.getLibraryBookID());
         }
 
         // web利用者履歴情報登録
-        webCustomerReservationCheckRepository.regWebCustomerHistoryInfo(String.valueOf(bookLoanId));
+        webCustomerReservationCheckRepository.regWebCustomerHistoryInfo(bookLoanID, customerId);
     }
 }

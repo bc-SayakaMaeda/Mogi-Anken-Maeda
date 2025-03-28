@@ -69,8 +69,19 @@ body {
 #webCustomerReservationConfirmButton {
     background-color: rgb(191, 228, 255); 
     }
-
+   
 #webCustomerReservationEditButton {
     background-color: rgb(255, 182, 193); 
-    }
-   
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 6px 6px #999;
+    font-size: 1em;
+    font-weight: bold;
+    padding: 10px 150px;
+    display: inline-block;
+    text-decoration: none;
+    color: black;
+    border-radius: 5px;
+    text-align: center;
+    margin: 0 auto;
+}

@@ -85,3 +85,34 @@ body {
     text-align: center;
     margin: 0 auto;
 }
+
+.delivery-info {
+    display: flex; 
+    margin-top: 20px;
+    padding: 10px;
+    border: 2.5px dashed rgb(0, 0, 0);
+}
+
+.delivery-info-label {
+    margin-right: 20px; 
+    font-weight: bold; 
+}
+
+.delivery-info-label p{
+    margin: 0;
+}
+
+.delivery-info-details {
+    display: flex; 
+    flex-direction: column; 
+    font-weight: bold;
+}
+
+.delivery-info-details p {
+    margin: 0; 
+    padding-left: 0; 
+}
+
+.spacer {
+    height: 20px; 
+}

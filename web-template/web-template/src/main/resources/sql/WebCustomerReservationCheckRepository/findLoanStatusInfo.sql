@@ -18,10 +18,6 @@ LEFT JOIN M_BookLoanRecordsDetail AS loanDetail
 WHERE 
     bookData.logicDelFlg = '0' -- 削除なし
     AND libraryBook.logicDelFlg = '0' -- 削除なし
-    AND bookData.bookID IN         
-    (/*[# th:each="bookRequest : ${bookRequestList}"]*/
-    /*[# mb:p="bookRequest"]*/ '1' /*[/]*/
-/*[/]*/
-    )
+    AND bookData.bookID IN (:bookRequestList)
 ORDER BY 
     bookData.bookID ASC; -- bookIDで昇順ソート

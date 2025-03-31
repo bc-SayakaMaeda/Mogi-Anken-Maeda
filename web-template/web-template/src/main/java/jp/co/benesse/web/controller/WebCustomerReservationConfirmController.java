@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import jakarta.servlet.http.HttpSession;
 import jp.co.benesse.web.annotation.AppDescription;
@@ -54,4 +55,20 @@ public class WebCustomerReservationConfirmController {
         return UrlConstants.VIEW_WEB_CUSTOMER_RESERVATION_CONFIRM;
 
     }
+
+    /**
+     * メニューへ戻るボタン押下時処理
+     * 
+     * @param model
+     * @return 画面遷移
+     * @throws WebUnexpectedException
+     */
+    @PostMapping(UrlConstants.VIEW_WEB_CUSTOMER_RESERVATION_CONFIRM)
+    @AppDescription(id = AppDescriptions.WEB_CUSTOMER_RESERVATIONCONFIRM_ID, name = AppDescriptions.WEB_CUSTOMER_RESERVATIONCONFIRM_NAME)
+    public String rturnMenu() throws WebUnexpectedException {
+
+        // リダイレクト
+        return "redirect:" + UrlConstants.VIEW_WEB_CUSTOMER_MENU;
+    }
+
 }

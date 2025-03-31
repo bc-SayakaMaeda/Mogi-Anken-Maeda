@@ -53,10 +53,16 @@ public class WebCustomerReservationCheckController {
         // セッションから利用者情報を取得
         String customerID = (String) session.getAttribute(SessionKeysConstants.CUSTOMER_ID);
         String customerName = (String) session.getAttribute(SessionKeysConstants.CUSTOMER_NAME);
+        String postalCode = (String) session.getAttribute(SessionKeysConstants.POST_CODE);
+        String address = (String) session.getAttribute(SessionKeysConstants.ADDRESS);
+        String email = (String) session.getAttribute(SessionKeysConstants.EMAIL);
 
         // 利用者情報をモデルに設定
         model.addAttribute("customerID", customerID);
         model.addAttribute("customerName", customerName);
+        model.addAttribute("postalCode", postalCode);
+        model.addAttribute("address", address);
+        model.addAttribute("email", email);
 
         // 貸出希望書籍情報の取得
         Object bookRequestList = session.getAttribute(SessionKeysConstants.BOOK_REQUEST);

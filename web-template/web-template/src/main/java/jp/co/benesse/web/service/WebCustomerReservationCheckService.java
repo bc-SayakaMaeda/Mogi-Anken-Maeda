@@ -38,7 +38,7 @@ public class WebCustomerReservationCheckService {
     /**
      * 貸出状況取得と在庫数設定
      * 
-     * @param bookDataList2
+     * @param bookDataList
      * @return 在庫数を設定した図書貸出状況一覧DTO
      * @throws WebUnexpectedException
      */

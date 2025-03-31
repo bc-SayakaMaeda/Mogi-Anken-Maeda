@@ -39,9 +39,21 @@
                 <tbody id="book-row-block"></tbody>
             </table>
 
+            <div class="delivery-info">
+                <div class="delivery-info-label">
+                    <p>送付先情報</p>
+                </div>
+                <div class="delivery-info-details">
+                    <p>郵便番号：<span th:text="${postalCode}"></span></p>
+                    <p>住所：<span th:text="${address}"></span></p>
+                    <p>メールアドレス：<span th:text="${email}"></span></p>
+                </div>
+            </div>
+            <div class="spacer"></div>
+
             <div class="form-group">
                 <button type="submit" id="webCustomerReservationConfirmButton">貸出予約確定</button>
-    <a th:href="@{/webCustomerMenu}" id="webCustomerReservationEditButton">修正</a>
+                <a th:href="@{/webCustomerMenu}" id="webCustomerReservationEditButton">修正</a>
             </div>
         </form>
     </div>

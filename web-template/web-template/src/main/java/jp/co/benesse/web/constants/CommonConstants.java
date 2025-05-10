@@ -42,5 +42,8 @@ public class CommonConstants {
 
     /** 日付フォーマット(年月日_日本) */
     public static final String DTF_FORMAT_YMD_JC = "uuuu年M月d日";
+    
+    /** 正規表現（半角英数字） */
+    public static final String HALF_ALPHANUMERIC = "^[a-zA-Z0-9]*$";
 
 }

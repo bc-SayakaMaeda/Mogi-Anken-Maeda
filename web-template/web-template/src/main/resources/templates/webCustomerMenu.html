@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>メニュー</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="×××市立図書館のメニュー画面です。">
+    <meta name="keywords" content="×××市立図書館, メニュー">
+    <link rel="stylesheet" th:href="@{/css/common.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/webCustomerMenu.css}" type="text/css">
+    <link rel="icon" href="data:,">
+</head>
+
+<body>
+    <div class="webCustomerMenu-container">
+        <div class="header">
+            <div class="user-info">
+                <span id="user-id" th:text="'利用者ID：' + ${customerID}"></span>
+                <span id="user-name" th:text="'利用者名：' + ${customerName}"></span>
+            </div>
+            <a th:href="@{/webCustomerLogin}" id="logoutButton">ログアウト</a>
+        </div>
+        <hr>
+        <div class="title-group">
+            <p th:if="${errorMessage == null}" th:class="${error} ? 'error' : ''">貸出希望の本を選択してください</p>
+            <p th:if="${errorMessage != null}" th:class="error" th:text="${errorMessage}">申し訳ございません、貸出中の図書がございます。もう一度選択ください。</p>
+        </div>
+        <template id="book-row-template">
+            <tr class="hidden">
+                <td class="book-id"></td>
+                <td class="book-title"></td>
+                <td class="book-author"></td>
+                <td class="book-stock"></td>
+                <td class="book-action"></td>
+            </tr>
+        </template>
+        <form id="reservationForm" th:action="@{/webCustomerMenu}" method="post">
+            <table id="book-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>タイトル</th>
+                        <th>著者</th>
+                        <th>在庫数</th>
+                        <th>貸出希望</th>
+                    </tr>
+                </thead>
+                <tbody id="book-row-block"></tbody>
+            </table>
+            <div class="pagination">
+                <a href="#" id="prev-page" th:href="@{${prevPageUrl}}">＜前</a>
+                <span id="page-info" th:text="${currentPage} + ' / ' + ${totalPages}"></span>
+                <a href="#" id="next-page" th:href="@{${nextPageUrl}}">次＞</a>
+            </div>
+            <div class="form-group">
+                <button type="submit" id="webCustomerReservationCheckButton">貸出希望確認</button>
+            </div>
+        </form>
+    </div>
+    <script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+        const bookList = /*[[${bookList != null ? bookList : '[]'}]]*/[];
+        const selectedBookIds = /*[[${bookIds != null ? bookIds : '[]'}]]*/[];
+        /*]]>*/
+    </script>
+    <script type="module" th:src="@{/js/utils.js}"></script>
+    <script type="module" th:src="@{/js/webCustomerMenu.js}"></script>
+</body>
+
+</html>

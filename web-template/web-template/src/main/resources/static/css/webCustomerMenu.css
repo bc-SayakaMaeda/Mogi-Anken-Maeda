@@ -1,0 +1,81 @@
+body {
+    align-items: flex-start;
+}
+
+.webCustomerMenu-container {
+    width: 80%;
+    margin: 20px auto;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.user-info {
+    display: flex;
+    gap: 10px;
+    flex-grow: 1;
+}
+
+hr {
+    margin: 20px 0;
+}
+
+.title-group {
+    font-size: 1em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+#book-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+#book-table th {
+    background-color: black;
+    color: white;
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#book-table td {
+    border: 1px solid #ddd;
+    padding: 5px;
+    text-align: left
+}
+
+#book-table tr:nth-child(odd) {
+    background-color: rgb(195, 195, 195); 
+}
+
+#book-table tr:nth-child(even) {
+    background-color: rgb(233, 233, 233);
+}
+
+.pagination {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.large-checkbox {
+    width: 20px; 
+    height: 20px; 
+}
+
+.title-group p.error {
+    color: red;
+}
+
+.hidden {
+    display: none;
+}

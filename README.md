@@ -102,12 +102,14 @@ web-template/
 
 ### ビルド (Build)
 ```bash
+# リポジトリのルートから実行する場合
 cd web-template/web-template
 mvn clean install
 ```
 
 ### 実行 (Run)
 ```bash
+# web-template/web-template ディレクトリから実行
 mvn spring-boot:run
 ```
 
@@ -130,7 +132,7 @@ WARファイルが `target/web-template-0.0.1-SNAPSHOT.war` に生成されま�
 ## サンプル機能 (Sample Features)
 
 ### サンプル画面
-- **URL**: `/sample?id=<会員ID>`
+- **URL**: `/sample?id={会員ID}` (例: `/sample?id=123`)
 - **機能**: 会員のオプト情報の表示と変更
 - **セキュリティ**: トークンによる二重送信防止
 

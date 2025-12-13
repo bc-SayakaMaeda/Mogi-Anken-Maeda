@@ -65,32 +65,34 @@ This project is an enterprise web application template based on Spring Boot. It 
 ## プロジェクト構造 (Project Structure)
 
 ```
-web-template/
-├── src/
-│   ├── main/
-│   │   ├── java/jp/co/benesse/web/
-│   │   │   ├── annotation/        # カスタムアノテーション
-│   │   │   ├── common/            # 共通機能（トークン処理等）
-│   │   │   ├── constants/         # 定数クラス
-│   │   │   ├── controller/        # コントローラー
-│   │   │   ├── entity/            # エンティティ
-│   │   │   ├── enums/             # 列挙型
-│   │   │   ├── exception/         # カスタム例外
-│   │   │   ├── form/              # フォームクラス
-│   │   │   ├── interceptor/       # インターセプター
-│   │   │   ├── log/               # ログ関連
-│   │   │   ├── repository/        # データアクセス層
-│   │   │   ├── service/           # サービス層
-│   │   │   ├── util/              # ユーティリティ
-│   │   │   └── validation/        # バリデーター
-│   │   └── resources/
-│   │       ├── sql/               # SQLファイル
-│   │       ├── templates/         # Thymeleafテンプレート
-│   │       ├── application.properties
-│   │       ├── messages.properties
-│   │       └── logback-spring.xml
-│   └── test/                      # テストコード
-└── pom.xml
+Mogi-Anken-Maeda/                   # リポジトリルート
+└── web-template/
+    └── web-template/               # Spring Bootプロジェクトルート
+        ├── src/
+        │   ├── main/
+        │   │   ├── java/jp/co/benesse/web/
+        │   │   │   ├── annotation/        # カスタムアノテーション
+        │   │   │   ├── common/            # 共通機能（トークン処理等）
+        │   │   │   ├── constants/         # 定数クラス
+        │   │   │   ├── controller/        # コントローラー
+        │   │   │   ├── entity/            # エンティティ
+        │   │   │   ├── enums/             # 列挙型
+        │   │   │   ├── exception/         # カスタム例外
+        │   │   │   ├── form/              # フォームクラス
+        │   │   │   ├── interceptor/       # インターセプター
+        │   │   │   ├── log/               # ログ関連
+        │   │   │   ├── repository/        # データアクセス層
+        │   │   │   ├── service/           # サービス層
+        │   │   │   ├── util/              # ユーティリティ
+        │   │   │   └── validation/        # バリデーター
+        │   │   └── resources/
+        │   │       ├── sql/               # SQLファイル
+        │   │       ├── templates/         # Thymeleafテンプレート
+        │   │       ├── application.properties
+        │   │       ├── messages.properties
+        │   │       └── logback-spring.xml
+        │   └── test/                      # テストコード
+        └── pom.xml
 ```
 
 ## ビルドと実行 (Build and Run)
